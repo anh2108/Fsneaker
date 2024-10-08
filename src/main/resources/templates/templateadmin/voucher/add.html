@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-image="none"
+      data-preloader="disable" data-theme="default" data-theme-colors="default" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Quản lý voucher</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description"/>
+    <meta content="Themesbrand" name="author"/>
     <link rel="shortcut icon" href="images/favicon.ico">
     <!-- Thêm Line Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
     <!-- Thêm Material Design Icons CDN -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Thêm Feather Icon CND -->
@@ -18,21 +20,22 @@
     <!-- Thêm link tới Boxicons CDN -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- jsvectormap css -->
-    <link href="css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/jsvectormap.min.css" rel="stylesheet" type="text/css"/>
 
     <!--Swiper slider css-->
-    <link href="css/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/swiper-bundle.min.css" rel="stylesheet" type="text/css"/>
 
     <!-- Layout config Js -->
     <script src="js/layout.js"></script>
     <!-- Bootstrap Css -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     n<!-- Icons Css -->
-    <link href="css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/icons.min.css" rel="stylesheet" type="text/css"/>
     <!-- App Css-->
-    <link href="css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/app.min.css" rel="stylesheet" type="text/css"/>
     <!-- custom Css-->
-    <link href="css/custom.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/custom.min.css" rel="stylesheet" type="text/css"/>
+
 </head>
 <body>
 <!-- Begin page -->
@@ -63,7 +66,9 @@
                         </a>
                     </div>
 
-                    <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger material-shadow-none" id="topnav-hamburger-icon">
+                    <button type="button"
+                            class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger material-shadow-none"
+                            id="topnav-hamburger-icon">
                     <span class="hamburger-icon">
                         <span></span>
                         <span></span>
@@ -74,9 +79,11 @@
                     <!-- App Search-->
                     <form class="app-search d-none d-md-block">
                         <div class="position-relative">
-                            <input type="text" class="form-control" placeholder="Search..." autocomplete="off" id="search-options" value="">
+                            <input type="text" class="form-control" placeholder="Search..." autocomplete="off"
+                                   id="search-options" value="">
                             <span class="mdi mdi-magnify search-widget-icon"></span>
-                            <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
+                            <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
+                                  id="search-close-options"></span>
                         </div>
                         <div class="dropdown-menu dropdown-menu-lg" id="search-dropdown">
                             <div data-simplebar style="max-height: 320px;">
@@ -86,8 +93,10 @@
                                 </div>
 
                                 <div class="dropdown-item bg-transparent text-wrap">
-                                    <a href="/trangchuadmin" class="btn btn-soft-secondary btn-sm rounded-pill">how to setup <i class="mdi mdi-magnify ms-1"></i></a>
-                                    <a href="/trangchuadmin" class="btn btn-soft-secondary btn-sm rounded-pill">buttons <i class="mdi mdi-magnify ms-1"></i></a>
+                                    <a href="/trangchuadmin" class="btn btn-soft-secondary btn-sm rounded-pill">how to
+                                        setup <i class="mdi mdi-magnify ms-1"></i></a>
+                                    <a href="/trangchuadmin" class="btn btn-soft-secondary btn-sm rounded-pill">buttons
+                                        <i class="mdi mdi-magnify ms-1"></i></a>
                                 </div>
                                 <!-- item-->
                                 <div class="dropdown-header mt-2">
@@ -121,7 +130,8 @@
                                     <!-- item -->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                         <div class="d-flex">
-                                            <img src="images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <img src="images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs"
+                                                 alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <h6 class="m-0">Angela Bernier</h6>
                                                 <span class="fs-11 mb-0 text-muted">Manager</span>
@@ -131,7 +141,8 @@
                                     <!-- item -->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                         <div class="d-flex">
-                                            <img src="images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <img src="images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs"
+                                                 alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <h6 class="m-0">David Grasso</h6>
                                                 <span class="fs-11 mb-0 text-muted">Web Designer</span>
@@ -141,7 +152,8 @@
                                     <!-- item -->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                         <div class="d-flex">
-                                            <img src="images/users/avatar-5.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <img src="images/users/avatar-5.jpg" class="me-3 rounded-circle avatar-xs"
+                                                 alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <h6 class="m-0">Mike Bunch</h6>
                                                 <span class="fs-11 mb-0 text-muted">React Developer</span>
@@ -152,7 +164,8 @@
                             </div>
 
                             <div class="text-center pt-3 pb-1">
-                                <a href="pages-search-results.html" class="btn btn-primary btn-sm">View All Results <i class="ri-arrow-right-line ms-1"></i></a>
+                                <a href="pages-search-results.html" class="btn btn-primary btn-sm">View All Results <i
+                                        class="ri-arrow-right-line ms-1"></i></a>
                             </div>
                         </div>
                     </form>
@@ -161,21 +174,26 @@
                 <div class="d-flex align-items-center">
 
                     <div class="dropdown d-md-none topbar-head-dropdown header-item">
-                        <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button"
+                                class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle"
+                                id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
                             <i class="bx bx-search fs-22"></i>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                             aria-labelledby="page-header-search-dropdown">
                             <form class="p-3">
                                 <div class="form-group m-0">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
-                                        <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                        <input type="text" class="form-control" placeholder="Search ..."
+                                               aria-label="Recipient's username">
+                                        <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
-
 
 
                     <!--                    <div class="dropdown topbar-head-dropdown ms-1 header-item">-->
@@ -326,23 +344,31 @@
                     <!--                    </div>-->
 
                     <div class="ms-1 header-item d-none d-sm-flex">
-                        <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle" data-toggle="fullscreen">
+                        <button type="button"
+                                class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle"
+                                data-toggle="fullscreen">
                             <i class='bx bx-fullscreen fs-22'></i>
                         </button>
                     </div>
 
                     <div class="ms-1 header-item d-none d-sm-flex">
-                        <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle light-dark-mode">
+                        <button type="button"
+                                class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle light-dark-mode">
                             <i class='bx bx-moon fs-22'></i>
                         </button>
                     </div>
 
                     <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
-                        <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+                        <button type="button"
+                                class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle"
+                                id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                             <i class='bx bx-bell fs-22'></i>
-                            <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">3<span class="visually-hidden">unread messages</span></span>
+                            <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">3<span
+                                    class="visually-hidden">unread messages</span></span>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                             aria-labelledby="page-header-notifications-dropdown">
 
                             <div class="dropdown-head bg-primary bg-pattern rounded-top">
                                 <div class="p-3">
@@ -357,19 +383,23 @@
                                 </div>
 
                                 <div class="px-2 pt-2">
-                                    <ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true" id="notificationItemsTab" role="tablist">
+                                    <ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true"
+                                        id="notificationItemsTab" role="tablist">
                                         <li class="nav-item waves-effect waves-light">
-                                            <a class="nav-link active" data-bs-toggle="tab" href="#all-noti-tab" role="tab" aria-selected="true">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#all-noti-tab"
+                                               role="tab" aria-selected="true">
                                                 Tất cả (4)
                                             </a>
                                         </li>
                                         <li class="nav-item waves-effect waves-light">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab" aria-selected="false">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab"
+                                               aria-selected="false">
                                                 Tin nhắn
                                             </a>
                                         </li>
                                         <li class="nav-item waves-effect waves-light">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#alerts-tab" role="tab" aria-selected="false">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#alerts-tab" role="tab"
+                                               aria-selected="false">
                                                 Cảnh báo
                                             </a>
                                         </li>
@@ -399,8 +429,10 @@
                                                 </div>
                                                 <div class="px-2 fs-15">
                                                     <div class="form-check notification-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check01">
-                                                        <label class="form-check-label" for="all-notification-check01"></label>
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               id="all-notification-check01">
+                                                        <label class="form-check-label"
+                                                               for="all-notification-check01"></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -408,13 +440,15 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item position-relative">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                                <img src="images/users/avatar-2.jpg"
+                                                     class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
                                                     </a>
                                                     <div class="fs-13 text-muted">
-                                                        <p class="mb-1">Answered to your comment on the cash flow forecast's
+                                                        <p class="mb-1">Answered to your comment on the cash flow
+                                                            forecast's
                                                             graph 🔔.</p>
                                                     </div>
                                                     <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
@@ -423,8 +457,10 @@
                                                 </div>
                                                 <div class="px-2 fs-15">
                                                     <div class="form-check notification-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check02">
-                                                        <label class="form-check-label" for="all-notification-check02"></label>
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               id="all-notification-check02">
+                                                        <label class="form-check-label"
+                                                               for="all-notification-check02"></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -439,7 +475,9 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
-                                                        <h6 class="mt-0 mb-2 fs-13 lh-base">You have received <b class="text-success">20</b> new messages in the conversation
+                                                        <h6 class="mt-0 mb-2 fs-13 lh-base">You have received <b
+                                                                class="text-success">20</b> new messages in the
+                                                            conversation
                                                         </h6>
                                                     </a>
                                                     <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
@@ -448,8 +486,10 @@
                                                 </div>
                                                 <div class="px-2 fs-15">
                                                     <div class="form-check notification-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check03">
-                                                        <label class="form-check-label" for="all-notification-check03"></label>
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               id="all-notification-check03">
+                                                        <label class="form-check-label"
+                                                               for="all-notification-check03"></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -457,7 +497,8 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item position-relative">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                                <img src="images/users/avatar-8.jpg"
+                                                     class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
@@ -471,26 +512,32 @@
                                                 </div>
                                                 <div class="px-2 fs-15">
                                                     <div class="form-check notification-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check04">
-                                                        <label class="form-check-label" for="all-notification-check04"></label>
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               id="all-notification-check04">
+                                                        <label class="form-check-label"
+                                                               for="all-notification-check04"></label>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="my-3 text-center view-all">
-                                            <button type="button" class="btn btn-soft-success waves-effect waves-light">View
-                                                All Notifications <i class="ri-arrow-right-line align-middle"></i></button>
+                                            <button type="button" class="btn btn-soft-success waves-effect waves-light">
+                                                View
+                                                All Notifications <i class="ri-arrow-right-line align-middle"></i>
+                                            </button>
                                         </div>
                                     </div>
 
                                 </div>
 
-                                <div class="tab-pane fade py-2 ps-2" id="messages-tab" role="tabpanel" aria-labelledby="messages-tab">
+                                <div class="tab-pane fade py-2 ps-2" id="messages-tab" role="tabpanel"
+                                     aria-labelledby="messages-tab">
                                     <div data-simplebar style="max-height: 300px;" class="pe-2">
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                <img src="images/users/avatar-3.jpg"
+                                                     class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">James Lemire</h6>
@@ -504,8 +551,10 @@
                                                 </div>
                                                 <div class="px-2 fs-15">
                                                     <div class="form-check notification-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="messages-notification-check01">
-                                                        <label class="form-check-label" for="messages-notification-check01"></label>
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               id="messages-notification-check01">
+                                                        <label class="form-check-label"
+                                                               for="messages-notification-check01"></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -513,13 +562,15 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                <img src="images/users/avatar-2.jpg"
+                                                     class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
                                                     </a>
                                                     <div class="fs-13 text-muted">
-                                                        <p class="mb-1">Answered to your comment on the cash flow forecast's
+                                                        <p class="mb-1">Answered to your comment on the cash flow
+                                                            forecast's
                                                             graph 🔔.</p>
                                                     </div>
                                                     <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
@@ -528,8 +579,10 @@
                                                 </div>
                                                 <div class="px-2 fs-15">
                                                     <div class="form-check notification-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="messages-notification-check02">
-                                                        <label class="form-check-label" for="messages-notification-check02"></label>
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               id="messages-notification-check02">
+                                                        <label class="form-check-label"
+                                                               for="messages-notification-check02"></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -537,13 +590,15 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-6.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                <img src="images/users/avatar-6.jpg"
+                                                     class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Kenneth Brown</h6>
                                                     </a>
                                                     <div class="fs-13 text-muted">
-                                                        <p class="mb-1">Mentionned you in his comment on 📃 invoice #12501.
+                                                        <p class="mb-1">Mentionned you in his comment on 📃 invoice
+                                                            #12501.
                                                         </p>
                                                     </div>
                                                     <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
@@ -552,8 +607,10 @@
                                                 </div>
                                                 <div class="px-2 fs-15">
                                                     <div class="form-check notification-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="messages-notification-check03">
-                                                        <label class="form-check-label" for="messages-notification-check03"></label>
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               id="messages-notification-check03">
+                                                        <label class="form-check-label"
+                                                               for="messages-notification-check03"></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -561,7 +618,8 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                <img src="images/users/avatar-8.jpg"
+                                                     class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
@@ -575,24 +633,33 @@
                                                 </div>
                                                 <div class="px-2 fs-15">
                                                     <div class="form-check notification-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="messages-notification-check04">
-                                                        <label class="form-check-label" for="messages-notification-check04"></label>
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               id="messages-notification-check04">
+                                                        <label class="form-check-label"
+                                                               for="messages-notification-check04"></label>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="my-3 text-center view-all">
-                                            <button type="button" class="btn btn-soft-success waves-effect waves-light">View
+                                            <button type="button" class="btn btn-soft-success waves-effect waves-light">
+                                                View
                                                 All Messages <i class="ri-arrow-right-line align-middle"></i></button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade p-4" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab"></div>
+                                <div class="tab-pane fade p-4" id="alerts-tab" role="tabpanel"
+                                     aria-labelledby="alerts-tab"></div>
 
                                 <div class="notification-actions" id="notification-actions">
                                     <div class="d-flex text-muted justify-content-center">
-                                        Select <div id="select-content" class="text-body fw-semibold px-1">0</div> Result <button type="button" class="btn btn-link link-danger p-0 ms-3" data-bs-toggle="modal" data-bs-target="#removeNotificationModal">Remove</button>
+                                        Select
+                                        <div id="select-content" class="text-body fw-semibold px-1">0</div>
+                                        Result
+                                        <button type="button" class="btn btn-link link-danger p-0 ms-3"
+                                                data-bs-toggle="modal" data-bs-target="#removeNotificationModal">Remove
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -600,9 +667,11 @@
                     </div>
 
                     <div class="dropdown ms-sm-3 header-item topbar-user">
-                        <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="images/users/avatar-1.jpg" alt="Header Avatar">
+                            <img class="rounded-circle header-profile-user" src="images/users/avatar-1.jpg"
+                                 alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Nguyễn Xuân Hoàng</span>
                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Trưởng nhóm</span>
@@ -612,13 +681,26 @@
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
                             <h6 class="dropdown-header">Xin chào Xuân Hoàng!</h6>
-                            <a class="dropdown-item" href="/thongtinadmin"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Thông tin cá nhân</span></a>
-                            <a class="dropdown-item" href="/tinnhanadmin"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Tin nhắn</span></a>
-                            <a class="dropdown-item" href="/trogiupadmin"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Trợ giúp</span></a>
+                            <a class="dropdown-item" href="/thongtinadmin"><i
+                                    class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle">Thông tin cá nhân</span></a>
+                            <a class="dropdown-item" href="/tinnhanadmin"><i
+                                    class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle">Tin nhắn</span></a>
+                            <a class="dropdown-item" href="/trogiupadmin"><i
+                                    class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle">Trợ giúp</span></a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/caidatadmin"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Cài đặt</span></a>
-                            <a class="dropdown-item" href="/khoamanhinhadmin"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Khóa màn hình</span></a>
-                            <a class="dropdown-item" href="/trangchu"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Đăng xuất</span></a>
+                            <a class="dropdown-item" href="/caidatadmin"><span
+                                    class="badge bg-success-subtle text-success mt-1 float-end">New</span><i
+                                    class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle">Cài đặt</span></a>
+                            <a class="dropdown-item" href="/khoamanhinhadmin"><i
+                                    class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle">Khóa màn hình</span></a>
+                            <a class="dropdown-item" href="/trangchu"><i
+                                    class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle" data-key="t-logout">Đăng xuất</span></a>
                         </div>
                     </div>
                 </div>
@@ -631,11 +713,14 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="NotificationModalbtn-close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            id="NotificationModalbtn-close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mt-2 text-center">
-                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                   colors="primary:#f7b84b,secondary:#f06548"
+                                   style="width:100px;height:100px"></lord-icon>
                         <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
                             <h4>Are you sure ?</h4>
                             <p class="text-muted mx-4 mb-0">Bạn có chắc chắn muốn xóa thông báo này?</p>
@@ -643,7 +728,8 @@
                     </div>
                     <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                         <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn w-sm btn-danger" id="delete-notification">Yes, Delete It!</button>
+                        <button type="button" class="btn w-sm btn-danger" id="delete-notification">Yes, Delete It!
+                        </button>
                     </div>
                 </div>
 
@@ -672,7 +758,8 @@
                         <img src="images/logo-light.png" alt="" height="17">
                     </span>
             </a>
-            <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
+            <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
+                    id="vertical-hover">
                 <i class="ri-record-circle-line"></i>
             </button>
         </div>
@@ -710,7 +797,8 @@
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                        <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
+                           aria-expanded="false" aria-controls="sidebarDashboards">
                             <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarDashboards">
@@ -724,26 +812,30 @@
                         </div>
                     </li> <!-- end Dashboard Menu -->
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
+                        <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
+                           aria-expanded="false" aria-controls="sidebarApps">
                             <i class="ri-apps-2-line"></i> <span data-key="t-apps">Quản lý</span>
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarApps">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
+                                    <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button"
+                                       aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
                                         Quản lý thuộc tính
                                     </a>
                                     <div class="collapse menu-dropdown" id="sidebarCalendar">
                                         <ul class="nav nav-sm flex-column">
                                             <li class="nav-item">
-                                                <a href="/qlkichthuoc" class="nav-link" data-key="t-main-calender"> Kích thước</a>
+                                                <a href="/qlkichthuoc" class="nav-link" data-key="t-main-calender"> Kích
+                                                    thước</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="/qlmausac" class="nav-link" data-key="t-month-grid"> Màu sắc </a>
+                                                <a href="/qlmausac" class="nav-link" data-key="t-month-grid"> Màu
+                                                    sắc </a>
                                             </li>
                                             <li class="nav-item">
 
-                                                <a href="/qlthuonghieu" class="nav-link" > Thương hiệu </a>
+                                                <a href="/qlthuonghieu" class="nav-link"> Thương hiệu </a>
                                             </li>
                                             <li class="nav-item">
                                                 <a href="/qlxuatxu" class="nav-link"> Xuất xứ</a>
@@ -752,7 +844,8 @@
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#sidebarSanPham" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"> Quản lý sản phẩm </a>
+                                    <a href="#sidebarSanPham" class="nav-link" data-bs-toggle="collapse" role="button"
+                                       aria-expanded="false"> Quản lý sản phẩm </a>
                                     <div class="collapse menu-dropdown" id="sidebarSanPham">
                                         <ul class="nav nav-sm flex-column">
                                             <li class="nav-item">
@@ -768,49 +861,61 @@
                                     <a href="/qlnhanvien" class="nav-link" data-key="t-nhanvien"> Quản lý nhân viên </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/qlkhachhang" class="nav-link" data-key="t-khachang"> Quản lý khách hàng </a>
+                                    <a href="/qlkhachhang" class="nav-link" data-key="t-khachang"> Quản lý khách
+                                        hàng </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/qlvoucher" class="nav-link" data-key="t-voucher"> Quản lý voucher </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/qlkhuyenmai" class="nav-link" data-key="t-khuyenmai"> Quản lý chương trình khuyến mãi </a>
+                                    <a href="/qlkhuyenmai" class="nav-link" data-key="t-khuyenmai"> Quản lý chương trình
+                                        khuyến mãi </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="/banhangtaiquay" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLayouts">
+                        <a class="nav-link menu-link" href="/banhangtaiquay" data-bs-toggle="collapse" role="button"
+                           aria-expanded="false" aria-controls="sidebarLayouts">
                             <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Bán hàng tại quầy</span>
                         </a>
 
                     </li> <!-- end Dashboard Menu -->
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="/donhangadmin" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLayouts">
+                        <a class="nav-link menu-link" href="/donhangadmin" data-bs-toggle="collapse" role="button"
+                           aria-expanded="false" aria-controls="sidebarLayouts">
                             <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Đơn hàng</span>
                         </a>
                     </li>
                     <li class="nav-item" hidden="true">
-                        <a class="nav-link menu-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarIcons">
+                        <a class="nav-link menu-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button"
+                           aria-expanded="false" aria-controls="sidebarIcons">
                             <i class="ri-compasses-2-line"></i> <span data-key="t-icons">Icons</span>
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarIcons">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a href="icons-remix.html" class="nav-link"><span data-key="t-remix">Remix</span> <span class="badge badge-pill bg-info">v3.6</span></a>
+                                    <a href="icons-remix.html" class="nav-link"><span data-key="t-remix">Remix</span>
+                                        <span class="badge badge-pill bg-info">v3.6</span></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="icons-boxicons.html" class="nav-link"><span data-key="t-boxicons">Boxicons</span> <span class="badge badge-pill bg-info">v2.1.4</span></a>
+                                    <a href="icons-boxicons.html" class="nav-link"><span
+                                            data-key="t-boxicons">Boxicons</span> <span
+                                            class="badge badge-pill bg-info">v2.1.4</span></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="icons-materialdesign.html" class="nav-link"><span data-key="t-material-design">Material Design</span> <span class="badge badge-pill bg-info">v7.2.96</span></a>
+                                    <a href="icons-materialdesign.html" class="nav-link"><span
+                                            data-key="t-material-design">Material Design</span> <span
+                                            class="badge badge-pill bg-info">v7.2.96</span></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="icons-lineawesome.html" class="nav-link" data-key="t-line-awesome">Line Awesome</a>
+                                    <a href="icons-lineawesome.html" class="nav-link" data-key="t-line-awesome">Line
+                                        Awesome</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="icons-feather.html" class="nav-link"><span data-key="t-feather">Feather</span> <span class="badge badge-pill bg-info">v4.29.1</span></a>
+                                    <a href="icons-feather.html" class="nav-link"><span
+                                            data-key="t-feather">Feather</span> <span class="badge badge-pill bg-info">v4.29.1</span></a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="icons-crypto.html" class="nav-link"> <span data-key="t-crypto-svg">Crypto SVG</span></a>
@@ -840,104 +945,112 @@
                 <!-- COde  tại đây -->
                 <div class="card">
                     <div class="card-header">
-                        <h1 class="card-title mb-0">Quản lý voucher</h1>
+                        <h1 class="card-title mb-0">Tạo voucher</h1>
                     </div>
                     <div class="card-body">
-                        <form action="" method="">
+                        <form th:action="@{/qlvoucher/add}" th:object="${data}" method="post">
                             <div class="row">
                                 <div class="col-6">
-                                    <label class="form-label">ID</label>
-                                    <input type="text" class="form-control" name="" value="" >
-                                </div>
-                                <div class="col-6">
                                     <label class="form-label">Mã voucher</label>
-                                    <input type="text" class="form-control" name="" value="" >
+                                    <input type="text" class="form-control" th:name="maVoucher" >
+                                    <!--                                    <span th:if="${errors['maVoucher']}" th:text="${errors['maVoucher']}"></span>-->
+                                    <span th:if="${errors != null and errors['maVoucher'] != null}"
+                                          style="color: red" th:text="${errors['maVoucher']}"></span>
+
                                 </div>
+
                                 <div class="col-6">
                                     <label class="form-label">Loại voucher</label>
-                                    <input type="text" class="form-control" name="" value="" >
+                                    <input type="text" class="form-control" th:name="loaiVoucher" value="">
+                                    <!--                                    <span th:if="${errors['loaiVoucher']}" th:text="${errors['loaiVoucher']}"></span>-->
+                                    <span th:if="${errors != null and errors['loaiVoucher'] != null}"
+                                          style="color: red" th:text="${errors['loaiVoucher']}"></span>
+
                                 </div>
+
                                 <div class="col-6">
                                     <label class="form-label">Số lượng</label>
-                                    <input type="text" class="form-control" name="" value="" >
+                                    <input type="text" class="form-control" th:name="soLuong" value="">
+                                    <!--                                    <span th:if="${errors['soLuong']}" th:text="${errors['soLuong']}"></span>-->
+                                    <span th:if="${errors != null and errors['soLuong'] != null}"
+                                          style="color: red" th:text="${errors['soLuong']}"></span>
+
                                 </div>
-                                <div class="col-6">
-                                    <label class="form-label">Mô tả</label>
-                                    <textarea class="form-control" name="" value="" rows="3"></textarea>
-                                </div>
+
+<!--                                <div class="col-6">-->
+<!--                                    <label class="form-label">Mô tả</label>-->
+<!--                                    <textarea class="form-control" th:name="moTa" value="" rows="2"></textarea>-->
+<!--                                </div>-->
+
                                 <div class="col-6">
                                     <label class="form-label">Giá trị</label>
-                                    <input type="text" class="form-control" name="" value="" >
+                                    <input type="text" class="form-control" th:name="giaTri" value="">
+                                    <span th:if="${errors != null and errors['giaTri'] != null}"
+                                          style="color: red" th:text="${errors['giaTri']}"></span>
                                 </div>
+
+                                <div class="col-6">
+                                    <label class="form-label">Đơn tối thiểu</label>
+                                    <input type="text" class="form-control" th:name="donToiThieu" value="">
+                                    <span th:if="${errors != null and errors['donToiThieu'] != null}"
+                                          style="color: red" th:text="${errors['donToiThieu']}"></span>
+                                </div>
+
                                 <div class="col-6">
                                     <label class="form-label">Ngày bắt đầu</label>
-                                    <input type="date" class="form-control" name="" value="" >
+                                    <input type="date" class="form-control" th:name="ngayBatDau" value="">
+                                    <span th:if="${errors != null and errors['ngayBatDau'] != null}"
+                                          style="color: red" th:text="${errors['ngayBatDau']}"></span>
                                 </div>
+
                                 <div class="col-6">
                                     <label class="form-label">Ngày kết thúc</label>
-                                    <input type="date" class="form-control" name="" value="" >
+                                    <input type="date" class="form-control" th:name="ngayKetThuc" value="">
+                                    <span th:if="${errors != null and errors['ngayKetThuc'] != null}"
+                                          style="color: red" th:text="${errors['ngayKetThuc']}"></span>
                                 </div>
+
                                 <div class="col-6">
                                     <label class="form-label">Ngày tạo</label>
-                                    <input type="date" class="form-control" name="" value="" >
+                                    <input type="date" class="form-control" th:name="ngayTao" value="">
+                                    <span th:if="${errors != null and errors['ngayTao'] != null}"
+                                          style="color: red" th:text="${errors['ngayTao']}"></span>
                                 </div>
-                                <div class="col-6">
-                                    <label class="form-label">Trạng thái</label>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="trangThai" checked>
-                                        <label class="form-check-label" >Đang hoạt động</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="trangThai">
-                                        <label class="form-check-label">Hết hạn</label>
-                                    </div>
-                                </div>
+
                                 <div class="col-6">
                                     <label class="form-label">Nhân viên</label>
-                                    <select class="form-select mb-3" aria-label="Default select example">
-                                        <option selected> Hãy chọn nhân viên </option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                    <select class="form-select mb-3" aria-label="Default select example"
+                                            th:name="nhanVien">
+                                        <div th:each="nv : ${dataNV}">
+                                            <option th:value="${nv.id}" th:text="${nv.tenNhanVien}"></option>
+                                        </div>
                                     </select>
                                 </div>
-                                <button class="btn btn-primary btn-animation w-25 h-25" style="left: 10px; top: 30px">Thêm</button>
+
+<!--                                <div class="col-6">-->
+<!--                                    <label class="form-label">Trạng thái</label>-->
+<!--                                    <div class="form-check mb-2">-->
+<!--                                        <input class="form-check-input" type="radio" th:name="trangThai" th:value="1"-->
+<!--                                               checked>-->
+<!--                                        <label class="form-check-label">Đang hoạt động</label>-->
+<!--                                    </div>-->
+<!--                                    <div class="form-check">-->
+<!--                                        <input class="form-check-input" type="radio" th:name="trangThai" th:value="0">-->
+<!--                                        <label class="form-check-label">Hết hạn</label>-->
+<!--                                    </div>-->
+<!--                                    <div class="form-check">-->
+<!--                                        <input class="form-check-input" type="radio" th:name="trangThai" th:value="2">-->
+<!--                                        <label class="form-check-label">Chờ kích hoạt</label>-->
+<!--                                    </div>-->
+<!--                                    <span th:if="${errors != null and errors['trangThai'] != null}"-->
+<!--                                          style="color: red" th:text="${errors['trangThai']}"></span>-->
+<!--                                </div>-->
+
+                                <button class="btn btn-primary btn-animation w-25 h-25" style="left: 10px; top: 30px"
+                                        type="submit">Thêm
+                                </button>
                             </div>
                         </form>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th> Mã voucher</th>
-                                <th>Loại voucher</th>
-                                <th>Mô tả</th>
-                                <th>Số lượng</th>
-                                <th>Giá trị</th>
-                                <th>Ngày bắt đầu</th>
-                                <th>Ngày kết thúc</th>
-                                <th> Ngày tạo</th>
-                                <th>Trạng thái</th>
-                                <th>Nhân viên</th>
-                                <th>Hành động</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
-                                <td>7</td>
-                                <td>8</td>
-                                <td>9</td>
-                                <td>10</td>
-                                <td>11</td>
-                                <td><a href="" class="link-primary"><i class="ri-edit-line"></i></a></td>
-                            </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -949,7 +1062,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
-                        <script>document.write(new Date().getFullYear())</script> © Velzon.
+                        <script>document.write(new Date().getFullYear())</script>
+                        © Velzon.
                     </div>
                     <div class="col-sm-6">
                         <div class="text-sm-end d-none d-sm-block">
