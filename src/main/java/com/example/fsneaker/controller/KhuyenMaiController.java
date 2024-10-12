@@ -114,11 +114,20 @@ public class KhuyenMaiController {
 
         return "redirect:/khuyenmai/hienthi";
     }
-    // xử lí yêu cầu tìm kiếm khách hàng
     @GetMapping("search")
-    public String search(@RequestParam("keyword") String keyword, Model model) {
-        List<KhuyenMai> km = khuyenMaiService.searchKhuyenMai(keyword);
-        model.addAttribute("khuyenmai", km);
+    public String search(@RequestParam("keyword") String keyword,
+                         @RequestParam(value = "page", defaultValue = "0") int page,
+                         Model model) {
+
+        int pageSize = 5; // Số lượng bản ghi mỗi trang
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending()); // Sắp xếp theo id tăng dần
+
+        Page<KhuyenMai> khuyenMaiPage = khuyenMaiService.searchKhuyenMai(keyword, pageable);
+
+        // Thêm dữ liệu phân trang vào model
+        model.addAttribute("khuyenmai", khuyenMaiPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", khuyenMaiPage.getTotalPages());
         return "templateadmin/qlkhuyenmai";
     }
 }
