@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default" >
 <head>
     <meta charset="UTF-8">
     <title>Quản lý khuyến mãi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
-    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="shortcut icon" href="../images/favicon.ico">
     <!-- Thêm Line Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
     <!-- Thêm Material Design Icons CDN -->
@@ -18,21 +18,21 @@
     <!-- Thêm link tới Boxicons CDN -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- jsvectormap css -->
-    <link href="css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
 
     <!--Swiper slider css-->
-    <link href="css/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Layout config Js -->
-    <script src="js/layout.js"></script>
+    <script src="../js/layout.js"></script>
     <!-- Bootstrap Css -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     n<!-- Icons Css -->
-    <link href="css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
-    <link href="css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/app.min.css" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
-    <link href="css/custom.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/custom.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <!-- Begin page -->
@@ -70,6 +70,7 @@
                         <span></span>
                     </span>
                     </button>
+
 
                     <!-- App Search-->
                     <form class="app-search d-none d-md-block">
@@ -752,7 +753,17 @@
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/qlsanpham" class="nav-link" data-key="t-sanpham">Quản lý sản phẩm</a>
+                                    <a href="#sidebarSanPham" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"> Quản lý sản phẩm </a>
+                                    <div class="collapse menu-dropdown" id="sidebarSanPham">
+                                        <ul class="nav nav-sm flex-column">
+                                            <li class="nav-item">
+                                                <a href="/qlsanpham" class="nav-link">Sản phẩm</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/qlsanphamchitiet" class="nav-link">Sản phẩm chi tiết</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/qlnhanvien" class="nav-link" data-key="t-nhanvien"> Quản lý nhân viên </a>
@@ -828,59 +839,20 @@
         <div class="page-content">
             <div class="container-fluid">
                 <!-- COde  tại đây -->
+
                 <div class="card">
                     <div class="card-header">
                         <h1 class="card-title mb-0">Quản lý khuyến mãi</h1>
                     </div>
                     <div class="card-body">
-                        <form action="" method="">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="form-label">ID</label>
-                                    <input type="text" class="form-control" name="" value="" >
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Mã khuyến mãi</label>
-                                    <input type="text" class="form-control" name="" value="" >
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Tên khuyến mãi</label>
-                                    <input type="text" class="form-control" name="" value="" >
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Loại khuyến mãi</label>
-                                    <input type="text" class="form-control" name="" value="" >
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Mô tả</label>
-                                    <textarea class="form-control" name="" value="" rows="3"></textarea>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Giá trị</label>
-                                    <input type="text" class="form-control" name="" value="" >
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Ngày bắt đầu</label>
-                                    <input type="date" class="form-control" name="" value="" >
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Ngày kết thúc</label>
-                                    <input type="date" class="form-control" name="" value="" >
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Trạng thái</label>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="trangThai" checked>
-                                        <label class="form-check-label" >Đang hoạt động</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="trangThai">
-                                        <label class="form-check-label">Hết hạn</label>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary btn-animation w-25 h-25" style="left: 10px; top: 30px">Thêm</button>
-                            </div>
+                        <a href="create" class="btn btn-success">Thêm mới</a><br><hr>
+
+                        <form action="#" th:action="@{search}" method="get">
+                            <label for="search">Nhập mã khuyến mãi:</label>
+                            <input type="text" id="search" name="keyword" placeholder="tìm kiếm theo mã hoặc tên" required w/>
+                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                         </form>
+
                         <table class="table">
                             <thead>
                             <tr>
@@ -897,20 +869,51 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
-                                <td>7</td>
-                                <td>8</td>
-                                <td>9</td>
-                                <td><a href="" class="link-primary"><i class="ri-edit-line"></i></a></td>
+                            <tr th:each="khuyenmai:${khuyenmai}">
+                                <th scope="row">[[${khuyenmai.id}]]</th>
+                                <td>[[${khuyenmai.maKhuyenMai}]]</td>
+                                <td>[[${khuyenmai.tenKhuyenMai}]]</td>
+                                <td>[[${khuyenmai.loaiKhuyenMai}]]</td>
+                                <td>[[${khuyenmai.moTa}]]</td>
+
+                                <td>[[${khuyenmai.giaTri}]]</td>
+                                <td>[[${khuyenmai.ngayBatDau}]]</td>
+                                <td>[[${khuyenmai.ngayKetThuc}]]</td>
+
+
+                                <td>[[${khuyenmai.trangThai}]]</td>
+                                <td>
+
+
+                                    <a th:href="@{edit/{id}(id=${khuyenmai.id})}" class="btn btn-warning">Sửa</a>
+
+
+                                </td>
+
                             </tr>
                             </tbody>
                         </table>
+                        <!-- Phân trang -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <!-- Nút Previous -->
+                                <li th:if="${currentPage > 0}" class="page-item">
+                                    <a th:href="@{/khuyenmai/hienthi(page=${currentPage - 1})}" class="page-link">Previous</a>
+                                </li>
+
+                                <!-- Hiển thị các số trang -->
+                                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                                    th:classappend="${i == currentPage ? 'active' : ''}">
+                                    <a th:href="@{/khuyenmai/hienthi(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
+                                </li>
+
+                                <!-- Nút Next -->
+                                <li th:if="${currentPage < totalPages - 1}" class="page-item">
+                                    <a th:href="@{/khuyenmai/hienthi(page=${currentPage + 1})}" class="page-link">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+
                     </div>
                 </div>
             </div>
@@ -938,28 +941,28 @@
 </div>
 <!-- END layout-wrapper -->
 
-<script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/simplebar.min.js"></script>
-<script src="js/waves.min.js"></script>
-<script src="js/feather.min.js"></script>
-<script src="js/lord-icon-2.1.0.js"></script>
-<script src="js/plugins.js"></script>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../js/simplebar.min.js"></script>
+<script src="../js/waves.min.js"></script>
+<script src="../js/feather.min.js"></script>
+<script src="../js/lord-icon-2.1.0.js"></script>
+<script src="../js/plugins.js"></script>
 
 <!-- apexcharts -->
-<script src="js/apexcharts.min.js"></script>
+<script src="../js/apexcharts.min.js"></script>
 
 <!-- Vector map-->
-<script src="js/jsvectormap.min.js"></script>
-<script src="js/world-merc.js"></script>
+<script src="../js/jsvectormap.min.js"></script>
+<script src="../js/world-merc.js"></script>
 
 <!--Swiper slider js-->
-<script src="js/swiper-bundle.min.js"></script>
+<script src="../js/swiper-bundle.min.js"></script>
 
 <!-- Dashboard init -->
-<script src="js/dashboard-ecommerce.init.js"></script>
+<script src="../js/dashboard-ecommerce.init.js"></script>
 
 <!-- App js -->
-<script src="js/app.js"></script>
+<script src="../js/app.js"></script>
 </body>
 
 </html>
