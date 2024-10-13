@@ -833,7 +833,7 @@
                         <h1 class="card-title mb-0">Quản lý kích thước</h1>
                     </div>
                     <div class="card-body">
-                       <form action="" method="" class="">
+                       <form action="/qlkichthuoc/store" method="post" class="">
                            <div class="row">
                                <div class="col-6">
                                    <label class="form-label">ID</label>
@@ -850,11 +850,11 @@
                                <div class="col-6">
                                    <label class="form-label">Trạng thái</label>
                                    <div class="form-check mb-2">
-                                       <input class="form-check-input" type="radio" name="trangThai" checked>
+                                       <input class="form-check-input" type="radio" name="trangThai" value="0" checked>
                                        <label class="form-check-label" >Hoạt động</label>
                                    </div>
                                    <div class="form-check">
-                                       <input class="form-check-input" type="radio" name="trangThai">
+                                       <input class="form-check-input" type="radio" name="trangThai" value="1">
                                        <label class="form-check-label">Hết hàng</label>
                                    </div>
                                    <button type="submit" class="btn btn-primary btn-animation waves-effect waves-light">Thêm</button>
@@ -864,7 +864,7 @@
                         <table class="table table-active">
                             <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Mã kích thước</th>
                                 <th>Kích thước</th>
                                 <th>Trạng thái</th>
@@ -872,12 +872,56 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td><a href="" class="link-primary"><i class="ri-edit-line"></i></a> </td>
+                            <tr th:each="kt,index : ${kichthuoc}">
+                                <td>[[${index.index + 1}]]</td>
+                                <td>[[${kt.makichThuoc}]]</td>
+                                <td>[[${kt.kichThuoc}]]</td>
+                                <td>[[${kt.trangThai}]]</td>
+                                <td>
+                                    <button type="button" class="link-primary" data-bs-toggle="modal" th:data-bs-target="'#editModal-' + ${kt.id}">
+                                        <i class="ri-edit-line"></i> Chỉnh sửa
+                                    </button>
+
+<!--                                    Tạo model chỉnh sửa-->
+                                    <div class="modal fade" th:id="'editModal-' + ${kt.id}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editModalLabel">Chỉnh sửa màu sắc</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form th:action="@{/qlkichthuoc/update}" method="post">
+                                                        <input type="hidden" th:value="${kt.id}" name="id" />
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Mã màu sắc</label>
+                                                            <input type="text" class="form-control" th:value="${kt.makichThuoc}" name="makichThuoc" readonly>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Màu sắc</label>
+                                                            <input type="text" class="form-control" th:value="${kt.kichThuoc}" name="kichThuoc">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Trạng thái</label>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" th:checked="${kt.trangThai == 0}" name="trangThai" value="0">
+                                                                <label class="form-check-label">Có sẵn</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" th:checked="${kt.trangThai == 1}" name="trangThai" value="1">
+                                                                <label class="form-check-label">Tạm ngừng</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
