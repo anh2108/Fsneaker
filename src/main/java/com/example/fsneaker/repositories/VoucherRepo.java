@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface VoucherRepo extends JpaRepository<Voucher,Integer> {
     @Query("select o from Voucher o where o.loaiVoucher like ?1 " +
@@ -15,4 +16,10 @@ public interface VoucherRepo extends JpaRepository<Voucher,Integer> {
             " and (?4 is null or o.trangThai = ?4) " +
             " order by o.id desc ")
     public Page<Voucher> searchPage(String keyword, LocalDate ngayBatDau, LocalDate ngayKetThuc, Integer trangThai, PageRequest p);
+
+    List<Voucher> findByNgayBatDauAfter(LocalDate today);
+
+    List<Voucher> findByNgayBatDauLessThanEqualAndNgayKetThucGreaterThanEqual(LocalDate today, LocalDate today2);
+
+    List<Voucher> findByNgayKetThucBefore(LocalDate today);
 }

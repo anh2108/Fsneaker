@@ -943,24 +943,29 @@
         <div class="page-content">
             <div class="container-fluid">
                 <!-- COde  tại đây -->
+                <div>
+                    <a href="/qlvoucher">
+                        <button class="btn btn-primary btn-animation "><- Back</button>
+                    </a>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h1 class="card-title mb-0">Tạo voucher</h1>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/qlvoucher/add}" th:object="${data}" method="post">
+                        <form th:action="@{/qlvoucher/add}" method="post">
                             <div class="row">
                                 <div class="col-6">
                                     <label class="form-label">Mã voucher</label>
                                     <input type="text" class="form-control" th:name="maVoucher" >
                                     <!--                                    <span th:if="${errors['maVoucher']}" th:text="${errors['maVoucher']}"></span>-->
                                     <span th:if="${errors != null and errors['maVoucher'] != null}"
-                                          style="color: red" th:text="${errors['maVoucher']}"></span>
+                                          style="color: #ff0000" th:text="${errors['maVoucher']}"></span>
 
                                 </div>
 
                                 <div class="col-6">
-                                    <label class="form-label">Loại voucher</label>
+                                    <label class="form-label">Tên voucher</label>
                                     <input type="text" class="form-control" th:name="loaiVoucher" value="">
                                     <!--                                    <span th:if="${errors['loaiVoucher']}" th:text="${errors['loaiVoucher']}"></span>-->
                                     <span th:if="${errors != null and errors['loaiVoucher'] != null}"

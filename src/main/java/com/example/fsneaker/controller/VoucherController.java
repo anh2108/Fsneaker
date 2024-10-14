@@ -6,13 +6,16 @@ import com.example.fsneaker.repositories.NhanVienRepo;
 import com.example.fsneaker.repositories.VoucherRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +29,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin("*")
+@SpringBootApplication
+@EnableScheduling
+@Component
 @Controller
+
 public class VoucherController {
     @Autowired
     VoucherRepo voucherRepo;
@@ -71,7 +77,7 @@ public class VoucherController {
         return "templateadmin/voucher/add.html";
     }
 
-    @GetMapping("/qlvoucher/{id}")
+    @GetMapping("/qlvoucher-edit/{id}")
     public String edit(
             @PathVariable("id") Voucher voucher,
             Model model)
@@ -83,7 +89,7 @@ public class VoucherController {
         return "templateadmin/voucher/edit.html";
     }
 
-    @PostMapping("/qlvoucher/update/{id}")
+    @PostMapping("/qlvoucher-update/{id}")
     public String update(
             @Valid Voucher voucher,
             BindingResult result,
@@ -135,6 +141,31 @@ public class VoucherController {
 
         voucherRepo.save(voucher);
         return "redirect:/qlvoucher";
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void updateVoucherStatus() {
+        LocalDate today = LocalDate.now();
+
+        List<Voucher> upcomingVouchers = voucherRepo.findByNgayBatDauAfter(today);
+        for (Voucher voucher : upcomingVouchers) {
+            voucher.setTrangThai(2); // Sắp diễn ra
+            voucherRepo.save(voucher);
+        }
+
+        List<Voucher> ongoingVouchers = voucherRepo.findByNgayBatDauLessThanEqualAndNgayKetThucGreaterThanEqual(today, today);
+        for (Voucher voucher : ongoingVouchers) {
+            voucher.setTrangThai(1); // Đang diễn ra
+            voucherRepo.save(voucher);
+        }
+
+        List<Voucher> expiredVouchers = voucherRepo.findByNgayKetThucBefore(today);
+        for (Voucher voucher : expiredVouchers) {
+            voucher.setTrangThai(0); // Ngừng hoạt động
+            voucherRepo.save(voucher);
+        }
+
+        System.out.println("Cập nhật trạng thái voucher thành công!");
     }
 
 }

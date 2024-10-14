@@ -943,12 +943,17 @@
         <div class="page-content">
             <div class="container-fluid">
                 <!-- COde  tại đây -->
+                <div>
+                    <a href="/qlvoucher">
+                        <button class="btn btn-primary btn-animation "><- Back</button>
+                    </a>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h1 class="card-title mb-0">Sửa voucher</h1>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/qlvoucher/update/{id}(id=${data.id})}" method="post">
+                        <form th:action="@{/qlvoucher-update/{id}(id=${data.id})}" method="post">
                             <div class="row">
                                 <div class="col-6">
                                     <label class="form-label">Mã voucher</label>
@@ -960,7 +965,7 @@
                                 </div>
 
                                 <div class="col-6">
-                                    <label class="form-label">Loại voucher</label>
+                                    <label class="form-label">Tên voucher</label>
                                     <input type="text" class="form-control" th:name="loaiVoucher"
                                            th:value="${data.loaiVoucher}">
                                     <span th:if="${errors != null and errors['loaiVoucher'] != null}"

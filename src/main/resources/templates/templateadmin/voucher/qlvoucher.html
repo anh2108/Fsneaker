@@ -958,8 +958,18 @@
                         <form th:action="@{/qlvoucher}" method="get">
                             <div class="row">
                                 <div class="col-6">
-                                    <label class="form-label">Tìm theo loại</label>
+                                    <label class="form-label">Tìm theo Tên</label>
                                     <input type="text" class="form-control" name="keyword" th:value="${param.keyword}">
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label">Trạng thái</label>
+                                    <select name="trangThai" class="form-control">
+                                        <option th:selected="${param.trangThai == null}" value="">Tất cả</option>
+                                        <option th:selected="${param.trangThai == 0}" value="0">Hết hạn</option>
+                                        <option th:selected="${param.trangThai == 1}" value="1">Đang hoạt đông</option>
+                                        <option th:selected="${param.trangThai == 2}" value="2">Chờ kích hoạt</option>
+                                    </select>
                                 </div>
 
                                 <div class="col-6">
@@ -970,17 +980,6 @@
                                 <div class="col-6">
                                     <label class="form-label">Ngày kết thúc</label>
                                     <input class="form-control" type="date" name="ngayKetThuc" th:value="${param.ngayKetThuc}">
-                                </div>
-
-                                <div class="col-6">
-                                    <label class="form-label">Trạng thái</label>
-                                    <select name="trangThai" class="form-control">
-                                        <option th:selected="${param.trangThai == null}" value="">Tất cả</option>
-                                        <option th:selected="${param.trangThai == 0}" value="0">Hết hạn</option>
-                                        <option th:selected="${param.trangThai == 1}" value="1">Đang hoạt đông</option>
-                                        <option th:selected="${param.trangThai == 2}" value="2">Chờ kích hoạt</option>
-                                        <!-- Thêm các trạng thái khác -->
-                                    </select>
                                 </div>
 
                                 <div class="col-2">
@@ -1017,7 +1016,7 @@
                             <tr>
                                 <th>STT</th>
                                 <th> Mã voucher</th>
-                                <th>Loại voucher</th>
+                                <th>Tên voucher</th>
                                 <!--                                <th>Mô tả</th>-->
                                 <th>Số lượng</th>
                                 <th>Giá trị</th>
@@ -1044,7 +1043,7 @@
                                 <td th:text="${i.ngayTao}"></td>
                                 <td th:text="${i.nhanVien.tenNhanVien}"></td>
                                 <td th:text="${i.trangThai == 1 ? 'Đang hoạt động' : (i.trangThai == 0 ? 'Hết hạn' : (i.trangThai == 2 ? 'Chờ kích hoạt' : 'Không xác định'))}"></td>
-                                <td><a th:href="@{/qlvoucher/{id}(id=${i.id})}" class="link-primary"><i
+                                <td><a th:href="@{/qlvoucher-edit/{id}(id=${i.id})}" class="link-primary"><i
                                         class="ri-edit-line"></i></a></td>
                             </tr>
                             </tbody>
