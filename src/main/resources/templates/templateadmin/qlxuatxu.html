@@ -752,17 +752,7 @@
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#sidebarSanPham" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"> Quản lý sản phẩm </a>
-                                    <div class="collapse menu-dropdown" id="sidebarSanPham">
-                                        <ul class="nav nav-sm flex-column">
-                                            <li class="nav-item">
-                                                <a href="/qlsanpham" class="nav-link">Sản phẩm</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="/qlsanphamchitiet" class="nav-link">Sản phẩm chi tiết</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <a href="/qlsanpham" class="nav-link" data-key="t-sanpham">Quản lý sản phẩm</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/qlnhanvien" class="nav-link" data-key="t-nhanvien"> Quản lý nhân viên </a>
@@ -882,12 +872,56 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td><a href="" class="link-primary"><i class="ri-edit-line"></i></a> </td>
+                            <tr th:each="xx,index : ${xuatXuList}" >
+                                <td>[[${index.index + 1}]</td>
+                                <td>[[${xx.maXuatXu}]]</td>
+                                <td>[[${xx.xuatXu}]]</td>
+                                <td>[[${xx.trangThai}]]</td>
+                                <td>
+                                    <button type="button" class="link-primary" data-bs-toggle="modal" th:data-bs-target="'#editModal-' + ${xx.id}">
+                                        <i class="ri-edit-line"></i> Chỉnh sửa
+                                    </button>
+
+                                    <!--                                     model chỉnh sửa-->
+                                    <div class="modal fade" th:id="'editModal-' + ${xx.id}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editModalLabel">Chỉnh sửa màu sắc</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form th:action="@{/qlxuatxu/update}" method="post">
+                                                        <input type="hidden" th:value="${xx.id}" name="id" />
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Mã màu sắc</label>
+                                                            <input type="text" class="form-control" th:value="${xx.maXuatXu}" name="maXuatXu" readonly>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Màu sắc</label>
+                                                            <input type="text" class="form-control" th:value="${xx.xuatXu}" name="xuatXu">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Trạng thái</label>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" th:checked="${xx.trangThai == 0}" name="trangThai" value="0">
+                                                                <label class="form-check-label">Có sẵn</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" th:checked="${xx.trangThai == 1}" name="trangThai" value="1">
+                                                                <label class="form-check-label">Tạm ngừng</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             </tbody>
                         </table>

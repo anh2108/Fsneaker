@@ -102,7 +102,8 @@ public class VoucherController {
             for (FieldError fe : listErrors) {
                 errors.put(fe.getField(), fe.getDefaultMessage());
             }
-
+            List<NhanVien> listNV = this.nhanVienRepo.findAll();
+            model.addAttribute("dataNV", listNV);
             model.addAttribute("errors", errors);
             model.addAttribute("data", voucher);
             return "templateadmin/voucher/edit.html";
