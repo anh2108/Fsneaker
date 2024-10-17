@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
+    <style>
+        .disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+
     <link rel="shortcut icon" href="images/favicon.ico">
     <!-- Thêm Line Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
@@ -825,126 +832,164 @@
         <div class="page-content">
             <div class="container-fluid">
                 <!-- COde tai day -->
+                <h1>Quản lý sản phẩm</h1>
+                <!-- Tabs nav -->
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Sản phẩm</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Sản phẩm chi tiết</button>
+                    </li>
+                </ul>
+                <!-- Tabs content -->
+                <div class="tab-content" id="myTabContent">
+                    <!-- Tab quản lý sản phẩm -->
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h1 class="card-title mb-0">Sản phẩm</h1>
+                            </div>
+                            <div class="card-body">
+<!--                                <form th:action="@{/qlsanpham}" method="get">-->
+<!--                                    <label for="search">Tìm kiếm</label>-->
+<!--                                    <input type="text" id="search" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm"/>-->
+<!--                                    <input type="submit" value="Tìm" class="btn btn-primary"/>-->
+<!--                                </form>-->
+<!--                                <a href="/them-san-pham-form" class="btn btn-primary">Thêm</a>-->
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã sản phẩm</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Thương hiệu</th>
+                                        <th>Xuất xứ</th>
+                                        <th>Khuyến mãi</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="sp,index : ${listSanPham}" >
+                                        <td>[[${index.index + 1}]]</td>
+                                        <td>[[${sp.maSanPham}]]</td>
+                                        <td>[[${sp.tenSanPham}]]</td>
+                                        <td>[[${sp.thuongHieu.tenThuongHieu}]]</td>
+                                        <td>[[${sp.xuatXu.xuatXu}]]</td>
+                                        <td>[[${sp.khuyenMai?.tenKhuyenMai}]]</td>
+                                        <td th:switch="${sp.trangThai}">
+                                            <span th:case="0">Còn hàng</span>
+                                            <span th:case="1">Hết hàng</span>
+                                            <span th:case="2">Đang khuyến mãi</span>
+                                            <span th:case="3">Hàng mới</span>
+                                            <span th:case="4">Sắp có hàng</span>
+                                            <span th:case="5">Ngừng kinh doanh</span>
+                                        </td>
+                                        <td>[[${sp.ngayTao}]]</td>
+                                        <td>
+                                            <a class="link-primary"><i class="ri-edit-line"></i></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+<!--                                <div>-->
+<!--                                    &lt;!&ndash; Nút về trang đầu &ndash;&gt;-->
+<!--                                    <a th:href="@{/qlsanpham(page=0, keyword=${keyword})}"-->
+<!--                                       th:classappend="${sanPhams.number == 0} ? 'disabled' : ''">First</a>-->
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h1 class="card-title mb-0">Quản lý sản phẩm</h1>
-                        </div>
-                        <div class="card-body">
-                            <form class="" action="" method="">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label class="form-label">ID</label>
-                                        <input type="text" class="form-control" name="" value="">
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Mã sản phẩm</label>
-                                        <input type="text" class="form-control" name="" value="">
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Tên sản phẩm</label>
-                                        <input type="text" class="form-control" name="" value="">
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Ngày tạo</label>
-                                        <input type="date" class="form-control" name="" value="">
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Thương hiệu</label>
-                                        <select class="form-select mb-3" aria-label="Default select example">
-                                            <option selected> Hãy chọn thương hiệu</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Xuất xứ</label>
-                                        <select class="form-select mb-3" aria-label="Default select example">
-                                        <option selected> Hãy chọn xuất xứ </option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Trạng thái</label>
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="radio" name="trangThai" checked>
-                                                    <label class="form-check-label" > Còn hàng</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="trangThai">
-                                                    <label class="form-check-label">Hết hàng</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="radio" name="trangThai" >
-                                                    <label class="form-check-label" > Đang khuyến mãi</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="trangThai">
-                                                    <label class="form-check-label">Hàng mới</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="radio" name="trangThai" >
-                                                    <label class="form-check-label" > Sắp có hàng</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="trangThai">
-                                                    <label class="form-check-label">Ngừng kinh doanh</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Khuyến mãi</label>
-                                        <select class="form-select mb-3" aria-label="Default select example">
-                                            <option selected> Hãy chọn khuyến mãi </option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-animation waves-effect waves-light">Thêm</button>
-                            </form>
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Mã sản phẩm</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Thương hiệu</th>
-                                    <th>Xuất xứ</th>
-                                    <th>Trạng thái</th>
-                                    <th>Khuyến mãi</th>
-                                    <th>Hành động</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2</td>
-                                    <td>3</td>
-                                    <td>4</td>
-                                    <td>5</td>
-                                    <td>6</td>
-                                    <td>7</td>
-                                    <td>8</td>
-                                    <td><a href="" class="link-primary"><i class="ri-edit-line"></i></a> </td>
-                                </tr>
-                                </tbody>
-                            </table>
+<!--                                    &lt;!&ndash; Nút Previous &ndash;&gt;-->
+<!--                                    <a th:href="@{/qlsanpham(page=${sanPhams.number - 1}, keyword=${keyword})}"-->
+<!--                                       th:classappend="${!sanPhams.hasPrevious()} ? 'disabled' : ''">Previous</a>-->
+
+<!--                                    &lt;!&ndash; Nút Next &ndash;&gt;-->
+<!--                                    <a th:href="@{/qlsanpham(page=${sanPhams.number + 1}, keyword=${keyword})}"-->
+<!--                                       th:classappend="${!sanPhams.hasNext()} ? 'disabled' : ''">Next</a>-->
+
+<!--                                    &lt;!&ndash; Nút về trang cuối &ndash;&gt;-->
+<!--                                    <a th:href="@{/qlsanpham(page=${sanPhams.totalPages - 1}, keyword=${keyword})}"-->
+<!--                                       th:classappend="${sanPhams.number + 1 >= sanPhams.totalPages} ? 'disabled' : ''">Last</a>-->
+<!--                                </div>-->
+                            </div>
                         </div>
                     </div>
+                    <!-- Tab quản lý sản phẩm chi tiết -->
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h1 class="card-title mb-0">Sản phẩm chi tiết</h1>
+                            </div>
+                            <div class="card-body">
+<!--                                <form th:action="@{/qlsanpham}" method="get">-->
+<!--                                    <label for="search1"> Tìm kiếm</label>-->
+<!--                                    <input type="text" id="search1" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm"/>-->
+<!--                                    <input type="submit" value="Tìm"/>-->
+<!--                                </form>-->
+<!--                                <a href= class="btn btn-primary">Thêm</a>-->
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã sản phảm chi tiết</th>
+                                        <th>Sản phẩm</th>
+                                        <th> Kích thước </th>
+                                        <th>Màu sắc</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá bán</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ngày sản xuất</th>
+                                        <th>Images</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="spct,index : ${listSanPhamChiTiet}">
+                                        <td>[[${index.index + 1}]]</td>
+                                        <td>[[${spct.maSanPhamChiTiet}]]</td>
+                                        <td>[[${spct.sanPham.tenSanPham}]]</td>
+                                        <td>[[${spct.kichThuoc.kichThuoc}]]</td>
+                                        <td>[[${spct.mauSac.mauSac}]]</td>
+                                        <td>[[${spct.soLuong}]]</td>
+                                        <td>[[${spct.giaBan}]]</td>
+                                        <td th:switch="${spct.trangThai}" >
+                                            <span th:case="0">Còn hàng</span>
+                                            <span th:case="1">Hết hàng</span>
+                                            <span th:case="2">Đang khuyến mãi</span>
+                                            <span th:case="3">Hàng mới</span>
+                                            <span th:case="4">Sắp có hàng</span>
+                                            <span th:case="5">Ngừng kinh doanh</span>
+                                        </td>
+                                        <td th:text="${#dates.format(spct.ngaySanXuat, 'dd/MM/yyyy')}"></td>
+                                        <td>
+                                            <a  class="link-primary"><i class="ri-edit-line"></i></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+<!--                                <div>-->
+<!--                                    &lt;!&ndash; Nút về trang đầu &ndash;&gt;-->
+<!--                                    <a th:href="@{/qlsanpham(page=0, keyword=${keyword})}"-->
+<!--                                       th:classappend="${sanPhamChiTiets.number == 0} ? 'disabled' : ''">First</a>-->
 
+<!--                                    &lt;!&ndash; Nút Previous &ndash;&gt;-->
+<!--                                    <a th:href="@{/qlsanpham(page=${sanPhamChiTiets.number - 1}, keyword=${keyword})}"-->
+<!--                                       th:classappend="${!sanPhamChiTiets.hasPrevious()} ? 'disabled' : ''">Previous</a>-->
+
+<!--                                    &lt;!&ndash; Nút Next &ndash;&gt;-->
+<!--                                    <a th:href="@{/qlsanpham(page=${sanPhamChiTiets.number + 1}, keyword=${keyword})}"-->
+<!--                                       th:classappend="${!sanPhamChiTiets.hasNext()} ? 'disabled' : ''">Next</a>-->
+
+<!--                                    &lt;!&ndash; Nút về trang cuối &ndash;&gt;-->
+<!--                                    <a th:href="@{/qlsanpham(page=${sanPhamChiTiets.totalPages - 1}, keyword=${keyword})}"-->
+<!--                                       th:classappend="${sanPhamChiTiets.number + 1 >= sanPhamChiTiets.totalPages} ? 'disabled' : ''">Last</a>-->
+<!--                                </div>-->
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- container-fluid -->
         </div>
@@ -954,7 +999,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
-                        <script>document.write(new Date().getFullYear())</script> © Velzon.
+                        © Velzon.
                     </div>
                     <div class="col-sm-6">
                         <div class="text-sm-end d-none d-sm-block">
@@ -969,7 +1014,6 @@
 
 </div>
 <!-- END layout-wrapper -->
-
 
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/simplebar.min.js"></script>

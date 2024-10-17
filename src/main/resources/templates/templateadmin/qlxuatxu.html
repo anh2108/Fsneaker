@@ -833,12 +833,8 @@
                         <h1 class="card-title mb-0">Quản lý xuất xứ</h1>
                     </div>
                     <div class="card-body">
-                        <form class="" action="" method="">
+                        <form class="" action="/qlmausac/store" method="post">
                             <div class="row">
-                                <div class="col-6">
-                                    <label class="form-label">ID</label>
-                                    <input type="text" class="form-control" name="" value="">
-                                </div>
                                 <div class="col-6">
                                     <label class="form-label">Mã xuất xứ</label>
                                     <input type="text" class="form-control" name="" value="">
@@ -873,7 +869,7 @@
                             </thead>
                             <tbody>
                             <tr th:each="xx,index : ${xuatXuList}" >
-                                <td>[[${index.index + 1}]</td>
+                                <td>[[${index.index + 1}]]</td>
                                 <td>[[${xx.maXuatXu}]]</td>
                                 <td>[[${xx.xuatXu}]]</td>
                                 <td>[[${xx.trangThai}]]</td>
