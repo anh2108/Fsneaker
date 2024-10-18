@@ -73,14 +73,16 @@ public class  KhuyenMaiController {
             model.addAttribute("errorNgay", "Ngày bắt đầu và ngày kết thúc không được trùng nhau!");
             return "templateadmin/them-khuyen-mai";
         }
-
-// Kiểm tra mã khuyến mãi có trùng không
+        // kiểm tra điều kiệu của mã khi thêm mới
         KhuyenMai existingKhuyenMai = khuyenMaiRepository.findByMaKhuyenMai(khuyenMai.getMaKhuyenMai());
         if (existingKhuyenMai != null) {
+            // Nếu mã khuyến mãi đã tồn tại, thông báo lỗi
             model.addAttribute("khuyenmai", khuyenMai);
             model.addAttribute("errorMaKhuyenMai", "Mã khuyến mãi đã tồn tại, vui lòng chọn mã khác!");
             return "templateadmin/them-khuyen-mai";
         }
+
+
 
         khuyenMaiRepository.save(khuyenMai);
         return "redirect:/khuyenmai/hienthi";
