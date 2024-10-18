@@ -8,4 +8,6 @@ public class KhachHang {
     private String ma;
 
     private String ten;
+
+    private String sdt;
 }
