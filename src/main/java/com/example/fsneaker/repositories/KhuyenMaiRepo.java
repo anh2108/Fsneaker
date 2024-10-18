@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface KhuyenMaiRepo extends JpaRepository<KhuyenMai,Integer> {
@@ -17,4 +18,5 @@ public interface KhuyenMaiRepo extends JpaRepository<KhuyenMai,Integer> {
     Page<KhuyenMai> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     KhuyenMai findByMaKhuyenMai(String maKhuyenMai);
+   
  }
