@@ -3,17 +3,16 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý khách hàng</title>
+    <title>Sửa khách hàng</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <style>
-        .disabled {
-            pointer-events: none;
-            opacity: 0.5;
+        .link-hover:hover {
+            text-decoration: underline;
         }
     </style>
-    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="shortcut icon" href="../images/favicon.ico">
     <!-- Thêm Line Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
     <!-- Thêm Material Design Icons CDN -->
@@ -25,21 +24,21 @@
     <!-- Thêm link tới Boxicons CDN -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- jsvectormap css -->
-    <link href="css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
 
     <!--Swiper slider css-->
-    <link href="css/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Layout config Js -->
-    <script src="js/layout.js"></script>
+    <script src="../js/layout.js"></script>
     <!-- Bootstrap Css -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    n<!-- Icons Css -->
-    <link href="css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="../css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
-    <link href="css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/app.min.css" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
-    <link href="css/custom.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/custom.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <!-- Begin page -->
@@ -53,19 +52,19 @@
                     <div class="navbar-brand-box horizontal-logo">
                         <a href="/trangchuadmin" class="logo logo-dark">
                         <span class="logo-sm">
-                            <img src="images/logo-sm.png" alt="" height="22">
+                            <img src="../images/logo-sm.png" alt="" height="22">
                         </span>
                             <span class="logo-lg">
-                            <img src="images/logo-dark.png" alt="" height="17">
+                            <img src="../images/logo-dark.png" alt="" height="17">
                         </span>
                         </a>
 
                         <a href="/trangchuadmin" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="images/logo-sm.png" alt="" height="22">
+                            <img src="../images/logo-sm.png" alt="" height="22">
                         </span>
                             <span class="logo-lg">
-                            <img src="images/logo-light.png" alt="" height="17">
+                            <img src="../images/logo-light.png" alt="" height="17">
                         </span>
                         </a>
                     </div>
@@ -128,7 +127,7 @@
                                     <!-- item -->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                         <div class="d-flex">
-                                            <img src="images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <img src="../images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <h6 class="m-0">Angela Bernier</h6>
                                                 <span class="fs-11 mb-0 text-muted">Manager</span>
@@ -138,7 +137,7 @@
                                     <!-- item -->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                         <div class="d-flex">
-                                            <img src="images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <img src="../images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <h6 class="m-0">David Grasso</h6>
                                                 <span class="fs-11 mb-0 text-muted">Web Designer</span>
@@ -148,7 +147,7 @@
                                     <!-- item -->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                         <div class="d-flex">
-                                            <img src="images/users/avatar-5.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <img src="../images/users/avatar-5.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <h6 class="m-0">Mike Bunch</h6>
                                                 <span class="fs-11 mb-0 text-muted">React Developer</span>
@@ -415,7 +414,7 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item position-relative">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                                <img src="../images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
@@ -464,7 +463,7 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item position-relative">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                                <img src="../images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
@@ -497,7 +496,7 @@
                                     <div data-simplebar style="max-height: 300px;" class="pe-2">
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                <img src="../images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">James Lemire</h6>
@@ -520,7 +519,7 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                <img src="../images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
@@ -544,7 +543,7 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-6.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                <img src="../images/users/avatar-6.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Kenneth Brown</h6>
@@ -568,7 +567,7 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <img src="images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                <img src="../images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
@@ -609,7 +608,7 @@
                     <div class="dropdown ms-sm-3 header-item topbar-user">
                         <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="images/users/avatar-1.jpg" alt="Header Avatar">
+                            <img class="rounded-circle header-profile-user" src="../images/users/avatar-1.jpg" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Nguyễn Xuân Hoàng</span>
                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Trưởng nhóm</span>
@@ -664,19 +663,19 @@
             <!-- Dark Logo-->
             <a href="/trangchuadmin" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="images/logo-sm.png" alt="" height="22">
+                        <img src="../images/logo-sm.png" alt="" height="22">
                     </span>
                 <span class="logo-lg">
-                        <img src="images/logo-dark.png" alt="" height="17">
+                        <img src="../images/logo-dark.png" alt="" height="17">
                     </span>
             </a>
             <!-- Light Logo-->
             <a href="/trangchuadmin" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="images/logo-sm.png" alt="" height="22">
+                        <img src="../images/logo-sm.png" alt="" height="22">
                     </span>
                 <span class="logo-lg">
-                        <img src="images/logo-light.png" alt="" height="17">
+                        <img src="../images/logo-light.png" alt="" height="17">
                     </span>
             </a>
             <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
@@ -789,140 +788,79 @@
                             <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Đơn hàng</span>
                         </a>
                     </li>
-                    <li class="nav-item" hidden="true">
-                        <a class="nav-link menu-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarIcons">
-                            <i class="ri-compasses-2-line"></i> <span data-key="t-icons">Icons</span>
-                        </a>
-                        <div class="collapse menu-dropdown" id="sidebarIcons">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a href="icons-remix.html" class="nav-link"><span data-key="t-remix">Remix</span> <span class="badge badge-pill bg-info">v3.6</span></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="icons-boxicons.html" class="nav-link"><span data-key="t-boxicons">Boxicons</span> <span class="badge badge-pill bg-info">v2.1.4</span></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="icons-materialdesign.html" class="nav-link"><span data-key="t-material-design">Material Design</span> <span class="badge badge-pill bg-info">v7.2.96</span></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="icons-lineawesome.html" class="nav-link" data-key="t-line-awesome">Line Awesome</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="icons-feather.html" class="nav-link"><span data-key="t-feather">Feather</span> <span class="badge badge-pill bg-info">v4.29.1</span></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="icons-crypto.html" class="nav-link"> <span data-key="t-crypto-svg">Crypto SVG</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
                 </ul>
             </div>
             <!-- Sidebar -->
         </div>
 
-        <div class="sidebar-background"></div>
     </div>
-    <!-- Left Sidebar End -->
-    <!-- Vertical Overlay-->
-    <div class="vertical-overlay"></div>
-
-    <!-- ============================================================== -->
-    <!-- Start right Content here -->
-    <!-- ============================================================== -->
     <div class="main-content">
-        <!-- End Page-content -->
         <div class="page-content">
-            <!-- Code tai day -->
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">Quản lý khách hàng</h4>
-                </div><!-- end card header -->
-                <div class="card-body">
-                    <form th:action="@{/qlkhachhang}" method="get">
-                        <label for="search">Tìm kiếm</label>
-                        <input type="text" id="search" name="keyword" th:value="${keyword}" placeholder="Mã, tên, email, điện thoại" style="width: 250px"/>
-                        <input type="submit" value="Tìm" class="btn btn-success">
-                    </form>
-                    <a href="/themkhachhang-form" class="btn btn-success mb-3">Thêm khách hàng</a>
-                    <table class="table table-nowrap">
-                        <tr class="">
-                            <th>ID</th>
-                            <th>
-                                Mã khách hàng
-                            </th>
-                            <th>
-                                Tên khách hàng
-                            </th>
-                            <th>
-                                Email
-                            </th>
-                            <th>
-                                Ngày sinh
-                            </th>
-                            <th>
-                                Giới tính
-                            </th>
-                            <th>
-                                Địa chỉ
-                            </th>
-                            <th>
-                                Số điện thoại
-                            </th>
-                            <th>
-                                Trạng thái
-                            <th>
-                                Hành động
-                            </th>
-                        </tr>
-                        <tr th:each="khachHang : ${khachHangs}">
-                            <td th:text="${khachHang.id}"></td>
-                            <td th:text="${khachHang.maKhachHang}"></td>
-                            <td th:text="${khachHang.tenKhachHang}"></td>
-                            <td th:text="${khachHang.email}"></td>
-                            <td th:text="${#dates.format(khachHang.ngaySinh,'dd/MM/yyyy')}"></td>
-                            <td th:text="${khachHang.gioiTinh} == true ? 'Nữ' : 'Nam'"></td>
-                            <td th:text="${khachHang.diaChi}"></td>
-                            <td th:text="${khachHang.soDienThoai}"></td>
-                            <td th:text="${khachHang.trangThai} == true ? 'Không hoạt động' : 'Hoạt động'"></td>
-                            <td><a th:href="@{/sua/{id}(id=${khachHang.id})}" class="link-primary"><i class="ri-edit-line"></i>EDIT</a>
-                                <a th:href="@{/select(id=${khachHang.id})}">Chọn</a></td>
-                        </tr>
-                    </table>
-                    <div>
-                        <!-- Nút về trang đầu -->
-                        <a th:href="@{/qlkhachhang(page=0, keyword=${keyword})}"
-                           th:classappend="${khachHangs.number == 0} ? 'disabled' : ''">First</a>
-
-                        <!-- Nút Previous -->
-                        <a th:href="@{/qlkhachhang(page=${khachHangs.number - 1}, keyword=${keyword})}"
-                           th:classappend="${!khachHangs.hasPrevious()} ? 'disabled' : ''">Previous</a>
-
-                        <!-- Nút Next -->
-                        <a th:href="@{/qlkhachhang(page=${khachHangs.number + 1}, keyword=${keyword})}"
-                           th:classappend="${!khachHangs.hasNext()} ? 'disabled' : ''">Next</a>
-
-                        <!-- Nút về trang cuối -->
-                        <a th:href="@{/qlkhachhang(page=${khachHangs.totalPages - 1}, keyword=${keyword})}"
-                           th:classappend="${khachHangs.number + 1 >= khachHangs.totalPages} ? 'disabled' : ''">Last</a>
-                    </div>
+                    <h1 >Sửa khách hàng</h1>
                 </div>
-            </div><!-- end card -->
+                <form th:action="@{/cap-nhat/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}" >
+                    <div class="card-body row">
+                        <div class="col-6 mb-2">
+                            <label  class="form-label">Mã khách hàng</label>
+                            <input type="text" th:field="*{maKhachHang}" class="form-control" />
+                            <div th:if="${#fields.hasErrors('maKhachHang')}" th:errors="*{maKhachHang}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <label  class="form-label">Tên khách hàng</label>
+                            <input type="text"  th:field="*{tenKhachHang}" class="form-control" />
+                            <div th:if="${#fields.hasErrors('tenKhachHang')}" th:errors="*{tenKhachHang}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" th:field="*{email}" class="form-control form-control-icon"   placeholder="example@gmail.com">
+                            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <label for="ngaySinh" class="form-label">Ngày sinh</label>
+                            <input type="date" id="ngaySinh" th:field="*{ngaySinh}" class="form-control" >
+                        </div>
+                        <div class="col-6 mb-2">
+                            <label class="form-label">Giới tính</label>
+                            <div class="form-check mb-2">
+                                <input id="male" class="form-check-input" type="radio"  value="false" name="gioiTinh" th:checked="${khachHang.gioiTinh == false}">
+                                <label for="male" class="form-check-label" >Nam</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="female" class="form-check-input" type="radio" value="true" name="gioiTinh" th:checked="${khachHang.gioiTinh == true}">
+                                <label for="female" class="form-check-label" >Nữ</label>
+                            </div>
+                            <div th:if="${#fields.hasErrors('gioiTinh')}" th:errors="*{gioiTinh}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <label for="diaChi" class="form-label">Địa chỉ</labeL>
+                            <input type="text" id="diaChi" th:field="*{diaChi}" class="form-control" name="" value="">
+                            <div th:if="${#fields.hasErrors('diaChi')}" th:errors="*{diaChi}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <label for="soDienThoai" class="form-label">Số điện thoại</label>
+                            <input type="text" id="soDienThoai" th:field="*{soDienThoai}" class="form-control" >
+                            <div th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <label class="form-label">Trạng thái</label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" id="active" type="radio" value="false" name="trangThai" th:checked="${khachHang.trangThai == false}">
+                                <label for="active" class="form-check-label">Hoạt động</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="inactive" type="radio" value="true" name="trangThai" th:checked="${khachHang.trangThai == true}">
+                                <label for="inactive" class="form-check-label">Không hoạt động</label>
+                            </div>
+                            <div th:if="${#fields.hasErrors('trangThai')}" th:errors="*{trangThai}" style="color: red"></div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-animation waves-effect waves-light mb-2" style="width: 100px; left: 12px">Sửa</button>
+                        <a href="/qlkhachhang" class="link-hover">Trở về</a>
+                    </div>
+                </form>
+            </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         <footer class="footer">
             <div class="container-fluid">
@@ -944,36 +882,36 @@
 </div>
 <!-- END layout-wrapper -->
 
-<script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/simplebar.min.js"></script>
-<script src="js/waves.min.js"></script>
-<script src="js/feather.min.js"></script>
-<script src="js/lord-icon-2.1.0.js"></script>
-<script src="js/plugins.js"></script>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../js/simplebar.min.js"></script>
+<script src="../js/waves.min.js"></script>
+<script src="../js/feather.min.js"></script>
+<script src="../js/lord-icon-2.1.0.js"></script>
+<script src="../js/plugins.js"></script>
 
 <!-- apexcharts -->
-<script src="js/apexcharts.min.js"></script>
+<script src="../js/apexcharts.min.js"></script>
 
 <!-- Vector map-->
-<script src="js/jsvectormap.min.js"></script>
-<script src="js/world-merc.js"></script>
+<script src="../js/jsvectormap.min.js"></script>
+<script src="../js/world-merc.js"></script>
 
 <!--Swiper slider js-->
-<script src="js/swiper-bundle.min.js"></script>
+<script src="../js/swiper-bundle.min.js"></script>
 
 <!-- Dashboard init -->
-<script src="js/dashboard-ecommerce.init.js"></script>
+<script src="../js/dashboard-ecommerce.init.js"></script>
 
 <!-- App js -->
-<script src="js/app.js"></script>
+<script src="../js/app.js"></script>
 
 <!-- prismjs plugin -->
-<script src="js/libs/prismjs/prism.js"></script>
+<script src="../js/libs/prismjs/prism.js"></script>
 
 <!-- gridjs js -->
-<script src="js/libs/gridjs/gridjs.umd.js"></script>
+<script src="../js/libs/gridjs/gridjs.umd.js"></script>
 <!-- gridjs init -->
-<script src="js/libs/gridjs/gridjs.init.js"></script>
+<script src="../js/libs/gridjs/gridjs.init.js"></script>
 </body>
 
 </html>

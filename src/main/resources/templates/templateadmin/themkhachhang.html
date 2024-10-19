@@ -1,16 +1,16 @@
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
+
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý khách hàng</title>
+    <title >Quản lý khách hàng</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <style>
-        .disabled {
-            pointer-events: none;
-            opacity: 0.5;
+        .link-hover:hover {
+            text-decoration: underline;
         }
     </style>
     <link rel="shortcut icon" href="images/favicon.ico">
@@ -34,7 +34,7 @@
     <script src="js/layout.js"></script>
     <!-- Bootstrap Css -->
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    n<!-- Icons Css -->
+    <!-- Icons Css -->
     <link href="css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
     <link href="css/app.min.css" rel="stylesheet" type="text/css" />
@@ -824,105 +824,75 @@
 
         <div class="sidebar-background"></div>
     </div>
-    <!-- Left Sidebar End -->
-    <!-- Vertical Overlay-->
-    <div class="vertical-overlay"></div>
-
-    <!-- ============================================================== -->
-    <!-- Start right Content here -->
-    <!-- ============================================================== -->
     <div class="main-content">
-        <!-- End Page-content -->
         <div class="page-content">
-            <!-- Code tai day -->
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">Quản lý khách hàng</h4>
-                </div><!-- end card header -->
-                <div class="card-body">
-                    <form th:action="@{/qlkhachhang}" method="get">
-                        <label for="search">Tìm kiếm</label>
-                        <input type="text" id="search" name="keyword" th:value="${keyword}" placeholder="Mã, tên, email, điện thoại" style="width: 250px"/>
-                        <input type="submit" value="Tìm" class="btn btn-success">
-                    </form>
-                    <a href="/themkhachhang-form" class="btn btn-success mb-3">Thêm khách hàng</a>
-                    <table class="table table-nowrap">
-                        <tr class="">
-                            <th>ID</th>
-                            <th>
-                                Mã khách hàng
-                            </th>
-                            <th>
-                                Tên khách hàng
-                            </th>
-                            <th>
-                                Email
-                            </th>
-                            <th>
-                                Ngày sinh
-                            </th>
-                            <th>
-                                Giới tính
-                            </th>
-                            <th>
-                                Địa chỉ
-                            </th>
-                            <th>
-                                Số điện thoại
-                            </th>
-                            <th>
-                                Trạng thái
-                            <th>
-                                Hành động
-                            </th>
-                        </tr>
-                        <tr th:each="khachHang : ${khachHangs}">
-                            <td th:text="${khachHang.id}"></td>
-                            <td th:text="${khachHang.maKhachHang}"></td>
-                            <td th:text="${khachHang.tenKhachHang}"></td>
-                            <td th:text="${khachHang.email}"></td>
-                            <td th:text="${#dates.format(khachHang.ngaySinh,'dd/MM/yyyy')}"></td>
-                            <td th:text="${khachHang.gioiTinh} == true ? 'Nữ' : 'Nam'"></td>
-                            <td th:text="${khachHang.diaChi}"></td>
-                            <td th:text="${khachHang.soDienThoai}"></td>
-                            <td th:text="${khachHang.trangThai} == true ? 'Không hoạt động' : 'Hoạt động'"></td>
-                            <td><a th:href="@{/sua/{id}(id=${khachHang.id})}" class="link-primary"><i class="ri-edit-line"></i>EDIT</a>
-                                <a th:href="@{/select(id=${khachHang.id})}">Chọn</a></td>
-                        </tr>
-                    </table>
-                    <div>
-                        <!-- Nút về trang đầu -->
-                        <a th:href="@{/qlkhachhang(page=0, keyword=${keyword})}"
-                           th:classappend="${khachHangs.number == 0} ? 'disabled' : ''">First</a>
-
-                        <!-- Nút Previous -->
-                        <a th:href="@{/qlkhachhang(page=${khachHangs.number - 1}, keyword=${keyword})}"
-                           th:classappend="${!khachHangs.hasPrevious()} ? 'disabled' : ''">Previous</a>
-
-                        <!-- Nút Next -->
-                        <a th:href="@{/qlkhachhang(page=${khachHangs.number + 1}, keyword=${keyword})}"
-                           th:classappend="${!khachHangs.hasNext()} ? 'disabled' : ''">Next</a>
-
-                        <!-- Nút về trang cuối -->
-                        <a th:href="@{/qlkhachhang(page=${khachHangs.totalPages - 1}, keyword=${keyword})}"
-                           th:classappend="${khachHangs.number + 1 >= khachHangs.totalPages} ? 'disabled' : ''">Last</a>
-                    </div>
+                    <h1>Thêm khách hàng</h1>
                 </div>
-            </div><!-- end card -->
+<!--               -->
+                <form th:action="@{/themkhachhang}" method="post" th:object="${khachHang}" >
+                    <div class="card-body row">
+
+                        <div class="col-6 mt-2">
+                            <label for="maKhachHang1" class="form-label">Mã khách hàng <span style="color: red">*</span></label>
+                            <input type="text"  th:field="*{maKhachHang}" class="form-control" id="maKhachHang1"/>
+                            <div th:if="${#fields.hasErrors('maKhachHang')}" th:errors="*{maKhachHang}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <label for="tenKhachHang1" class="form-label">Tên khách hàng <span style="color: red">*</span></label>
+                            <input type="text" th:field="*{tenKhachHang}" class="form-control" id="tenKhachHang1"/>
+                            <div th:if="${#fields.hasErrors('tenKhachHang')}" th:errors="*{tenKhachHang}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <label for="email1" class="form-label">Email <span style="color: red">*</span></label>
+                            <input type="email" th:field="*{email}" class="form-control form-control-icon"  placeholder="example@gmail.com" id="email1">
+                            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <label for="ngaySinh1" class="form-label">Ngày sinh</label>
+                            <input type="date" th:field="*{ngaySinh}" class="form-control" id="ngaySinh1">
+                        </div>
+                        <div class="col-6 mt-2">
+                            <label class="form-label">Giới tính <span style="color: red">*</span></label>
+                            <div class="form-check mb-2">
+                                <input checked class="form-check-input" type="radio" id="Nam" value="false" name="gioiTinh" th:checked="${khachHang.gioiTinh == false}">
+                                <label class="form-check-label" for="Nam">Nam</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="Nữ" value="true" name="gioiTinh" th:checked="${khachHang.gioiTinh == true}">
+                                <label class="form-check-label" for="Nữ">Nữ</label>
+                            </div>
+                            <div th:if="${#fields.hasErrors('gioiTinh')}" th:errors="*{gioiTinh}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <label for="diaChi1" class="form-label">Địa chỉ <span style="color: red">*</span></labeL>
+                            <input type="text" th:field="*{diaChi}" class="form-control" id="diaChi1">
+                            <div th:if="${#fields.hasErrors('diaChi')}" th:errors="*{diaChi}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <label for="soDienThoai1" class="form-label">Số điện thoại <span style="color: red">*</span></label>
+                            <input type="text" th:field="*{soDienThoai}" class="form-control" id="soDienThoai1">
+                            <div th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}" style="color: red"></div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <label class="form-label">Trạng thái <span style="color: red">*</span></label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" id="active1" value="false" name="trangThai" th:checked="${khachHang.trangThai == false}">
+                                <label for="active1" class="form-check-label">Hoạt động</label>
+                            </div>
+                            <div class="form-check">
+                                <input  class="form-check-input" type="radio" id="inactive1" value="true" name="trangThai" th:checked="${khachHang.trangThai == true}">
+                                <label for="inactive1" class="form-check-label">Không hoạt động</label>
+                            </div>
+                            <div th:if="${#fields.hasErrors('trangThai')}" th:errors="*{trangThai}" style="color: red"></div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-animation waves-effect waves-light mb-2" style="width: 100px;left: 12px">Thêm mới</button>
+                        <a href="/qlkhachhang" class="link-hover">Trở về</a>
+                    </div>
+                </form>
+            </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         <footer class="footer">
             <div class="container-fluid">
