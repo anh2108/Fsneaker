@@ -898,18 +898,18 @@
                             <ul class="pagination justify-content-center">
                                 <!-- Nút Previous -->
                                 <li th:if="${currentPage > 0}" class="page-item">
-                                    <a th:href="@{/khuyenmai/hienthi(page=${currentPage - 1})}" class="page-link">Previous</a>
+                                    <a th:href="@{/qlkhuyenmai(page=${currentPage - 1})}" class="page-link">Previous</a>
                                 </li>
 
                                 <!-- Hiển thị các số trang -->
                                 <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
                                     th:classappend="${i == currentPage ? 'active' : ''}">
-                                    <a th:href="@{/khuyenmai/hienthi(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
+                                    <a th:href="@{/qlkhuyenmai(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
                                 </li>
 
                                 <!-- Nút Next -->
                                 <li th:if="${currentPage < totalPages - 1}" class="page-item">
-                                    <a th:href="@{/khuyenmai/hienthi(page=${currentPage + 1})}" class="page-link">Next</a>
+                                    <a th:href="@{/qlkhuyenmai(page=${currentPage + 1})}" class="page-link">Next</a>
                                 </li>
                             </ul>
                         </nav>

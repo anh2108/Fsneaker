@@ -839,7 +839,7 @@
             <div class="container-fluid">
                 <!-- COde  tại đây -->
                 <h1>sửa khuyến mại</h1>
-                <form th:action="@{/khuyenmai/update/{id}(id=${khuyenmai.id})}" method="post" th:object="${khuyenmai}">
+                <form th:action="@{/update/{id}(id=${khuyenmai.id})}" method="post" th:object="${khuyenmai}">
                     <div>
                         <label class="form-label">Mã khuyến mại:</label>
                         <input class="form-control" th:field="*{maKhuyenMai}">
