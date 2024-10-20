@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("khuyenmai")
+//@RequestMapping("khuyenmai")
 public class KhuyenMaiController {
     @Autowired
     public KhuyenMaiRepo khuyenMaiRepository;
@@ -38,7 +38,7 @@ public class KhuyenMaiController {
         return "templateadmin/them-khuyen-mai";
     }
 
-    @GetMapping("hienthi")
+    @GetMapping("/qlkhuyenmai")
     public String index( Model model,@RequestParam(defaultValue = "0") int page) {
 
         int pageSize = 5; // Số lượng bản ghi mỗi trang
@@ -85,7 +85,7 @@ public class KhuyenMaiController {
 
 
         khuyenMaiRepository.save(khuyenMai);
-        return "redirect:/khuyenmai/hienthi";
+        return "redirect:/qlkhuyenmai";
     }
 
 
@@ -114,7 +114,7 @@ public class KhuyenMaiController {
 
         khuyenMaiRepository.save(existingKhuyenMai);
 
-        return "redirect:/khuyenmai/hienthi";
+        return "redirect:/qlkhuyenmai";
     }
     @GetMapping("search")
     public String search(@RequestParam("keyword") String keyword,
