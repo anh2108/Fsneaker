@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-//@RequestMapping("khuyenmai")
+
 public class KhuyenMaiController {
     @Autowired
     public KhuyenMaiRepo khuyenMaiRepository;
