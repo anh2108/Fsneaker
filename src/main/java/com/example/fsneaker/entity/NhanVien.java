@@ -1,32 +1,75 @@
 package com.example.fsneaker.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
-@Setter
+import java.time.LocalDate;
+
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-
+@AllArgsConstructor
 @Entity
 @Table(name = "NhanVien")
 public class NhanVien {
 
-
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "Id")
         private Integer id;
 
+        @Size(max = 10, message = "Mã nhân viên không được dài quá 10 ký tự")
+        @NotBlank(message = "Mã nhân viên không được bỏ trống !")
+        @Column(unique = true, name = "MaNhanVien")  // unique để đảm bảo không trùng mã nhân viên
+        private String maNhanVien;
+
+        @NotBlank(message = "Tên nhân viên không được bỏ trống !")
         @Column(name = "TenNhanVien")
         private String tenNhanVien;
 
+        @NotBlank(message = "Email không được bỏ trống !")
+        @Email(message = "Email không hợp lệ !")
+        @Column(unique = true, name = "Email")
+        private String email;
+
+        @Size(max = 10, message = "Số điện thoại không được dài quá 10 ký tự")
+        @NotBlank(message = "Số điện thoại không được bỏ trống !")
+        @Column(unique = true, name = "SoDienThoai")
+        private String soDienThoai;
+
+        @NotNull(message = "Ngày sinh không được bỏ trống !")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        @Column(name = "NgaySinh")
+        private LocalDate ngaySinh;
+
+        @NotBlank(message = "Giới tính không được bỏ trống !")
+        @Column(name = "GioiTinh")
+        private Boolean gioiTinh;
+
+        @NotBlank(message = "Địa chỉ không được bỏ trống !")
+        @Column(name = "DiaChi")
+        private String diaChi;
+
+        @NotNull(message = "Vai trò không được bỏ trống !")
+        @Column(name = "VaiTro")
+        private Boolean vaiTro;
+
+        @NotBlank(message = "Tài khoản không được bỏ trống !")
+        @Size(max = 10, message = "Tài khoản không được dài quá 10 ký tự")
+        @Column(name = "TaiKhoan")
+        private String taiKhoan;
+
+        @NotBlank(message = "Mật khẩu không được bỏ trống !")
+        @Size(max = 10, message = "Mật khẩu không được dài quá 10 ký tự")
+        @Column(name = "MatKhau")
+        private String matKhau;
+
+        @NotBlank(message = "CCCD không được bỏ trống !")
+        @Column(unique = true, name = "CCCD")
+        private String cccd;
+
+        @NotBlank(message = "Trạng thái không được bỏ trống !")
+        @Column(name = "TrangThai")
+        private Boolean trangThai;
 }
