@@ -840,7 +840,10 @@
                 <!-- COde  tại đây -->
                 <h1>sửa khuyến mại</h1>
                 <form th:action="@{/update/{id}(id=${khuyenmai.id})}" method="post" th:object="${khuyenmai}">
-                    <div>
+
+                    <div class="card-body row">
+
+                    <div class="col-6 mt-2">
                         <label class="form-label">Mã khuyến mại:</label>
                         <input class="form-control" th:field="*{maKhuyenMai}">
                         <span th:if="${errors != null and errors.containsKey('maKhuyenMai')}">
@@ -850,7 +853,7 @@
 
                     </div>
 
-                    <div>
+                    <div class="col-6 mt-2">
                         <label class="form-label">Tên khuyến mại:</label>
                         <input class="form-control" th:field="*{tenKhuyenMai}">
                         <span th:if="${errors != null and errors.containsKey('tenKhuyenMai')}">
@@ -858,7 +861,7 @@
                 </span>
                     </div>
 
-                    <div>
+                    <div class="col-6 mt-2">
                         <label class="form-label">Loại khuyến mại:</label>
                         <input class="form-control" th:field="*{loaiKhuyenMai}">
                         <span th:if="${errors != null and errors.containsKey('loaiKhuyenMai')}">
@@ -866,7 +869,7 @@
                 </span>
                     </div><br>
 
-                    <div>
+                    <div class="col-6 mt-2">
                         <label class="form-label">Mô tả:</label>
                         <input class="form-control" th:field="*{moTa}">
 
@@ -875,7 +878,7 @@
                 </span>
                     </div>
 
-                    <div>
+                    <div class="col-6 mt-2">
                         <label class="form-label">Giá trị</label>
                         <input class="form-control" th:field="*{giaTri}">
                         <span th:if="${errors != null and errors.containsKey('giaTri')}">
@@ -883,18 +886,18 @@
                 </span>
                     </div>
 
-                    <div>
+                    <div class="col-6 mt-2">
                         <label class="form-label">Ngày bắt đầu</label>
                         <input type="date" class="form-control" th:field="*{ngayBatDau}"  />
                     </div>
 
-                    <div>
+                    <div class="col-6 mt-2">
                         <label class="form-label">Ngày kết thúc</label>
 
                         <input type="date" class="form-control" th:field="*{ngayKetThuc}" />
                     </div>
 
-                    <div>
+                    <div class="col-6 mt-2">
                         <label class="form-label">trạng thái</label>
                         <select class="form-select" th:field="*{trangThai}" aria-label="Default select example">
 
@@ -906,8 +909,9 @@
                     </div><br>
 
 
-
-                    <button class="btn btn-success">sửa</button>
+                        <button type="submit" class="btn btn-success btn-animation waves-effect waves-light mb-2" style="width: 100px;left: 12px">Sửa</button>
+                        <a href="/qlkhuyenmai" class="link-hover">Trở về</a>
+                    </div>
                 </form>
             </div>
         </div>
