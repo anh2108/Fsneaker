@@ -25,7 +25,7 @@ public class MauSac {
     private String maMauSac;
 
     @Column(name = "MauSac")
-    private String mauSac;
+    private String tenMauSac;
 
     @Column(name = "TrangThai")
     private int trangThai;

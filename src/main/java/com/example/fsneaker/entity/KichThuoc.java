@@ -26,7 +26,7 @@ public class KichThuoc {
     private String makichThuoc;
 
     @Column(name = "KichThuoc")
-    private String kichThuoc;
+    private String tenKichThuoc;
 
     @Column(name = "TrangThai")
     private int TrangThai;
