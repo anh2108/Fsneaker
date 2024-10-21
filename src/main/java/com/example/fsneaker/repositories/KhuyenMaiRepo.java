@@ -18,5 +18,9 @@ public interface KhuyenMaiRepo extends JpaRepository<KhuyenMai,Integer> {
     Page<KhuyenMai> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     KhuyenMai findByMaKhuyenMai(String maKhuyenMai);
+
+    // Truy vấn để sắp xếp theo trạng thái trước (Hoạt động lên đầu)
+    @Query("SELECT k FROM KhuyenMai k ORDER BY k.trangThai DESC, k.id ASC")
+    Page<KhuyenMai> findAllWithSorting(Pageable pageable);
    
  }
