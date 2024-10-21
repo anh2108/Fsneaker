@@ -25,12 +25,12 @@ public class XuatXuController {
 
     @PostMapping("/qlxuatxu/store")
     public String store(@RequestParam String maXuatXu,
-                        @RequestParam String xuatXu,
+                        @RequestParam String tenXuatXu,
                         @RequestParam int trangThai){
 
         XuatXu xuatXu1 = new XuatXu();
         xuatXu1.setMaXuatXu(maXuatXu);
-        xuatXu1.setXuatXu(xuatXu);
+        xuatXu1.setTenXuatXu(tenXuatXu);
         xuatXu1.setTrangThai(trangThai == 0? 0 : 1);
         xuatXuRepo.save(xuatXu1);
         return "redirect:/qlxuatxu";
@@ -49,12 +49,12 @@ public class XuatXuController {
     public String update(
             @RequestParam int id,
             @RequestParam String maXuatXu,
-            @RequestParam String xuatXu,
+            @RequestParam String tenXuatXu,
             @RequestParam int trangThai) {
         XuatXu existingXuatXu = xuatXuRepo.getXuatXuById(id);
         if (existingXuatXu != null) {
             existingXuatXu.setMaXuatXu(maXuatXu);
-            existingXuatXu.setXuatXu(xuatXu);
+            existingXuatXu.setTenXuatXu(tenXuatXu);
             existingXuatXu.setTrangThai(trangThai);
             xuatXuRepo.save(existingXuatXu);
         }

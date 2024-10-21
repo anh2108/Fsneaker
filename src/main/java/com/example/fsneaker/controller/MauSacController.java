@@ -25,11 +25,11 @@ public class MauSacController {
 
     @PostMapping("/qlmausac/store")
     public String storeMauSac(@RequestParam String maMauSac,
-                              @RequestParam String mauSac,
+                              @RequestParam String tenMauSac,
                               @RequestParam int trangThai) {
         MauSac newMauSac = new MauSac();
         newMauSac.setMaMauSac(maMauSac);
-        newMauSac.setMauSac(mauSac);
+        newMauSac.setTenMauSac(tenMauSac);
         newMauSac.setTrangThai(trangThai == 0 ? 0 : 1);
 
         mauSacRepo.save(newMauSac);
@@ -51,12 +51,12 @@ public class MauSacController {
     public String update(
             @RequestParam int id,
             @RequestParam String maMauSac,
-            @RequestParam String mauSac,
+            @RequestParam String tenMauSac,
             @RequestParam int trangThai) {
         MauSac existingMauSac = mauSacRepo.getMauSacById(id);
         if (existingMauSac != null) {
             existingMauSac.setMaMauSac(maMauSac);
-            existingMauSac.setMauSac(mauSac);
+            existingMauSac.setTenMauSac(tenMauSac);
             existingMauSac.setTrangThai(trangThai);
             mauSacRepo.save(existingMauSac);
         }

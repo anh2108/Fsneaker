@@ -837,11 +837,11 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label class="form-label">Mã thương hiệu</label>
-                                    <input type="text" class="form-control" name="" value="">
+                                    <input type="text" class="form-control" name="maThuongHieu">
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Tên thương hiệu</label>
-                                    <input type="text" class="form-control" name="" value="">
+                                    <input type="text" class="form-control" name="tenThuongHieu">
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Trạng thái</label>
@@ -851,7 +851,7 @@
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="trangThai" value="1">
-                                        <label class="form-check-label">Tạm ngừng</label>
+                                        <label class="form-check-label">Ngừng hoạt động</label>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-animation waves-effect waves-light">Thêm</button>
                                 </div>
@@ -873,7 +873,7 @@
                                 <td>[[${th.maThuongHieu}]]</td>
                                 <td>[[${th.tenThuongHieu}]]</td>
                                 <td>[[${th.trangThai}]]</td>
-                                <td>[[${th.trangThai}]]</td>
+                                <td>[[${th.trangThai == 0 ? "Hoạt động" : "Ngừng hoạt động" }]]</td>
                                 <td>
                                     <button type="button" class="link-primary" data-bs-toggle="modal" th:data-bs-target="'#editModal-' + ${th.id}">
                                         <i class="ri-edit-line"></i> Chỉnh sửa
@@ -884,29 +884,29 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="editModalLabel">Chỉnh sửa màu sắc</h5>
+                                                    <h5 class="modal-title" id="editModalLabel">Chỉnh sửa thương hiệu</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form th:action="@{/qlthuonghieu/update}" method="post">
                                                         <input type="hidden" th:value="${th.id}" name="id" />
                                                         <div class="mb-3">
-                                                            <label class="form-label">Mã màu sắc</label>
+                                                            <label class="form-label">Mã thương hiệu</label>
                                                             <input type="text" class="form-control" th:value="${th.maThuongHieu}" name="maThuongHieu" readonly>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="form-label">Màu sắc</label>
+                                                            <label class="form-label">Thương hiệu</label>
                                                             <input type="text" class="form-control" th:value="${th.tenThuongHieu}" name="tenThuongHieu">
                                                         </div>
                                                         <div class="mb-3">
                                                             <label class="form-label">Trạng thái</label>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" th:checked="${th.trangThai == 0}" name="trangThai" value="0">
-                                                                <label class="form-check-label">Có sẵn</label>
+                                                                <label class="form-check-label">Hoạt động</label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" th:checked="${th.trangThai == 1}" name="trangThai" value="1">
-                                                                <label class="form-check-label">Tạm ngừng</label>
+                                                                <label class="form-check-label">Ngừng hoạt động</label>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">

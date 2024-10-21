@@ -23,12 +23,12 @@ public class KichThuocController {
 
     @PostMapping("qlkichthuoc/store")
     public String store(@RequestParam String maKichThuoc,
-                        @RequestParam String kichThuoc,
+                        @RequestParam String tenKichThuoc,
                         @RequestParam int trangThai){
 
         KichThuoc kt = new KichThuoc();
         kt.setMakichThuoc(maKichThuoc);
-        kt.setKichThuoc(kichThuoc);
+        kt.setTenKichThuoc(tenKichThuoc);
         kt.setTrangThai(trangThai == 0 ? 0 : 1);
         kichThuocRepo.save(kt);
 
@@ -48,12 +48,12 @@ public class KichThuocController {
     public String update(
             @RequestParam int id,
             @RequestParam String makichThuoc,
-            @RequestParam String kichThuoc,
+            @RequestParam String tenKichThuoc,
             @RequestParam int trangThai) {
         KichThuoc existingKichThuoc = kichThuocRepo.getKichThuocById(id);
         if (existingKichThuoc != null) {
             existingKichThuoc.setMakichThuoc(makichThuoc);
-            existingKichThuoc.setKichThuoc(kichThuoc);
+            existingKichThuoc.setTenKichThuoc(tenKichThuoc);
             existingKichThuoc.setTrangThai(trangThai);
             kichThuocRepo.save(existingKichThuoc);
         }

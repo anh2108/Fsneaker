@@ -837,21 +837,21 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label class="form-label">Mã màu sắc</label>
-                                    <input type="text" class="form-control" name="maMauSac" value="">
+                                    <input type="text" class="form-control" name="maMauSac" >
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Màu sắc</label>
-                                    <input type="text" class="form-control" name="mauSac" value="">
+                                    <input type="text" class="form-control" name="tenMauSac">
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Trạng thái</label>
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="radio" name="trangThai" value="0" checked>
-                                        <label class="form-check-label" >Có sẵn</label>
+                                        <label class="form-check-label" >Hoạt động</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="trangThai" value="1">
-                                        <label class="form-check-label">Tạm ngừng</label>
+                                        <label class="form-check-label">Ngừng hoạt động</label>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-animation waves-effect waves-light">Thêm</button>
                                 </div>
@@ -871,8 +871,8 @@
                             <tr th:each="ms,index : ${ms}">
                                 <td th:text="${index.index + 1 }"></td>
                                 <td th:text="${ms.maMauSac}"></td>
-                                <td th:text="${ms.mauSac}"></td>
-                                <td th:text="${ms.trangThai}"></td>
+                                <td th:text="${ms.tenMauSac}"></td>
+                                <td th:text="${ms.trangThai == 0 ? 'Hoạt động' : 'Ngừng hoạt động'}"></td>
                                 <td>
 
                                     <button type="button" class="link-primary" data-bs-toggle="modal" th:data-bs-target="'#editModal-' + ${ms.id}">
@@ -896,17 +896,17 @@
                                                         </div>
                                                         <div class="mb-3">
                                                             <label class="form-label">Màu sắc</label>
-                                                            <input type="text" class="form-control" th:value="${ms.mauSac}" name="mauSac">
+                                                            <input type="text" class="form-control" th:value="${ms.tenMauSac}" name="tenMauSac">
                                                         </div>
                                                         <div class="mb-3">
                                                             <label class="form-label">Trạng thái</label>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" th:checked="${ms.trangThai == 0}" name="trangThai" value="0">
-                                                                <label class="form-check-label">Có sẵn</label>
+                                                                <label class="form-check-label">Hoạt động</label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" th:checked="${ms.trangThai == 1}" name="trangThai" value="1">
-                                                                <label class="form-check-label">Tạm ngừng</label>
+                                                                <label class="form-check-label">Ngừng hoạt động</label>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
