@@ -26,7 +26,7 @@ public class XuatXu {
     private String maXuatXu;
 
     @Column(name = "XuatXu")
-    private String xuatXu;
+    private String tenXuatXu;
 
     @Column(name = "TrangThai")
     private int trangThai;
