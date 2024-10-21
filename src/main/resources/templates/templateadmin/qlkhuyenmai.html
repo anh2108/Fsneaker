@@ -851,6 +851,7 @@
                             <label for="search">Nhập mã khuyến mãi:</label>
                             <input type="text" id="search" name="keyword" placeholder="tìm kiếm theo mã hoặc tên" required w/>
                             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+
                         </form>
 
                         <table class="table">
@@ -881,7 +882,7 @@
                                 <td>[[${khuyenmai.ngayKetThuc}]]</td>
 
 
-                                <td>[[${khuyenmai.trangThai}]]</td>
+                                <td>[[${khuyenmai.trangThai == 1 ? 'Hoạt động' : 'Không hoạt dộng'}]]</td>
                                 <td>
 
 
@@ -913,7 +914,7 @@
                                 </li>
                             </ul>
                         </nav>
-
+                        <a href="/qlkhuyenmai" class="link-hover">Trở về</a>
                     </div>
                 </div>
             </div>

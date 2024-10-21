@@ -22,6 +22,8 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Controller
 public class KhuyenMaiController {
@@ -41,12 +43,14 @@ public class KhuyenMaiController {
     public String index( Model model,@RequestParam(defaultValue = "0") int page) {
 
         int pageSize = 5; // Số lượng bản ghi mỗi trang
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending()); // Sắp xếp theo id giảm dần
+        Pageable pageable = PageRequest.of(page, pageSize); // Sắp xếp theo id giảm dần
 
-        Page<KhuyenMai> khuyenMaiPage = khuyenMaiRepository.findAll(pageable);
+        Page<KhuyenMai> khuyenMaiPage = khuyenMaiRepository.findAllWithSorting(pageable);
+
+
 
         // Thêm dữ liệu phân trang vào model
-        model.addAttribute("khuyenmai", khuyenMaiPage.getContent());
+        model.addAttribute("khuyenmai", khuyenMaiPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", khuyenMaiPage.getTotalPages());
         return "templateadmin/qlkhuyenmai";
