@@ -851,12 +851,71 @@
                                 <h1 class="card-title mb-0">Sản phẩm</h1>
                             </div>
                             <div class="card-body">
-<!--                                <form th:action="@{/qlsanpham}" method="get">-->
-<!--                                    <label for="search">Tìm kiếm</label>-->
-<!--                                    <input type="text" id="search" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm"/>-->
-<!--                                    <input type="submit" value="Tìm" class="btn btn-primary"/>-->
-<!--                                </form>-->
-<!--                                <a href="/them-san-pham-form" class="btn btn-primary">Thêm</a>-->
+                                    <button type="button" class="link-primary" data-bs-toggle="modal" th:data-bs-target="'#addModal'">
+                                        <i class="ri-add-line"></i> Thêm mới
+                                    </button>
+
+                                    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editModalLabel">Thêm sản phẩm</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form th:action="@{/qlsanpham/store}" method="post">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Mã sản phẩm</label>
+                                                            <input type="text" class="form-control"  name="maSanPham" >
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Tên sản phẩm</label>
+                                                            <input type="text" class="form-control"  name="tenSanPham">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label>Khuyến mãi </label>
+                                                            <select name="khuyenMaiId">
+                                                                <option th:each="km : ${listKhuyenMai}" th:value="${km.id}">
+                                                                    [[${km.tenKhuyenMai}]]
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label>Thương hiệu</label>
+                                                            <select name="thuongHieuId">
+                                                                <option th:each="th : ${listThuongHieu}" th:value="${th.id}" th:text="${th.tenThuongHieu}">
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label>Xuất xứ</label>
+                                                            <select name="thuongHieuId">
+                                                                <option th:each="xx : ${listXuatXu}" th:value="${xx.id}">
+                                                                    [[${xx.tenXuatXu}]]
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Trạng thái</label>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"  name="trangThai" value="0">
+                                                                <label class="form-check-label">Có sẵn</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"  name="trangThai" value="1">
+                                                                <label class="form-check-label">Tạm ngừng</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+<!--                                Table-->
                                 <table class="table">
                                     <thead>
                                     <tr>
@@ -877,7 +936,7 @@
                                         <td>[[${sp.maSanPham}]]</td>
                                         <td>[[${sp.tenSanPham}]]</td>
                                         <td>[[${sp.thuongHieu.tenThuongHieu}]]</td>
-                                        <td>[[${sp.xuatXu.xuatXu}]]</td>
+                                        <td>[[${sp.xuatXu.tenXuatXu}]]</td>
                                         <td>[[${sp.khuyenMai?.tenKhuyenMai}]]</td>
                                         <td th:switch="${sp.trangThai}">
                                             <span th:case="0">Còn hàng</span>
@@ -948,8 +1007,8 @@
                                         <td>[[${index.index + 1}]]</td>
                                         <td>[[${spct.maSanPhamChiTiet}]]</td>
                                         <td>[[${spct.sanPham.tenSanPham}]]</td>
-                                        <td>[[${spct.kichThuoc.kichThuoc}]]</td>
-                                        <td>[[${spct.mauSac.mauSac}]]</td>
+                                        <td>[[${spct.kichThuoc.tenKichThuoc}]]</td>
+                                        <td>[[${spct.mauSac.tenMauSac}]]</td>
                                         <td>[[${spct.soLuong}]]</td>
                                         <td>[[${spct.giaBan}]]</td>
                                         <td th:switch="${spct.trangThai}" >
