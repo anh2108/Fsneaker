@@ -50,7 +50,7 @@ public class SanPhamChiTiet {
     @Column(name = "TrangThai")
     private int trangThai;
 
-    @Column(name = "Imanges")
+    @Column(name = "Images")
     private String imanges;
 
     @Column(name = "GiaBan")
