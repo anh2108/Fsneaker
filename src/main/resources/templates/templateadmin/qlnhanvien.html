@@ -842,9 +842,9 @@
                         <h1 class="card-title mb-0">Quản lý nhân viên</h1>
                     </div>
                     <div class="card-body">
-                        <a href="create" class="btn btn-success">Thêm mới</a><br><hr>
+                        <a href="/them-nhan-vien-form" class="btn btn-success">Thêm mới</a><br><hr>
 
-                        <form action="#" th:action="@{search}" method="get">
+                        <form action="#" th:action="@{/search-nhan-vien}" method="get">
                             <label for="search">Nhập mã nhân viên:</label>
                             <input type="text" id="search" name="keyword" placeholder="tìm kiếm theo mã hoặc tên" required w/>
                             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
@@ -884,7 +884,7 @@
                                 <td>[[${nhanvien.cccd}]]</td>
                                 <td>[[${nhanvien.trangThai}]]</td>
                                 <td>
-                                    <a th:href="@{edit/{id}(id=${nhanvien.id})}" class="btn btn-warning">Sửa</a>
+                                    <a th:href="@{edit-nhan-vien/{id}(id=${nhanvien.id})}" class="btn btn-warning">Sửa</a>
                                 </td>
                             </tr>
                             </tbody>

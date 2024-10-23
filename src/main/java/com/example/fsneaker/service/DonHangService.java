@@ -41,9 +41,9 @@ public class DonHangService {
             return false;
         }
     }
-    public boolean kiemTraSanPhamTrongDonHang(int idDonHang, int idSanPhamChiTiet){
-        return donHangChiTietRepo.existsByDonHangIdAndSanPhamChiTietId(idDonHang, idSanPhamChiTiet);
-    }
+//    public boolean kiemTraSanPhamTrongDonHang(int idDonHang, int idSanPhamChiTiet){
+//        return donHangChiTietRepo.existsByDonHangIdAndSanPhamChiTietId(idDonHang, idSanPhamChiTiet);
+//    }
     public List<DonHang> getDonHangs(){
         return donHangRepo.findAll();
     }

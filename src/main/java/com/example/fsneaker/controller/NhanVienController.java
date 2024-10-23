@@ -28,7 +28,7 @@ public class NhanVienController {
     @Autowired
     public NhanVienService nhanVienService;
 
-    @GetMapping("create")
+    @GetMapping("/them-nhan-vien-form")
     public String create(Model model){
         model.addAttribute("nhanvien", new NhanVien());
         return "templateadmin/addNhanVien";
@@ -50,7 +50,7 @@ public class NhanVienController {
     }
 
 
-    @PostMapping("add")
+    @PostMapping("/add-nhan-vien")
     public String add(Model model, @Valid @ModelAttribute("nhanvien") NhanVien nhanVien, BindingResult validate) {
         if (validate.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -68,7 +68,7 @@ public class NhanVienController {
     }
 
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/edit-nhan-vien/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
         NhanVien nhanVien = this.nhanVienRepo.findById(id).get();
         model.addAttribute("nhanvien", nhanVien);
@@ -76,7 +76,7 @@ public class NhanVienController {
     }
 
 
-    @PostMapping("/update/{id}")
+    @PostMapping("/update-nhan-vien/{id}")
     public String updateNhanVien(@PathVariable Integer id, @ModelAttribute NhanVien nhanVien) {
         NhanVien existingNhanVien = nhanVienRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nhân viên không tồn tại"));
@@ -99,7 +99,7 @@ public class NhanVienController {
         return "redirect:/qlnhanvien";
     }
 
-    @GetMapping("search")
+    @GetMapping("/search-nhan-vien")
     public String search(@RequestParam("keyword") String keyword,
                          @RequestParam(value = "page", defaultValue = "0") int page,
                          Model model) {
