@@ -43,7 +43,7 @@ public class NhanVien {
         @Column(name = "NgaySinh")
         private LocalDate ngaySinh;
 
-        @NotBlank(message = "Giới tính không được bỏ trống !")
+        @NotNull(message = "Giới tính không được bỏ trống !")
         @Column(name = "GioiTinh")
         private Boolean gioiTinh;
 
@@ -69,7 +69,7 @@ public class NhanVien {
         @Column(unique = true, name = "CCCD")
         private String cccd;
 
-        @NotBlank(message = "Trạng thái không được bỏ trống !")
+        @NotNull(message = "Trạng thái không được bỏ trống !")
         @Column(name = "TrangThai")
         private Boolean trangThai;
 }
