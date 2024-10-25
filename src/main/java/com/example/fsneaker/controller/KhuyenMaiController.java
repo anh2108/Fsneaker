@@ -87,7 +87,7 @@ public class KhuyenMaiController {
 
 
         // Kiểm tra giá trị khuyến mãi
-        if (khuyenMai.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá theo %")) {
+        if (khuyenMai.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá %")) {
             // Kiểm tra giá trị phần trăm không được vượt quá 100%
             if (khuyenMai.getGiaTri() < 0 || khuyenMai.getGiaTri() > 100) {
                 model.addAttribute("khuyenmai", khuyenMai);
@@ -95,12 +95,11 @@ public class KhuyenMaiController {
                 return "templateadmin/them-khuyen-mai"; // Trả về form với thông báo lỗi
             }
 
-            // So sánh với đơn tối thiểu
-            float giaTriGiam = (khuyenMai.getDonToiThieu() * khuyenMai.getGiaTri()) / 100; // Tính giá trị giảm
-            if (giaTriGiam > khuyenMai.getDonToiThieu()) {
+            // Kiểm tra nếu đơn tối thiểu ít hơn giá trị giảm theo % (giả sử phải nhập sao cho đủ điều kiện đơn tối thiểu)
+            if (khuyenMai.getDonToiThieu() <= khuyenMai.getGiaTri()) {
                 model.addAttribute("khuyenmai", khuyenMai);
-                model.addAttribute("errorDonToiThieu", "Giá trị giảm không được lớn hơn đơn tối thiểu.");
-                return "templateadmin/them-khuyen-mai"; // Trả về form với thông báo lỗi
+                model.addAttribute("errorDonToiThieu", "Đơn tối thiểu phải lớn hơn giá trị giảm.");
+                return "templateadmin/them-khuyen-mai";
             }
         } else if (khuyenMai.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá theo tiền")) {
             // Kiểm tra giá trị tiền phải nhỏ hơn hoặc bằng đơn tối thiểu
@@ -164,7 +163,7 @@ public class KhuyenMaiController {
         }
 
         // Kiểm tra giá trị khuyến mãi
-        if (km.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá theo %")) {
+        if (km.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá %")) {
             // Kiểm tra giá trị phần trăm không được vượt quá 100%
             if (km.getGiaTri() < 0 || km.getGiaTri() > 100) {
                 model.addAttribute("khuyenmai", km);
@@ -172,14 +171,15 @@ public class KhuyenMaiController {
                 return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
             }
 
-            // So sánh với đơn tối thiểu
-            float giaTriGiam = (km.getDonToiThieu() * km.getGiaTri()) / 100; // Tính giá trị giảm
-            if (giaTriGiam > km.getDonToiThieu()) {
+
+            // Kiểm tra nếu đơn tối thiểu ít hơn giá trị giảm theo % (giả sử phải nhập sao cho đủ điều kiện đơn tối thiểu)
+            if (km.getDonToiThieu() <= km.getGiaTri()) {
                 model.addAttribute("khuyenmai", km);
-                model.addAttribute("errorDonToiThieu", "Giá trị giảm không được lớn hơn đơn tối thiểu.");
-                return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
+                model.addAttribute("errorDonToiThieu", "Đơn tối thiểu phải lớn hơn giá trị giảm.");
+                return "templateadmin/sua-khuyen-mai";
             }
-        } else if (km.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá theo tiền")) {
+
+        } else if (km.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá số tiền")) {
             // Kiểm tra giá trị tiền phải nhỏ hơn hoặc bằng đơn tối thiểu
             if (km.getGiaTri() > km.getDonToiThieu()) {
                 model.addAttribute("khuyenmai", km);
