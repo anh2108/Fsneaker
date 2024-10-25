@@ -849,7 +849,7 @@
 
                         <form action="#" th:action="@{search}" method="get">
                             <label for="search">Nhập mã khuyến mãi:</label>
-                            <input type="text" id="search" name="keyword" placeholder="tìm kiếm theo mã hoặc tên" required w/>
+                            <input type="text" id="search" name="keyword" placeholder="tìm kiếm theo  tên" required w/>
                             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
 
                         </form>
@@ -863,6 +863,7 @@
                                 <th>Loại khuyến mãi</th>
                                 <th>Mô tả</th>
                                 <th>Giá trị</th>
+                                <th>Đơn tối thiểu</th>
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
                                 <th>Trạng thái</th>
@@ -878,6 +879,7 @@
                                 <td>[[${khuyenmai.moTa}]]</td>
 
                                 <td>[[${khuyenmai.giaTri}]]</td>
+                                <td>[[${khuyenmai.donToiThieu}]]</td>
                                 <td>[[${khuyenmai.ngayBatDau}]]</td>
                                 <td>[[${khuyenmai.ngayKetThuc}]]</td>
 
