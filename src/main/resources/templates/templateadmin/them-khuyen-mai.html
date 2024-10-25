@@ -867,11 +867,11 @@
                 <div class="col-6 mt-2">
                     <label class="form-label">Loại khuyến mãi:</label>
                     <select class="form-control" th:field="*{loaiKhuyenMai}">
-                        <option value="phantram">Giảm giá theo %</option>
-                        <option value="Giảm giá theo tiền">Giảm giá theo tiền</option>
+                        <option value="giảm giá %">Giảm giá  %</option>
+                        <option value="Giảm giá số tiền">Giảm giá số tiền</option>
                     </select>
-                    <span th:if="${errors != null and errors.containsKey('moTa')}">
-                 <small style="color: red" th:text="${errors['moTa']}"></small>
+                    <span th:if="${errors != null and errors.containsKey('loaiKhuyenMai')}">
+                 <small style="color: red" th:text="${errors['loaiKhuyenMai']}"></small>
                 </span>
                 </div><br>
 
