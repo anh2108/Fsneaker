@@ -864,13 +864,16 @@
                 </span>
             </div>
 
-            <div class="col-6 mt-2">
-                <label class="form-label">Loại khuyến mại:</label>
-                <input class="form-control" th:field="*{loaiKhuyenMai}">
-                <span th:if="${errors != null and errors.containsKey('loaiKhuyenMai')}">
-                 <small style="color: red" th:text="${errors['loaiKhuyenMai']}"></small>
+                <div class="col-6 mt-2">
+                    <label class="form-label">Loại khuyến mãi:</label>
+                    <select class="form-control" th:field="*{loaiKhuyenMai}">
+                        <option value="phantram">Giảm giá theo %</option>
+                        <option value="Giảm giá theo tiền">Giảm giá theo tiền</option>
+                    </select>
+                    <span th:if="${errors != null and errors.containsKey('moTa')}">
+                 <small style="color: red" th:text="${errors['moTa']}"></small>
                 </span>
-            </div><br>
+                </div><br>
 
             <div class="col-6 mt-2">
                 <label class="form-label">Mô tả:</label>
@@ -884,10 +887,20 @@
             <div class="col-6 mt-2">
                 <label class="form-label">Giá trị</label>
                 <input class="form-control" th:field="*{giaTri}">
-                <span th:if="${errors != null and errors.containsKey('giaTri')}">
-                 <small style="color: red" th:text="${errors['giaTri']}"></small>
-                </span>
+
+
+                <span th:if="${errorGiaTri != null}">
+                <small style="color: red" th:text="${errorGiaTri}"></small>
+            </span>
             </div>
+
+                <div class="col-6 mt-2">
+                    <label class="form-label">Đơn tối thiểu:</label>
+                    <input class="form-control"  th:field="*{donToiThieu}"  />
+                    <span th:if="${errorDonToiThieu != null}">
+                <small style="color: red" th:text="${errorDonToiThieu}"></small>
+            </span>
+                </div>
 
 
             <div class="col-6 mt-2">
@@ -909,16 +922,20 @@
                 <span th:text="${errorNgay}" style="color:red;"></span>
             </div>
 
-            <div class="col-6 mt-2">
-                <label class="form-label">trạng thái</label>
-                <select class="form-select" th:field="*{trangThai}" aria-label="Default select example">
-
-                    <option value="1">hoạt động</option>
-                    <option value="0">không hoạt động</option>
-
-
-                </select>
-            </div>
+                <div class="col-6 mt-2">
+                    <label class="form-label">Trạng thái <span style="color: red">*</span></label>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" id="active1" value="1" name="trangThai" th:checked="${khuyenmai.trangThai == 1}">
+                        <label for="active1" class="form-check-label">Hoạt động</label>
+                    </div>
+                    <div class="form-check">
+                        <input  class="form-check-input" type="radio" id="inactive1" value="0" name="trangThai" th:checked="${khuyenmai.trangThai == 0}">
+                        <label for="inactive1" class="form-check-label">Không hoạt động</label>
+                    </div>
+                    <span th:if="${errors != null and errors.containsKey('trangThai')}">
+                 <small style="color: red" th:text="${errors['trangThai']}"></small>
+                </span>
+                </div>
                 <br>
 
 
