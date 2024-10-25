@@ -13,11 +13,11 @@ import java.util.Optional;
 
 @Repository
 public interface KhuyenMaiRepo extends JpaRepository<KhuyenMai,Integer> {
-    // tìm kiếm theo mã khuyến mại hoặc tên khuyến mại
-    @Query("SELECT k FROM KhuyenMai k WHERE k.tenKhuyenMai LIKE %:keyword% OR k.maKhuyenMai LIKE %:keyword%" )
+    // tìm kiếm theo  tên khuyến mại
+    @Query("SELECT k FROM KhuyenMai k WHERE k.tenKhuyenMai LIKE %:keyword% " )
     Page<KhuyenMai> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
-    KhuyenMai findByMaKhuyenMai(String maKhuyenMai);
+   KhuyenMai findByMaKhuyenMai(String maKhuyenMai);
 
     // Truy vấn để sắp xếp theo trạng thái trước (Hoạt động lên đầu)
     @Query("SELECT k FROM KhuyenMai k ORDER BY k.trangThai DESC, k.id ASC")
