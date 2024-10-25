@@ -34,14 +34,14 @@ public class KhuyenMai {
 
     @NotBlank(message = "Tên khuyến mãi không được để trống")
     @Size(min = 5, max = 20, message = "Tên khuyến mãi phải có từ 5 đến 20 ký tự")
-    @Column(name="TenKhuyenMai")
+    @Column(name="TenKhuyenMai" ,unique = true)
     private String tenKhuyenMai;
 
-    @NotBlank(message = "Loại khuyến mại khuyến mãi không được để trống")
+
     @Column(name="LoaiKhuyenMai")
     private String loaiKhuyenMai;
 
-    @NotBlank(message = "Mô tả khuyến mãi không được để trống")
+
     @Column(name="MoTa")
     private String moTa;
 
@@ -49,15 +49,21 @@ public class KhuyenMai {
     @Column(name="GiaTri")
     private float giaTri;
 
+    @NotNull
+    @Column(name = "donToiThieu")
+    private Float donToiThieu;
+
 
     @Temporal(TemporalType.DATE)
     @Column(name="NgayBatDau")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private Date ngayBatDau;
 
     @Temporal(TemporalType.DATE)
     @Column(name="NgayKetThuc")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private Date ngayKetThuc;
 
     @NotNull

@@ -19,10 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -32,6 +29,8 @@ public class KhuyenMaiController {
 
     @Autowired
     public KhuyenMaiService khuyenMaiService;
+
+
 
     @GetMapping("create")
     public String create(Model model){
@@ -87,6 +86,33 @@ public class KhuyenMaiController {
 
 
 
+        // Kiểm tra giá trị khuyến mãi
+        if (khuyenMai.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá theo %")) {
+            // Kiểm tra giá trị phần trăm không được vượt quá 100%
+            if (khuyenMai.getGiaTri() < 0 || khuyenMai.getGiaTri() > 100) {
+                model.addAttribute("khuyenmai", khuyenMai);
+                model.addAttribute("errorGiaTri", "Giá trị phần trăm phải từ 0 đến 100%");
+                return "templateadmin/them-khuyen-mai"; // Trả về form với thông báo lỗi
+            }
+
+            // So sánh với đơn tối thiểu
+            float giaTriGiam = (khuyenMai.getDonToiThieu() * khuyenMai.getGiaTri()) / 100; // Tính giá trị giảm
+            if (giaTriGiam > khuyenMai.getDonToiThieu()) {
+                model.addAttribute("khuyenmai", khuyenMai);
+                model.addAttribute("errorDonToiThieu", "Giá trị giảm không được lớn hơn đơn tối thiểu.");
+                return "templateadmin/them-khuyen-mai"; // Trả về form với thông báo lỗi
+            }
+        } else if (khuyenMai.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá theo tiền")) {
+            // Kiểm tra giá trị tiền phải nhỏ hơn hoặc bằng đơn tối thiểu
+            if (khuyenMai.getGiaTri() > khuyenMai.getDonToiThieu()) {
+                model.addAttribute("khuyenmai", khuyenMai);
+                model.addAttribute("errorDonToiThieu", "Giá trị giảm phải nhỏ hơn hoặc bằng đơn tối thiểu.");
+                return "templateadmin/them-khuyen-mai"; // Trả về form với thông báo lỗi
+            }
+        }
+
+
+
         khuyenMaiRepository.save(khuyenMai);
         return "redirect:/qlkhuyenmai";
     }
@@ -102,23 +128,83 @@ public class KhuyenMaiController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateKhuyenMai(@PathVariable Integer id, @ModelAttribute KhuyenMai km) {
+    public String updateKhuyenMai(@PathVariable Integer id, @Valid @ModelAttribute KhuyenMai km, BindingResult validate, Model model) {
+        // Tìm kiếm khuyến mãi hiện tại theo ID
         KhuyenMai existingKhuyenMai = khuyenMaiRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Khuyến mãi không tồn tại"));
 
+        // Kiểm tra lỗi từ validate
+        if (validate.hasErrors()) {
+            // Lưu lại thông tin khuyến mãi cũ để hiển thị lại trong form
+            model.addAttribute("khuyenmai", km);
+            // Chuyển đổi lỗi thành map để hiển thị
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError e : validate.getFieldErrors()) {
+                errors.put(e.getField(), e.getDefaultMessage());
+            }
+            model.addAttribute("errors", errors);
+            return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
+        }
+
+        // Kiểm tra logic: ngày bắt đầu không được trùng với ngày kết thúc
+        if (km.getNgayBatDau().equals(km.getNgayKetThuc())) {
+            model.addAttribute("khuyenmai", km);
+            model.addAttribute("errorNgay", "Ngày bắt đầu và ngày kết thúc không được trùng nhau!");
+            return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
+        }
+
+        // Kiểm tra điều kiện của mã khi cập nhật
+        if (!existingKhuyenMai.getMaKhuyenMai().equals(km.getMaKhuyenMai())) {
+            KhuyenMai existingByMa = khuyenMaiRepository.findByMaKhuyenMai(km.getMaKhuyenMai());
+            if (existingByMa != null) {
+                model.addAttribute("khuyenmai", km);
+                model.addAttribute("errorMaKhuyenMai", "Mã khuyến mãi đã tồn tại, vui lòng chọn mã khác!");
+                return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
+            }
+        }
+
+        // Kiểm tra giá trị khuyến mãi
+        if (km.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá theo %")) {
+            // Kiểm tra giá trị phần trăm không được vượt quá 100%
+            if (km.getGiaTri() < 0 || km.getGiaTri() > 100) {
+                model.addAttribute("khuyenmai", km);
+                model.addAttribute("errorGiaTri", "Giá trị phần trăm phải từ 0 đến 100%");
+                return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
+            }
+
+            // So sánh với đơn tối thiểu
+            float giaTriGiam = (km.getDonToiThieu() * km.getGiaTri()) / 100; // Tính giá trị giảm
+            if (giaTriGiam > km.getDonToiThieu()) {
+                model.addAttribute("khuyenmai", km);
+                model.addAttribute("errorDonToiThieu", "Giá trị giảm không được lớn hơn đơn tối thiểu.");
+                return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
+            }
+        } else if (km.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá theo tiền")) {
+            // Kiểm tra giá trị tiền phải nhỏ hơn hoặc bằng đơn tối thiểu
+            if (km.getGiaTri() > km.getDonToiThieu()) {
+                model.addAttribute("khuyenmai", km);
+                model.addAttribute("errorDonToiThieu", "Giá trị giảm phải nhỏ hơn hoặc bằng đơn tối thiểu.");
+                return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
+            }
+        }
+
+        // Cập nhật thông tin cho khuyến mãi hiện tại
         existingKhuyenMai.setMaKhuyenMai(km.getMaKhuyenMai());
         existingKhuyenMai.setTenKhuyenMai(km.getTenKhuyenMai());
         existingKhuyenMai.setLoaiKhuyenMai(km.getLoaiKhuyenMai());
         existingKhuyenMai.setMoTa(km.getMoTa());
         existingKhuyenMai.setGiaTri(km.getGiaTri());
+        existingKhuyenMai.setDonToiThieu(km.getDonToiThieu()); // Cập nhật đơn tối thiểu
         existingKhuyenMai.setNgayBatDau(km.getNgayBatDau());
         existingKhuyenMai.setNgayKetThuc(km.getNgayKetThuc());
         existingKhuyenMai.setTrangThai(km.getTrangThai());
 
+        // Lưu khuyến mãi đã cập nhật
         khuyenMaiRepository.save(existingKhuyenMai);
 
-        return "redirect:/qlkhuyenmai";
+        return "redirect:/qlkhuyenmai"; // Chuyển hướng đến trang quản lý khuyến mãi
     }
+
     @GetMapping("search")
     public String search(@RequestParam("keyword") String keyword,
                          @RequestParam(value = "page", defaultValue = "0") int page,
