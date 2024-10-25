@@ -860,12 +860,11 @@
                  <small style="color: red" th:text="${errors['tenKhuyenMai']}"></small>
                 </span>
                     </div>
-
                         <div class="col-6 mt-2">
                             <label class="form-label">Loại khuyến mãi:</label>
                             <select class="form-control" th:field="*{loaiKhuyenMai}">
-                                <option value="Giảm giá theo %">Giảm giá theo %</option>
-                                <option value="Giảm giá theo tiền">Giảm giá theo tiền</option>
+                                <option value="giảm giá %">Giảm giá  %</option>
+                                <option value="Giảm giá số tiền">Giảm giá số tiền</option>
                             </select>
 
                         </div><br>
@@ -894,6 +893,7 @@
                         <div class="col-6 mt-2">
                             <label class="form-label">Đơn tối thiểu:</label>
                             <input class="form-control"  th:field="*{donToiThieu}"  />
+
                             <span th:if="${errorDonToiThieu != null}">
                 <small style="color: red" th:text="${errorDonToiThieu}"></small>
             </span>
