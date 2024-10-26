@@ -60,7 +60,6 @@ public class MauSacController {
             existingMauSac.setTrangThai(trangThai);
             mauSacRepo.save(existingMauSac);
         }
-
         return "redirect:/qlmausac";
     }
 

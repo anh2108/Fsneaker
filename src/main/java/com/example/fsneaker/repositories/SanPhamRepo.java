@@ -7,7 +7,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface SanPhamRepo extends JpaRepository<SanPham, Integer> {
 
-    @Query("select e from SanPham e where e.id= :id")
-    public SanPham getSanPhamById(int id);
+
+    @Query("select sp, km.tenKhuyenMai, th.tenThuongHieu, xx.tenXuatXu from SanPham sp " +
+            "join sp.khuyenMai km  " +
+            "join sp.thuongHieu th " +
+            "join sp.xuatXu xx " +
+            "where sp.id = :id ")
+    public SanPham getSanPhamsById(int id);
 
 }

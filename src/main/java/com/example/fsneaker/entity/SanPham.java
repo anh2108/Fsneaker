@@ -21,7 +21,7 @@ public class SanPham {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "Id")
     private int id;
 
     @Column(name = "MaSanPham")
@@ -46,6 +46,6 @@ public class SanPham {
     private KhuyenMai khuyenMai;
 
     @Column(name = "TrangThai")
-    private String trangThai;
+    private int trangThai;
 
 }

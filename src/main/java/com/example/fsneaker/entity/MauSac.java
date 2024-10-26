@@ -24,7 +24,7 @@ public class MauSac {
     @Column(name = "MaMauSac")
     private String maMauSac;
 
-    @Column(name = "MauSac")
+    @Column(name = "TenMauSac")
     private String tenMauSac;
 
     @Column(name = "TrangThai")
