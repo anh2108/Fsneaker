@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -14,7 +15,7 @@ public class KhuyenMaiService {
     @Autowired
     private KhuyenMaiRepo khuyenMaiRepository;
 
-    public Page<KhuyenMai> searchKhuyenMai(String keyword, Pageable pageable) {
-        return khuyenMaiRepository.findByKeyword(keyword, pageable);
+    public Page<KhuyenMai> searchKhuyenMai(String keyword, LocalDate date, Pageable pageable) {
+        return khuyenMaiRepository.searchByKeywordAndDate(keyword, date, pageable);
     }
 }
