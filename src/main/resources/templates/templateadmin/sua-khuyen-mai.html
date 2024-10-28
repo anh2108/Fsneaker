@@ -844,7 +844,7 @@
                     <div class="card-body row">
 
                     <div class="col-6 mt-2">
-                        <label class="form-label">Mã khuyến mại:</label>
+                        <label class="form-label">Mã khuyến mại: <span style="color: red">*</span></label>
                         <input class="form-control" th:field="*{maKhuyenMai}">
                         <span th:if="${errors != null and errors.containsKey('maKhuyenMai')}">
                  <small style="color: red" th:text="${errors['maKhuyenMai']}"></small>
@@ -854,7 +854,7 @@
                     </div>
 
                     <div class="col-6 mt-2">
-                        <label class="form-label">Tên khuyến mại:</label>
+                        <label class="form-label">Tên khuyến mại: <span style="color: red">*</span></label>
                         <input class="form-control" th:field="*{tenKhuyenMai}">
                         <span th:if="${errors != null and errors.containsKey('tenKhuyenMai')}">
                  <small style="color: red" th:text="${errors['tenKhuyenMai']}"></small>
@@ -879,7 +879,7 @@
                     </div>
 
                     <div class="col-6 mt-2">
-                        <label class="form-label">Giá trị</label>
+                        <label class="form-label">Giá trị: <span style="color: red">*</span></label>
                         <input class="form-control" th:field="*{giaTri}">
                         <span th:if="${errors != null and errors.containsKey('giaTri')}">
                  <small style="color: red" th:text="${errors['giaTri']}"></small>
@@ -891,7 +891,7 @@
                     </div>
 
                         <div class="col-6 mt-2">
-                            <label class="form-label">Đơn tối thiểu:</label>
+                            <label class="form-label">Đơn tối thiểu: <span style="color: red">*</span></label>
                             <input class="form-control"  th:field="*{donToiThieu}"  />
 
                             <span th:if="${errorDonToiThieu != null}">
@@ -926,7 +926,7 @@
                         </div> <br>
 
 
-                        <button type="submit" class="btn btn-success btn-animation waves-effect waves-light mb-2" style="width: 100px;left: 12px">Sửa</button>
+                        <button type="submit" class="btn btn-success btn-animation waves-effect waves-light mb-2" style="width: 100px;left: 12px;height: 40px">Sửa</button>
                         <a href="/qlkhuyenmai" class="link-hover">Trở về</a>
                     </div>
                 </form>
