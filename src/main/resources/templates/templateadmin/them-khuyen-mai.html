@@ -843,7 +843,7 @@
             <div class="card-body row">
 
             <div class="col-6 mt-2">
-                <label class="form-label">Mã khuyến mại:</label>
+                <label class="form-label">Mã khuyến mại: <span style="color: red">*</span></label>
                 <input class="form-control" th:field="*{maKhuyenMai}">
                 <span th:if="${errors != null and errors.containsKey('maKhuyenMai')}">
                  <small style="color: red" th:text="${errors['maKhuyenMai']}"></small>
@@ -857,7 +857,7 @@
             </div>
 
             <div class="col-6 mt-2">
-                <label class="form-label">Tên khuyến mại:</label>
+                <label class="form-label">Tên khuyến mại: <span style="color: red">*</span></label>
                 <input class="form-control" th:field="*{tenKhuyenMai}">
                 <span th:if="${errors != null and errors.containsKey('tenKhuyenMai')}">
                  <small style="color: red" th:text="${errors['tenKhuyenMai']}"></small>
@@ -865,7 +865,7 @@
             </div>
 
                 <div class="col-6 mt-2">
-                    <label class="form-label">Loại khuyến mãi:</label>
+                    <label class="form-label">Loại khuyến mãi: </label>
                     <select class="form-control" th:field="*{loaiKhuyenMai}">
                         <option value="giảm giá %">Giảm giá  %</option>
                         <option value="Giảm giá số tiền">Giảm giá số tiền</option>
@@ -885,7 +885,7 @@
             </div>
 
             <div class="col-6 mt-2">
-                <label class="form-label">Giá trị</label>
+                <label class="form-label">Giá trị: <span style="color: red">*</span></label>
                 <input class="form-control" th:field="*{giaTri}">
 
 
@@ -895,7 +895,7 @@
             </div>
 
                 <div class="col-6 mt-2">
-                    <label class="form-label">Đơn tối thiểu:</label>
+                    <label class="form-label">Đơn tối thiểu: <span style="color: red">*</span></label>
                     <input class="form-control"  th:field="*{donToiThieu}"  />
                     <span th:if="${errorDonToiThieu != null}">
                 <small style="color: red" th:text="${errorDonToiThieu}"></small>
@@ -916,11 +916,11 @@
                 <label class="form-label">Ngày kết thúc</label>
 
                 <input type="date" class="form-control" th:field="*{ngayKetThuc}" />
-            </div>
+            </div><br>
             <!-- Hiển thị lỗi nếu có -->
             <div th:if="${errorNgay != null}">
                 <span th:text="${errorNgay}" style="color:red;"></span>
-            </div>
+            </div><br>
 
                 <div class="col-6 mt-2">
                     <label class="form-label">Trạng thái <span style="color: red">*</span></label>
@@ -931,16 +931,18 @@
                     <div class="form-check">
                         <input  class="form-check-input" type="radio" id="inactive1" value="0" name="trangThai" th:checked="${khuyenmai.trangThai == 0}">
                         <label for="inactive1" class="form-check-label">Không hoạt động</label>
-                    </div>
+                    </div> <br>
                     <span th:if="${errors != null and errors.containsKey('trangThai')}">
                  <small style="color: red" th:text="${errors['trangThai']}"></small>
                 </span>
                 </div>
-                <br>
 
 
-                    <br>
-                <button type="submit" class="btn btn-success btn-animation waves-effect waves-light mb-2" style="width: 100px;left: 12px">Thêm mới</button>
+
+
+
+
+                <button type="submit" class="btn btn-success btn-animation waves-effect waves-light mb-2" style="width: 100px;left: 12px;height: 40px">Thêm mới</button>
                 <a href="/qlkhuyenmai" class="link-hover">Trở về</a>
 
             </div>
