@@ -19,6 +19,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,7 @@ public class KhuyenMaiController {
     @Autowired
     public KhuyenMaiService khuyenMaiService;
 
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
 
     @GetMapping("create")
@@ -69,12 +72,7 @@ public class KhuyenMaiController {
             return "templateadmin/them-khuyen-mai";
         }
 
-        // Kiểm tra logic: ngày bắt đầu không được trùng với ngày kết thúc
-        if (khuyenMai.getNgayBatDau().equals(khuyenMai.getNgayKetThuc())) {
-            model.addAttribute("khuyenmai", khuyenMai);
-            model.addAttribute("errorNgay", "Ngày bắt đầu và ngày kết thúc không được trùng nhau!");
-            return "templateadmin/them-khuyen-mai";
-        }
+
         // kiểm tra điều kiệu của mã khi thêm mới
         KhuyenMai existingKhuyenMai = khuyenMaiRepository.findByMaKhuyenMai(khuyenMai.getMaKhuyenMai());
         if (existingKhuyenMai != null) {
@@ -89,19 +87,27 @@ public class KhuyenMaiController {
         // Kiểm tra giá trị khuyến mãi
         if (khuyenMai.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá %")) {
             // Kiểm tra giá trị phần trăm không được vượt quá 100%
-            if (khuyenMai.getGiaTri() < 0 || khuyenMai.getGiaTri() > 100) {
+            if (khuyenMai.getGiaTri() < 1 || khuyenMai.getGiaTri() > 100) {
                 model.addAttribute("khuyenmai", khuyenMai);
-                model.addAttribute("errorGiaTri", "Giá trị phần trăm phải từ 0 đến 100%");
+                model.addAttribute("errorGiaTri", "Giá trị phần trăm phải từ 1 đến 100%");
                 return "templateadmin/them-khuyen-mai"; // Trả về form với thông báo lỗi
             }
 
-            // Kiểm tra nếu đơn tối thiểu ít hơn giá trị giảm theo % (giả sử phải nhập sao cho đủ điều kiện đơn tối thiểu)
+            // Kiểm tra nếu đơn tối thiểu ít hơn giá trị giảm theo %
             if (khuyenMai.getDonToiThieu() <= khuyenMai.getGiaTri()) {
                 model.addAttribute("khuyenmai", khuyenMai);
                 model.addAttribute("errorDonToiThieu", "Đơn tối thiểu phải lớn hơn giá trị giảm.");
                 return "templateadmin/them-khuyen-mai";
             }
-        } else if (khuyenMai.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá theo tiền")) {
+
+        } else if (khuyenMai.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá số tiền")) {
+            // Kiểm tra giá trị tiền phải lớn hơn 0
+            if (khuyenMai.getGiaTri() < 0) {
+                model.addAttribute("khuyenmai", khuyenMai);
+                model.addAttribute("errorGiaTri", "Giá trị giảm phải lớn hơn 0.");
+                return "templateadmin/them-khuyen-mai"; // Trả về form với thông báo lỗi
+            }
+
             // Kiểm tra giá trị tiền phải nhỏ hơn hoặc bằng đơn tối thiểu
             if (khuyenMai.getGiaTri() > khuyenMai.getDonToiThieu()) {
                 model.addAttribute("khuyenmai", khuyenMai);
@@ -110,7 +116,12 @@ public class KhuyenMaiController {
             }
         }
 
-
+        // Kiểm tra logic: ngày bắt đầu không được trùng với ngày kết thúc
+        if (khuyenMai.getNgayBatDau().equals(khuyenMai.getNgayKetThuc())) {
+            model.addAttribute("khuyenmai", khuyenMai);
+            model.addAttribute("errorNgay", "Ngày bắt đầu và ngày kết thúc không được trùng nhau!");
+            return "templateadmin/them-khuyen-mai";
+        }
 
         khuyenMaiRepository.save(khuyenMai);
         return "redirect:/qlkhuyenmai";
@@ -145,12 +156,7 @@ public class KhuyenMaiController {
             return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
         }
 
-        // Kiểm tra logic: ngày bắt đầu không được trùng với ngày kết thúc
-        if (km.getNgayBatDau().equals(km.getNgayKetThuc())) {
-            model.addAttribute("khuyenmai", km);
-            model.addAttribute("errorNgay", "Ngày bắt đầu và ngày kết thúc không được trùng nhau!");
-            return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
-        }
+
 
         // Kiểm tra điều kiện của mã khi cập nhật
         if (!existingKhuyenMai.getMaKhuyenMai().equals(km.getMaKhuyenMai())) {
@@ -165,14 +171,13 @@ public class KhuyenMaiController {
         // Kiểm tra giá trị khuyến mãi
         if (km.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá %")) {
             // Kiểm tra giá trị phần trăm không được vượt quá 100%
-            if (km.getGiaTri() < 0 || km.getGiaTri() > 100) {
+            if (km.getGiaTri() < 1 || km.getGiaTri() > 100) {
                 model.addAttribute("khuyenmai", km);
-                model.addAttribute("errorGiaTri", "Giá trị phần trăm phải từ 0 đến 100%");
+                model.addAttribute("errorGiaTri", "Giá trị phần trăm phải từ 1 đến 100%");
                 return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
             }
 
-
-            // Kiểm tra nếu đơn tối thiểu ít hơn giá trị giảm theo % (giả sử phải nhập sao cho đủ điều kiện đơn tối thiểu)
+            // Kiểm tra nếu đơn tối thiểu ít hơn giá trị giảm theo %
             if (km.getDonToiThieu() <= km.getGiaTri()) {
                 model.addAttribute("khuyenmai", km);
                 model.addAttribute("errorDonToiThieu", "Đơn tối thiểu phải lớn hơn giá trị giảm.");
@@ -180,12 +185,26 @@ public class KhuyenMaiController {
             }
 
         } else if (km.getLoaiKhuyenMai().equalsIgnoreCase("Giảm giá số tiền")) {
+            // Kiểm tra giá trị tiền phải lớn hơn 0
+            if (km.getGiaTri() <= 0) {
+                model.addAttribute("khuyenmai", km);
+                model.addAttribute("errorGiaTri", "Giá trị giảm phải lớn hơn 0.");
+                return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
+            }
+
             // Kiểm tra giá trị tiền phải nhỏ hơn hoặc bằng đơn tối thiểu
             if (km.getGiaTri() > km.getDonToiThieu()) {
                 model.addAttribute("khuyenmai", km);
                 model.addAttribute("errorDonToiThieu", "Giá trị giảm phải nhỏ hơn hoặc bằng đơn tối thiểu.");
                 return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
             }
+        }
+
+        // Kiểm tra logic: ngày bắt đầu không được trùng với ngày kết thúc
+        if (km.getNgayBatDau().equals(km.getNgayKetThuc())) {
+            model.addAttribute("khuyenmai", km);
+            model.addAttribute("errorNgay", "Ngày bắt đầu và ngày kết thúc không được trùng nhau!");
+            return "templateadmin/sua-khuyen-mai"; // Trả về form với thông báo lỗi
         }
 
         // Cập nhật thông tin cho khuyến mãi hiện tại
@@ -206,14 +225,33 @@ public class KhuyenMaiController {
     }
 
     @GetMapping("search")
-    public String search(@RequestParam("keyword") String keyword,
+    public String search(@RequestParam( "keyword") String keyword,
+
+
                          @RequestParam(value = "page", defaultValue = "0") int page,
                          Model model) {
 
         int pageSize = 5; // Số lượng bản ghi mỗi trang
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending()); // Sắp xếp theo id tăng dần
 
-        Page<KhuyenMai> khuyenMaiPage = khuyenMaiService.searchKhuyenMai(keyword, pageable);
+        LocalDate date = null;
+
+        // Kiểm tra xem từ khóa có phải là một ngày không
+        if (keyword != null && !keyword.isEmpty()) {
+            try {
+                date = LocalDate.parse(keyword, DATE_FORMATTER);
+            } catch (DateTimeParseException e) {
+                // Nếu không phải ngày thì tiếp tục sử dụng từ khóa
+            }
+        }
+
+
+
+
+
+
+
+        Page<KhuyenMai> khuyenMaiPage = khuyenMaiService.searchKhuyenMai(keyword, date, pageable);
 
         // Thêm dữ liệu phân trang vào model
         model.addAttribute("khuyenmai", khuyenMaiPage.getContent());
