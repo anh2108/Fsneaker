@@ -21,4 +21,19 @@ public class TrangChuController {
         return "trangchu";
     }
 
+
+    @GetMapping("/trang-chu1")
+    public String hienThiTrangChu1(Model model){
+        List<Object[]> sanPhamBanChayAsics = donHangChiTietService.getTopSellingProductsByBrand("Asics", 10); // Lấy 10 sản phẩm bán chạy nhất
+        model.addAttribute("sanPhamBanChayAsics",sanPhamBanChayAsics);
+        return "trangchu";
+    }
+
+    @GetMapping("/trang-chu2")
+    public String hienThiTrangChu2(Model model){
+        List<Object[]> sanPhamBanChayNike = donHangChiTietService.getTopSellingProductsByBrand("Nike", 10); // Lấy 10 sản phẩm bán chạy nhất
+        model.addAttribute("sanPhamBanChayNike",sanPhamBanChayNike);
+        return "trangchu";
+    }
+
 }
