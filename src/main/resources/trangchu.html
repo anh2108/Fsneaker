@@ -1264,7 +1264,7 @@
             <div class="tab-pane fade" id="watches" role="tabpanel">
                 <div class="row">
                     <div class="product_carousel product_column4 owl-carousel">
-                        <div class="col-lg-3">
+                        <div class="col-lg-3" th:each="asics : ${sanPhamBanChayAsics}">
                             <article class="single_product">
                                 <figure>
                                     <div class="product_thumb">
@@ -1281,14 +1281,14 @@
                                     </div>
                                     <figcaption class="product_content">
                                         <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html">Fusce Aliquam</a></h4>
+                                            <h4 class="product_name" th:text="${asics[0]}"><a href="product-details.html">Fusce Aliquam</a></h4>
                                             <div class="wishlist-btn">
                                                 <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>
                                             </div>
                                         </div>
                                         <div class="product_price_rating">
                                             <div class="price_box">
-                                                <span class="current_price">$380.00</span>
+                                                <span class="current_price" th:text="${asics[1]}">$380.00</span>
                                             </div>
                                             <div class="product_rating">
                                                 <ul>
@@ -1568,14 +1568,14 @@
                                     </div>
                                     <figcaption class="product_content">
                                         <div class="product_content-header">
-                                            <h4 class="product_name" ><a href="product-details.html">Accumsan Elit</a></h4>
+                                            <h4 class="product_name"><a href="product-details.html">Accumsan Elit</a></h4>
                                             <div class="wishlist-btn">
                                                 <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>
                                             </div>
                                         </div>
                                         <div class="product_price_rating">
                                             <div class="price_box">
-                                                <span class="current_price" > $220.00</span>
+                                                <span class="current_price">$220.00</span>
                                             </div>
                                             <div class="product_rating">
                                                 <ul>
