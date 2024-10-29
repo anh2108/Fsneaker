@@ -16,7 +16,6 @@ public class TrangChuController {
     public String hienThiTrangChu(Model model){
         List<Object[]> sanPhamBanChayPuma = donHangChiTietService.getTopSellingProductsByBrand("Puma", 10); // Lấy 10 sản phẩm bán chạy nhất
         model.addAttribute("sanPhamBanChayPuma",sanPhamBanChayPuma);
-
         List<Object[]> sanPhamBanChayNike = donHangChiTietService.getTopSellingProductsByBrand("Nike", 10); // Lấy 10 sản phẩm bán chạy nhất
         model.addAttribute("sanPhamBanChayNike",sanPhamBanChayNike);
         return "trangchu";
