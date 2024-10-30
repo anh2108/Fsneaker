@@ -1017,7 +1017,7 @@
             <div class="tab-pane fade" id="women" role="tabpanel">
                 <div class="row">
                     <div class="product_carousel product_column4 owl-carousel">
-                        <div class="col-lg-3">
+                        <div class="col-lg-3" th:each="adidas : ${sanPhamBanChayAdidas}">
                             <article class="single_product">
                                 <figure>
                                     <div class="product_thumb">
@@ -1034,14 +1034,14 @@
                                     </div>
                                     <figcaption class="product_content">
                                         <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html">Lorem Ipsum</a></h4>
+                                            <h4 class="product_name" th:text="${adidas[0]}"><a href="product-details.html">Lorem Ipsum</a></h4>
                                             <div class="wishlist-btn">
                                                 <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>
                                             </div>
                                         </div>
                                         <div class="product_price_rating">
                                             <div class="price_box">
-                                                <span class="current_price">$210.00</span>
+                                                <span class="current_price" th:text="${adidas[1]}">$210.00</span>
                                             </div>
                                             <div class="product_rating">
                                                 <ul>
@@ -1057,206 +1057,206 @@
                                 </figure>
                             </article>
                         </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="product-details.html"><img src="images/product/product9.jpg" alt=""></a>
-                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product10.jpg" alt=""></a>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i class="zmdi zmdi-shopping-cart"></i></a></li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i class="zmdi zmdi-refresh"></i></a></li>
+<!--                        <div class="col-lg-3">-->
+<!--                            <article class="single_product">-->
+<!--                                <figure>-->
+<!--                                    <div class="product_thumb">-->
+<!--                                        <a class="primary_img" href="product-details.html"><img src="images/product/product9.jpg" alt=""></a>-->
+<!--                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product10.jpg" alt=""></a>-->
+<!--                                        <div class="action_links">-->
+<!--                                            <ul>-->
+<!--                                                <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i class="zmdi zmdi-shopping-cart"></i></a></li>-->
+<!--                                                <li class="compare"><a href="#" title="Add to Compare"><i class="zmdi zmdi-refresh"></i></a></li>-->
 
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="quick view"> <i class="zmdi zmdi-eye"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html">Accumsan Elit</a></h4>
-                                            <div class="wishlist-btn">
-                                                <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="product_price_rating">
-                                            <div class="price_box">
-                                                <span class="current_price">$220.00</span>
-                                            </div>
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="product-details.html"><img src="images/product/product11.jpg" alt=""></a>
-                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product12.jpg" alt=""></a>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i class="zmdi zmdi-shopping-cart"></i></a></li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i class="zmdi zmdi-refresh"></i></a></li>
+<!--                                                <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="quick view"> <i class="zmdi zmdi-eye"></i></a></li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <figcaption class="product_content">-->
+<!--                                        <div class="product_content-header">-->
+<!--                                            <h4 class="product_name"><a href="product-details.html">Accumsan Elit</a></h4>-->
+<!--                                            <div class="wishlist-btn">-->
+<!--                                                <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="product_price_rating">-->
+<!--                                            <div class="price_box">-->
+<!--                                                <span class="current_price">$220.00</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="product_rating">-->
+<!--                                                <ul>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                </ul>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </figcaption>-->
+<!--                                </figure>-->
+<!--                            </article>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-3">-->
+<!--                            <article class="single_product">-->
+<!--                                <figure>-->
+<!--                                    <div class="product_thumb">-->
+<!--                                        <a class="primary_img" href="product-details.html"><img src="images/product/product11.jpg" alt=""></a>-->
+<!--                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product12.jpg" alt=""></a>-->
+<!--                                        <div class="action_links">-->
+<!--                                            <ul>-->
+<!--                                                <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i class="zmdi zmdi-shopping-cart"></i></a></li>-->
+<!--                                                <li class="compare"><a href="#" title="Add to Compare"><i class="zmdi zmdi-refresh"></i></a></li>-->
 
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="quick view"> <i class="zmdi zmdi-eye"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html">Primis Faucibus</a></h4>
-                                            <div class="wishlist-btn">
-                                                <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="product_price_rating">
-                                            <div class="price_box">
-                                                <span class="current_price">$280.00</span>
-                                            </div>
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="product-details.html"><img src="images/product/product1.jpg" alt=""></a>
-                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product2.jpg" alt=""></a>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i class="zmdi zmdi-shopping-cart"></i></a></li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i class="zmdi zmdi-refresh"></i></a></li>
+<!--                                                <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="quick view"> <i class="zmdi zmdi-eye"></i></a></li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <figcaption class="product_content">-->
+<!--                                        <div class="product_content-header">-->
+<!--                                            <h4 class="product_name"><a href="product-details.html">Primis Faucibus</a></h4>-->
+<!--                                            <div class="wishlist-btn">-->
+<!--                                                <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="product_price_rating">-->
+<!--                                            <div class="price_box">-->
+<!--                                                <span class="current_price">$280.00</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="product_rating">-->
+<!--                                                <ul>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                </ul>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </figcaption>-->
+<!--                                </figure>-->
+<!--                            </article>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-3">-->
+<!--                            <article class="single_product">-->
+<!--                                <figure>-->
+<!--                                    <div class="product_thumb">-->
+<!--                                        <a class="primary_img" href="product-details.html"><img src="images/product/product1.jpg" alt=""></a>-->
+<!--                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product2.jpg" alt=""></a>-->
+<!--                                        <div class="action_links">-->
+<!--                                            <ul>-->
+<!--                                                <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i class="zmdi zmdi-shopping-cart"></i></a></li>-->
+<!--                                                <li class="compare"><a href="#" title="Add to Compare"><i class="zmdi zmdi-refresh"></i></a></li>-->
 
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="quick view"> <i class="zmdi zmdi-eye"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html">Letraset Sheets</a></h4>
-                                            <div class="wishlist-btn">
-                                                <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="product_price_rating">
-                                            <div class="price_box">
-                                                <span class="current_price">$220.00</span>
-                                            </div>
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="product-details.html"><img src="images/product/product3.jpg" alt=""></a>
-                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product4.jpg" alt=""></a>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i class="zmdi zmdi-shopping-cart"></i></a></li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i class="zmdi zmdi-refresh"></i></a></li>
+<!--                                                <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="quick view"> <i class="zmdi zmdi-eye"></i></a></li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <figcaption class="product_content">-->
+<!--                                        <div class="product_content-header">-->
+<!--                                            <h4 class="product_name"><a href="product-details.html">Letraset Sheets</a></h4>-->
+<!--                                            <div class="wishlist-btn">-->
+<!--                                                <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="product_price_rating">-->
+<!--                                            <div class="price_box">-->
+<!--                                                <span class="current_price">$220.00</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="product_rating">-->
+<!--                                                <ul>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                </ul>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </figcaption>-->
+<!--                                </figure>-->
+<!--                            </article>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-3">-->
+<!--                            <article class="single_product">-->
+<!--                                <figure>-->
+<!--                                    <div class="product_thumb">-->
+<!--                                        <a class="primary_img" href="product-details.html"><img src="images/product/product3.jpg" alt=""></a>-->
+<!--                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product4.jpg" alt=""></a>-->
+<!--                                        <div class="action_links">-->
+<!--                                            <ul>-->
+<!--                                                <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i class="zmdi zmdi-shopping-cart"></i></a></li>-->
+<!--                                                <li class="compare"><a href="#" title="Add to Compare"><i class="zmdi zmdi-refresh"></i></a></li>-->
 
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="quick view"> <i class="zmdi zmdi-eye"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html">Accumsan Elit</a></h4>
-                                            <div class="wishlist-btn">
-                                                <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="product_price_rating">
-                                            <div class="price_box">
-                                                <span class="current_price">$320.00</span>
-                                            </div>
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="product-details.html"><img src="images/product/product5.jpg" alt=""></a>
-                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product6.jpg" alt=""></a>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i class="zmdi zmdi-shopping-cart"></i></a></li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i class="zmdi zmdi-refresh"></i></a></li>
+<!--                                                <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="quick view"> <i class="zmdi zmdi-eye"></i></a></li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <figcaption class="product_content">-->
+<!--                                        <div class="product_content-header">-->
+<!--                                            <h4 class="product_name"><a href="product-details.html">Accumsan Elit</a></h4>-->
+<!--                                            <div class="wishlist-btn">-->
+<!--                                                <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="product_price_rating">-->
+<!--                                            <div class="price_box">-->
+<!--                                                <span class="current_price">$320.00</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="product_rating">-->
+<!--                                                <ul>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                </ul>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </figcaption>-->
+<!--                                </figure>-->
+<!--                            </article>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-3">-->
+<!--                            <article class="single_product">-->
+<!--                                <figure>-->
+<!--                                    <div class="product_thumb">-->
+<!--                                        <a class="primary_img" href="product-details.html"><img src="images/product/product5.jpg" alt=""></a>-->
+<!--                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product6.jpg" alt=""></a>-->
+<!--                                        <div class="action_links">-->
+<!--                                            <ul>-->
+<!--                                                <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i class="zmdi zmdi-shopping-cart"></i></a></li>-->
+<!--                                                <li class="compare"><a href="#" title="Add to Compare"><i class="zmdi zmdi-refresh"></i></a></li>-->
 
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="quick view"> <i class="zmdi zmdi-eye"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html">Fusce Aliquam</a></h4>
-                                            <div class="wishlist-btn">
-                                                <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="product_price_rating">
-                                            <div class="price_box">
-                                                <span class="current_price">$380.00</span>
-                                            </div>
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
+<!--                                                <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="quick view"> <i class="zmdi zmdi-eye"></i></a></li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <figcaption class="product_content">-->
+<!--                                        <div class="product_content-header">-->
+<!--                                            <h4 class="product_name"><a href="product-details.html">Fusce Aliquam</a></h4>-->
+<!--                                            <div class="wishlist-btn">-->
+<!--                                                <a href="#"><i class="zmdi zmdi-favorite-outline"></i></a>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="product_price_rating">-->
+<!--                                            <div class="price_box">-->
+<!--                                                <span class="current_price">$380.00</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="product_rating">-->
+<!--                                                <ul>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>-->
+<!--                                                </ul>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </figcaption>-->
+<!--                                </figure>-->
+<!--                            </article>-->
+<!--                        </div>-->
                     </div>
                 </div>
             </div>

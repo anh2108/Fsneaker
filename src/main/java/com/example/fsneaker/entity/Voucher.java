@@ -18,7 +18,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -42,7 +42,7 @@ public class Voucher {
     @Column(name = "MoTa")
     private String moTa;
 
-    @Min(value = 1, message = "Số lượng phải lớn hơn 0")
+//    @Min(value = 1, message = "Số lượng phải lớn hơn 0")
     @NotNull(message = "SoLuong không được bỏ trống")
     @Column(name = "SoLuong")
     private Integer soLuong;
@@ -57,37 +57,37 @@ public class Voucher {
     private Double donToiThieu;
 
     @NotNull(message = "NgayBatDau không được bỏ trống")
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "NgayBatDau")
-    private LocalDate ngayBatDau;
+    private LocalDateTime ngayBatDau;
 
     @NotNull(message = "NgayKetThuc không được bỏ trống")
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "NgayKetThuc")
-    private LocalDate ngayKetThuc;
+    private LocalDateTime ngayKetThuc;
 
-    @NotNull(message = "NgayTao không được bỏ trống")
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    //    @NotNull(message = "NgayTao không được bỏ trống")
+//    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "NgayTao")
-    private LocalDate ngayTao;
+    private LocalDateTime ngayTao;
 
     @NotNull(message = "NhanVien không được bỏ trống")
     @ManyToOne
     @JoinColumn(name = "IdNhanVien")
     private NhanVien nhanVien;
 
-//    @NotNull(message = "Trang Thai không được bỏ trống")
+    //    @NotNull(message = "Trang Thai không được bỏ trống")
     @Column(name = "TrangThai")
     private Integer trangThai;
 
     public int getTrangThai() {
-        LocalDate today = LocalDate.now();
+        LocalDateTime today = LocalDateTime.now();
         if (today.isBefore(ngayBatDau)) {
             return 2;
-        } else if (today.isAfter(ngayKetThuc)) {
+        } else if (today.isAfter(ngayKetThuc) || getSoLuong() == 0) {
             return 0;
         } else {
             return 1;
