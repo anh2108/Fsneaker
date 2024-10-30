@@ -22,4 +22,8 @@ public interface VoucherRepo extends JpaRepository<Voucher,Integer> {
     List<Voucher> findByNgayBatDauLessThanEqualAndNgayKetThucGreaterThanEqual(LocalDate today, LocalDate today2);
 
     List<Voucher> findByNgayKetThucBefore(LocalDate today);
+
+
+    //Chỗ này là của trướng nhóm code cấm đụng vào
+    Voucher findByMaVoucher(String maVoucher); //Tìm voucher theo mã;
 }
