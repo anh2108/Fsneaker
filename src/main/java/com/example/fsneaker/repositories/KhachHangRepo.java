@@ -19,4 +19,7 @@ public interface KhachHangRepo extends JpaRepository<KhachHang, Integer> {
     Page<KhachHang> searchByKhachHang(@Param("keyword") String keyword, Pageable pageable);
 
     Page<KhachHang> findAll(Pageable pageable);
+
+    //Chỗ là code của trườởng nhóm code cấm đụng vào
+    KhachHang findBySoDienThoaiOrEmail(String soDienThoai,String email);
 }

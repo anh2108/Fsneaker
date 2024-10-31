@@ -5097,7 +5097,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    padding: 80px 0;
+    padding: 150px 0;
 }
 @media only screen and (max-width: 767px) {
     .banner_fullwidth {
@@ -7979,7 +7979,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 
 /*testimonial css here*/
 .testimonial_area {
-    background: url("../img/bg/banner10.jpg") no-repeat 0 0;
+    background: url("../../images/bg/banner10.jpg") no-repeat 0 0;
     padding: 75px 0 71px;
 }
 @media only screen and (max-width: 767px) {
@@ -9404,15 +9404,15 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     background: inherit;
 }
 .shop_toolbar_btn > button.btn-grid-3 {
-    background: url(../img/icon/bkg_grid.png) no-repeat scroll center center;
+    background: url(../../images/icon/bkg_grid.png) no-repeat scroll center center;
     width: 20px;
     height: 20px;
 }
 .shop_toolbar_btn > button.btn-grid-3.active {
-    background: url(../img/icon/bkg_grid_hover.png) no-repeat scroll center center !important;
+    background: url(../../images/icon/bkg_grid_hover.png) no-repeat scroll center center !important;
 }
 .shop_toolbar_btn > button.btn-grid-4 {
-    background: url(../img/icon/bkg_grid4.png) no-repeat scroll center center;
+    background: url(../../images/icon/bkg_grid4.png) no-repeat scroll center center;
     width: 26px;
     height: 22px;
 }
@@ -9427,15 +9427,15 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     }
 }
 .shop_toolbar_btn > button.btn-grid-4.active {
-    background: url(../img/icon/bkg_grid4_hover.png) no-repeat scroll center center !important;
+    background: url(../../images/icon/bkg_grid4_hover.png) no-repeat scroll center center !important;
 }
 .shop_toolbar_btn > button.btn-list {
-    background: url(../img/icon/bkg_list.png) no-repeat scroll center center;
+    background: url(../../images/icon/bkg_list.png) no-repeat scroll center center;
     width: 20px;
     height: 20px;
 }
 .shop_toolbar_btn > button.btn-list.active {
-    background: url(../img/icon/bkg_list_hover.png) no-repeat scroll center center !important;
+    background: url(../../images/icon/bkg_list_hover.png) no-repeat scroll center center !important;
 }
 
 .product_content.list_content {
@@ -11657,7 +11657,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 
 .home_about_section {
-    background: url(../img/bg/banner12.jpg) no-repeat scroll center center/cover;
+    background: url(../../images/bg/banner12.jpg) no-repeat scroll center center/cover;
 }
 @media only screen and (max-width: 767px) {
     .home_about_section {
