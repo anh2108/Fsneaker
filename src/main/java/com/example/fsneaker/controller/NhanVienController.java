@@ -89,7 +89,7 @@ public class NhanVienController {
         existingNhanVien.setGioiTinh(nhanVien.getGioiTinh());
         existingNhanVien.setDiaChi(nhanVien.getDiaChi());
         existingNhanVien.setVaiTro(nhanVien.getVaiTro());
-//        existingNhanVien.setTaiKhoan(nhanVien.getTaiKhoan());
+        existingNhanVien.setTaiKhoan(nhanVien.getTaiKhoan());
         existingNhanVien.setMatKhau(nhanVien.getMatKhau());
         existingNhanVien.setCccd(nhanVien.getCccd());
         existingNhanVien.setTrangThai(nhanVien.getTrangThai());
