@@ -30,7 +30,7 @@ public class SanPhamChiTiet {
     private int soLuong;
 
     @Column(name = "NgaySanXuat")
-    private Date ngaySanXuat;
+    private java.sql.Date ngaySanXuat;
 
     @ManyToOne
     @JoinColumn(name = "IdSanPham",referencedColumnName = "Id")
@@ -55,5 +55,8 @@ public class SanPhamChiTiet {
 
     @Column(name = "GiaBan")
     private double giaBan;
+
+    @Column(name = "GiaBanGiamGia")
+    private Double giaBanGiamGia;
 
 }
