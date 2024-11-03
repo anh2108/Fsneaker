@@ -23,9 +23,9 @@ public class SanPhamNewBalanceController {
     @GetMapping("/san-pham-newbalance")
     public String hienThiNewBalance(@RequestParam(value = "page",defaultValue = "0")int page, Model model){
         int pageSize = 12;
-        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham();
+        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(4);
         model.addAttribute("mauSacVoiSanPham",mauSacVoiSanPham);
-        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham();
+        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(4);
         model.addAttribute("kichThuocVoiSanPham",kichThuocVoiSanPham);
         Page<Object[]> tatCaSanPhamNewBalance = sanPhamChiTietService.getThuongHieuTenThuongHieu(4,page, pageSize);
         model.addAttribute("tatCaSanPhamNewBalance",tatCaSanPhamNewBalance);

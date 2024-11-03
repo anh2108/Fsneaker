@@ -23,9 +23,9 @@ public class SanPhamAdidasController {
     @GetMapping("/san-pham-adidas")
     public String hienThiAdidas(@RequestParam(value="page",defaultValue = "0")int page, Model model){
         int pageSize = 12;
-        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham();
+        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(2);
         model.addAttribute("mauSacVoiSanPham",mauSacVoiSanPham);
-        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham();
+        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(2);
         model.addAttribute("kichThuocVoiSanPham",kichThuocVoiSanPham);
         Page<Object[]> tatCaSanPhamAdidas = sanPhamChiTietService.getThuongHieuTenThuongHieu(2, page, pageSize);
         model.addAttribute("tatCaSanPhamAdidas",tatCaSanPhamAdidas);

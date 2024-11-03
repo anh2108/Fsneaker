@@ -413,7 +413,7 @@
     });
     
     /*--- niceSelect---*/
-     $('.select_option').niceSelect();
+     // $('.select_option').niceSelect();
     
 
     /*---  ScrollUp Active ---*/

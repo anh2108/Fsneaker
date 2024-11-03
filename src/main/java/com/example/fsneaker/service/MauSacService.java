@@ -11,7 +11,7 @@ public class MauSacService {
     @Autowired
     private MauSacRepo mauSacRepo;
 
-    public List<Object[]> getMauSacWithSanPham(){
-        return mauSacRepo.findByMauSacWithProduct();
+    public List<Object[]> getMauSacWithSanPham(Integer idThuongHieu){
+        return mauSacRepo.findByMauSacWithProduct(idThuongHieu);
     }
 }

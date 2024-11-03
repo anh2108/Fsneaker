@@ -18,7 +18,7 @@ public interface DonHangChiTietRepo extends JpaRepository<DonHangChiTiet, Intege
     List<DonHangChiTiet> findAllByDonHangId(int id);
     //Kiểm tra nếu sản phẩm đã có trong hóa đơn
     boolean existsByDonHangIdAndSanPhamChiTietId(int idDonHang, int idSanPhamChiTiet);
-    @Query("SELECT c.sanPhamChiTiet.sanPham.tenSanPham,c.sanPhamChiTiet.ngayTao,c.gia,SUM(c.soLuong), c.sanPhamChiTiet.soLuong, c.sanPhamChiTiet.mauSac.tenMauSac, c.sanPhamChiTiet.kichThuoc.tenKichThuoc, c.sanPhamChiTiet.sanPham.thuongHieu.tenThuongHieu FROM DonHangChiTiet c GROUP BY c.sanPhamChiTiet.id,c.sanPhamChiTiet.sanPham.tenSanPham,c.sanPhamChiTiet.ngayTao,c.gia, c.sanPhamChiTiet.soLuong,c.sanPhamChiTiet.mauSac.tenMauSac, c.sanPhamChiTiet.kichThuoc.tenKichThuoc, c.sanPhamChiTiet.sanPham.thuongHieu.tenThuongHieu ORDER BY SUM(c.soLuong) DESC")
+    @Query("SELECT c.sanPhamChiTiet.sanPham.id ,c.sanPhamChiTiet.sanPham.tenSanPham,c.sanPhamChiTiet.ngayTao,MAX(c.gia),SUM(c.soLuong), MAX(c.sanPhamChiTiet.soLuong) FROM DonHangChiTiet c GROUP BY c.sanPhamChiTiet.sanPham.id, c.sanPhamChiTiet.id,c.sanPhamChiTiet.sanPham.tenSanPham,c.sanPhamChiTiet.ngayTao ORDER BY SUM(c.soLuong) DESC")
     Page<Object[]> findBestSellingProducts(Pageable pageable);
     @Query("SELECT c.sanPhamChiTiet.sanPham.tenSanPham,c.sanPhamChiTiet.ngayTao,c.gia, SUM(c.soLuong), c.sanPhamChiTiet.soLuong FROM DonHangChiTiet c GROUP BY c.sanPhamChiTiet.id,c.sanPhamChiTiet.sanPham.tenSanPham,c.sanPhamChiTiet.ngayTao,c.gia, c.sanPhamChiTiet.soLuong ORDER BY (c.gia * SUM(c.soLuong)) DESC")
     Page<Object[]> sanPhamDoanhThuCaoNhat(Pageable pageable);
@@ -31,7 +31,8 @@ public interface DonHangChiTietRepo extends JpaRepository<DonHangChiTiet, Intege
 
     DonHangChiTiet findByDonHangIdAndSanPhamChiTietId(Integer idDonHang, Integer idSanPhamChiTiet);
 
-
+    @Query("SELECT dhct.sanPhamChiTiet.sanPham.tenSanPham, dhct.sanPhamChiTiet.giaBan, dhct.sanPhamChiTiet.mauSac.tenMauSac, SUM(dhct.soLuong) FROM DonHangChiTiet dhct WHERE dhct.sanPhamChiTiet.sanPham.thuongHieu.id = :idThuongHieu GROUP BY dhct.sanPhamChiTiet.sanPham.tenSanPham, dhct.sanPhamChiTiet.giaBan, dhct.sanPhamChiTiet.mauSac.tenMauSac ORDER BY SUM(dhct.soLuong) DESC")
+    Page<Object[]> findNikeByPopularity(@Param("idThuongHieu")Integer idThuongHieu, Pageable pageable);
 
     //Từ chỗ này đi ai code của ai thì note lại tên tránh nhầm lẫn
 }

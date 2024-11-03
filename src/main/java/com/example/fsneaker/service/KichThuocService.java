@@ -11,7 +11,7 @@ public class KichThuocService {
     @Autowired
     private KichThuocRepo kichThuocRepo;
 
-    public List<Object[]> getKichThuocVoiSanPham(){
-        return kichThuocRepo.findKichThuocWithSanPham();
+    public List<Object[]> getKichThuocVoiSanPham(Integer idThuongHieu){
+        return kichThuocRepo.findKichThuocWithSanPham(idThuongHieu);
     }
 }

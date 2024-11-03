@@ -23,9 +23,9 @@ public class SanPhamPumaController {
     @GetMapping("/san-pham-puma")
     public String hienThiPuma(@RequestParam(value = "page", defaultValue = "0")int page, Model model){
         int pageSize = 12;
-        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham();
+        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(3);
         model.addAttribute("mauSacVoiSanPham",mauSacVoiSanPham);
-        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham();
+        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(3);
         model.addAttribute("kichThuocVoiSanPham",kichThuocVoiSanPham);
         Page<Object[]> tatCaSanPhamPuma = sanPhamChiTietService.getThuongHieuTenThuongHieu(3, page, pageSize);
         model.addAttribute("tatCaSanPhamPuma",tatCaSanPhamPuma);

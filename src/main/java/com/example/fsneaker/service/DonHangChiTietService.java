@@ -67,4 +67,7 @@ public class DonHangChiTietService {
     public DonHangChiTiet getDonHangIdAndSanPhamChiTietId(Integer idDonHang, Integer idSanPhamChiTiet){
         return donHangChiTietRepo.findByDonHangIdAndSanPhamChiTietId(idDonHang,idSanPhamChiTiet);
     }
+    public Page<Object[]> getNikeByPopularity( Integer idThuongHieu, int page, int size){
+        return donHangChiTietRepo.findNikeByPopularity(idThuongHieu, PageRequest.of(page, size));
+    }
 }
