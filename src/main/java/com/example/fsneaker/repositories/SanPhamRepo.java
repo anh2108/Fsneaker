@@ -12,7 +12,7 @@ public interface SanPhamRepo extends JpaRepository<SanPham, Integer> {
             "join sp.khuyenMai km  " +
             "join sp.thuongHieu th " +
             "join sp.xuatXu xx " +
-            "where sp.id = :id ")
+            "where sp.id = :id order by sp.ngayTao")
     public SanPham getSanPhamsById(int id);
 
 }

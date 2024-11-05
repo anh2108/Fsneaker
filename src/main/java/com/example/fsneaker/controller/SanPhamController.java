@@ -32,6 +32,10 @@ public class SanPhamController {
 
     @Autowired
     private KhuyenMaiRepo khuyenMaiRepo;
+    @Autowired
+    private KichThuocRepo kichThuocRepo;
+    @Autowired
+    private MauSacRepo mauSacRepo;
 
     @GetMapping("/qlsanpham")
    public String index(Model model){
@@ -49,6 +53,15 @@ public class SanPhamController {
         List<XuatXu> listXu = xuatXuRepo.findAll();
         model.addAttribute("listXuatXu", listXu);
 
+        List<KichThuoc> listKichThuoc = kichThuocRepo.findAll();
+        model.addAttribute("listKichThuoc", listKichThuoc);
+
+        List<MauSac> listMauSac = mauSacRepo.findAll();
+        model.addAttribute("listMauSac", listMauSac);
+
+
+
+
         return "templateadmin/qlsanpham.html";
 
     }
@@ -59,7 +72,6 @@ public class SanPhamController {
             @RequestParam(name = "khuyenMaiId") Integer khuyenMaiId,
             @RequestParam(name = "thuongHieuId") Integer thuongHieuId,
             @RequestParam(name = "xuatXuId") Integer xuatXuId,
-
             @RequestParam(name = "maSanPham") String maSanPham,
             @RequestParam(name = "tenSanPham") String tenSanPham,
             @RequestParam(name = "trangThai") Integer trangThai
@@ -132,5 +144,7 @@ public class SanPhamController {
         return "redirect:/qlsanpham";
 
     }
+
+
 
 }

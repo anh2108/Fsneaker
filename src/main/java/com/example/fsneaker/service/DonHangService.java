@@ -41,9 +41,9 @@ public class DonHangService {
             return false;
         }
     }
-//    public boolean kiemTraSanPhamTrongDonHang(int idDonHang, int idSanPhamChiTiet){
-//        return donHangChiTietRepo.existsByDonHangIdAndSanPhamChiTietId(idDonHang, idSanPhamChiTiet);
-//    }
+    public boolean kiemTraSanPhamTrongDonHang(int idDonHang, int idSanPhamChiTiet){
+        return donHangChiTietRepo.existsByDonHangIdAndSanPhamChiTietId(idDonHang, idSanPhamChiTiet);
+    }
     public List<DonHang> getDonHangs(){
         return donHangRepo.findAll();
     }
@@ -172,5 +172,13 @@ public class DonHangService {
             return 0L;
         }
         return tongSanPham;
+    }
+    public void updateSanPhamQuantity(Integer idDonHang, Integer idSanPhamChiTiet, Integer soLuong){
+        DonHangChiTiet chiTiet = donHangChiTietRepo.findByDonHangIdAndSanPhamChiTietId(idDonHang,idSanPhamChiTiet);
+        if(chiTiet != null){
+            chiTiet.setSoLuong(soLuong); //Cập nhật số lượng
+            chiTiet.setThanhTien(soLuong * chiTiet.getGia());
+            donHangChiTietRepo.save(chiTiet); //Lưu vào database
+        }
     }
 }

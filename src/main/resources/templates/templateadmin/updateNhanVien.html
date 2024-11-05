@@ -10,7 +10,7 @@
     <!-- Thêm Line Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
     <!-- Thêm Material Design Icons CDN -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
     <!-- Thêm Feather Icon CND -->
     <script src="https://unpkg.com/feather-icons"></script>
     <!-- Thêm Remix Icon -->
@@ -751,23 +751,7 @@
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#sidebarSanPham" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"> Quản lý sản phẩm </a>
-                                    <div class="collapse menu-dropdown" id="sidebarSanPham">
-                                        <ul class="nav nav-sm flex-column">
-                                            <li class="nav-item">
-                                                <a href="/qlsanpham" class="nav-link">Sản phẩm</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="/qlsanphamchitiet" class="nav-link">Sản phẩm chi tiết</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/qlnhanvien" class="nav-link" data-key="t-nhanvien"> Quản lý nhân viên </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/qlkhachhang" class="nav-link" data-key="t-khachang"> Quản lý khách hàng </a>
+                                    <a href="/qlsanpham" class="nav-link" data-key="t-sanpham">Quản lý sản phẩm</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/qlvoucher" class="nav-link" data-key="t-voucher"> Quản lý voucher </a>
@@ -789,6 +773,21 @@
                         <a class="nav-link menu-link" href="/donhangadmin" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLayouts">
                             <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Đơn hàng</span>
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
+                            <i class="ri-account-circle-line"></i> <span data-key="t-auth">Tài khoản</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="sidebarAuth">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a href="/qlnhanvien" class="nav-link" data-key="t-nhanvien"> Nhân viên </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/qlkhachhang" class="nav-link" data-key="t-khachang"> Khách hàng </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item" hidden="true">
                         <a class="nav-link menu-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarIcons">
@@ -910,13 +909,6 @@
                         </div>
 
                         <!-- Tài khoản -->
-<!--                        <div class="mb-3">-->
-<!--                            <label class="form-label">Tài khoản:</label>-->
-<!--                            <input class="form-control" th:field="*{taiKhoan}" placeholder="Nhập tài khoản" required>-->
-<!--                            <span th:if="${errors != null and errors.containsKey('taiKhoan')}" class="text-danger">-->
-<!--                        <small th:text="${errors['taiKhoan']}"></small>-->
-<!--                    </span>-->
-<!--                        </div>-->
 
                         <!-- Mật khẩu -->
                         <div class="mb-3">

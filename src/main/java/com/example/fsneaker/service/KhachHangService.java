@@ -48,4 +48,9 @@ public class KhachHangService {
     public long countTotalKhachHang(){
         return khachHangRepo.count();
     }
+
+    //Chỗ này là code của trưởng nhóm code cấm đụng vào
+    public KhachHang timKiemTheoSoDienThoaiHoacEmail(String keyword){
+        return khachHangRepo.findBySoDienThoaiOrEmail(keyword,keyword);
+    }
 }

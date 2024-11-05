@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,9 +47,9 @@ public class VoucherController {
             @RequestParam(name = "page", defaultValue = "0") int pageNo,
             @RequestParam(name = "limit", defaultValue = "5") int pageSize,
             @RequestParam(defaultValue = "") String keyword,
-            @RequestParam Optional<LocalDate> ngayBatDau,
-            @RequestParam Optional<LocalDate> ngayKetThuc,
-            @RequestParam Optional<Integer>  trangThai
+            @RequestParam Optional<LocalDateTime> ngayBatDau,
+            @RequestParam Optional<LocalDateTime> ngayKetThuc,
+            @RequestParam Optional<Integer> trangThai
     ) {
         String s = "%" + keyword + "%";
         PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
@@ -80,8 +80,7 @@ public class VoucherController {
     @GetMapping("/qlvoucher-edit/{id}")
     public String edit(
             @PathVariable("id") Voucher voucher,
-            Model model)
-    {
+            Model model) {
         List<NhanVien> listNV = this.nhanVienRepo.findAll();
         model.addAttribute("dataNV", listNV);
 
@@ -146,7 +145,7 @@ public class VoucherController {
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateVoucherStatus() {
-        LocalDate today = LocalDate.now();
+        LocalDateTime today = LocalDateTime.now();
 
         List<Voucher> upcomingVouchers = voucherRepo.findByNgayBatDauAfter(today);
         for (Voucher voucher : upcomingVouchers) {

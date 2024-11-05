@@ -55,11 +55,6 @@ public class NhanVien {
         @Column(name = "VaiTro")
         private Boolean vaiTro;
 
-//        @NotBlank(message = "Tài khoản không được bỏ trống !")
-//        @Size(max = 10, message = "Tài khoản không được dài quá 10 ký tự")
-//        @Column(name = "TaiKhoan")
-//        private String taiKhoan;
-
         @NotBlank(message = "Mật khẩu không được bỏ trống !")
         @Size(max = 10, message = "Mật khẩu không được dài quá 10 ký tự")
         @Column(name = "MatKhau")
