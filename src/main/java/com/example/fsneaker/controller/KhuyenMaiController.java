@@ -111,7 +111,7 @@ public class KhuyenMaiController {
             // Kiểm tra giá trị tiền phải nhỏ hơn hoặc bằng đơn tối thiểu
             if (khuyenMai.getGiaTri() > khuyenMai.getDonToiThieu()) {
                 model.addAttribute("khuyenmai", khuyenMai);
-                model.addAttribute("errorDonToiThieu", "Giá trị giảm phải nhỏ hơn hoặc bằng đơn tối thiểu.");
+                model.addAttribute("errorGiaTri", "Giá trị giảm phải nhỏ hơn hoặc bằng đơn tối thiểu.");
                 return "templateadmin/them-khuyen-mai"; // Trả về form với thông báo lỗi
             }
         }
