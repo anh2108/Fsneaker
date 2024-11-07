@@ -869,7 +869,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
+                        <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
+                           aria-expanded="false" aria-controls="sidebarAuth">
                             <i class="ri-account-circle-line"></i> <span data-key="t-auth">Tài khoản</span>
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarAuth">
@@ -952,7 +953,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label class="form-label">Mã voucher</label>
-                                    <input type="text" class="form-control" th:name="maVoucher" >
+                                    <input type="text" class="form-control" th:name="maVoucher">
                                     <!--                                    <span th:if="${errors['maVoucher']}" th:text="${errors['maVoucher']}"></span>-->
                                     <span th:if="${errors != null and errors['maVoucher'] != null}"
                                           style="color: #ff0000" th:text="${errors['maVoucher']}"></span>
@@ -961,11 +962,21 @@
 
                                 <div class="col-6">
                                     <label class="form-label">Tên voucher</label>
-                                    <input type="text" class="form-control" th:name="loaiVoucher" value="">
+                                    <input type="text" class="form-control" th:name="tenVoucher" value="">
                                     <!--                                    <span th:if="${errors['loaiVoucher']}" th:text="${errors['loaiVoucher']}"></span>-->
+                                    <span th:if="${errors != null and errors['tenVoucher'] != null}"
+                                          style="color: red" th:text="${errors['tenVoucher']}"></span>
+
+                                </div>
+
+                                <div class="col-6 mt-2">
+                                    <label class="form-label">Loại Voucher: </label>
+                                    <select class="form-control" th:name="loaiVoucher">
+                                        <option value="Giảm giá %">Giảm giá %</option>
+                                        <option value="Giảm giá số tiền">Giảm giá số tiền</option>
+                                    </select>
                                     <span th:if="${errors != null and errors['loaiVoucher'] != null}"
                                           style="color: red" th:text="${errors['loaiVoucher']}"></span>
-
                                 </div>
 
                                 <div class="col-6">
@@ -977,10 +988,10 @@
 
                                 </div>
 
-<!--                                <div class="col-6">-->
-<!--                                    <label class="form-label">Mô tả</label>-->
-<!--                                    <textarea class="form-control" th:name="moTa" value="" rows="2"></textarea>-->
-<!--                                </div>-->
+                                <!--                                <div class="col-6">-->
+                                <!--                                    <label class="form-label">Mô tả</label>-->
+                                <!--                                    <textarea class="form-control" th:name="moTa" value="" rows="2"></textarea>-->
+                                <!--                                </div>-->
 
                                 <div class="col-6">
                                     <label class="form-label">Giá trị</label>
@@ -1027,24 +1038,24 @@
                                     </select>
                                 </div>
 
-<!--                                <div class="col-6">-->
-<!--                                    <label class="form-label">Trạng thái</label>-->
-<!--                                    <div class="form-check mb-2">-->
-<!--                                        <input class="form-check-input" type="radio" th:name="trangThai" th:value="1"-->
-<!--                                               checked>-->
-<!--                                        <label class="form-check-label">Đang hoạt động</label>-->
-<!--                                    </div>-->
-<!--                                    <div class="form-check">-->
-<!--                                        <input class="form-check-input" type="radio" th:name="trangThai" th:value="0">-->
-<!--                                        <label class="form-check-label">Hết hạn</label>-->
-<!--                                    </div>-->
-<!--                                    <div class="form-check">-->
-<!--                                        <input class="form-check-input" type="radio" th:name="trangThai" th:value="2">-->
-<!--                                        <label class="form-check-label">Chờ kích hoạt</label>-->
-<!--                                    </div>-->
-<!--                                    <span th:if="${errors != null and errors['trangThai'] != null}"-->
-<!--                                          style="color: red" th:text="${errors['trangThai']}"></span>-->
-<!--                                </div>-->
+                                <!--                                <div class="col-6">-->
+                                <!--                                    <label class="form-label">Trạng thái</label>-->
+                                <!--                                    <div class="form-check mb-2">-->
+                                <!--                                        <input class="form-check-input" type="radio" th:name="trangThai" th:value="1"-->
+                                <!--                                               checked>-->
+                                <!--                                        <label class="form-check-label">Đang hoạt động</label>-->
+                                <!--                                    </div>-->
+                                <!--                                    <div class="form-check">-->
+                                <!--                                        <input class="form-check-input" type="radio" th:name="trangThai" th:value="0">-->
+                                <!--                                        <label class="form-check-label">Hết hạn</label>-->
+                                <!--                                    </div>-->
+                                <!--                                    <div class="form-check">-->
+                                <!--                                        <input class="form-check-input" type="radio" th:name="trangThai" th:value="2">-->
+                                <!--                                        <label class="form-check-label">Chờ kích hoạt</label>-->
+                                <!--                                    </div>-->
+                                <!--                                    <span th:if="${errors != null and errors['trangThai'] != null}"-->
+                                <!--                                          style="color: red" th:text="${errors['trangThai']}"></span>-->
+                                <!--                                </div>-->
 
                                 <button class="btn btn-primary btn-animation w-25 h-25" style="left: 10px; top: 30px"
                                         type="submit">Thêm

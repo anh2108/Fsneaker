@@ -35,6 +35,10 @@ public class Voucher {
     @Column(name = "MaVoucher")
     private String maVoucher;
 
+    @NotBlank(message = "Tên Voucher không được bỏ trống")
+    @Column(name = "TenVoucher")
+    private String tenVoucher;
+
     @NotBlank(message = "LoaiVoucher không được bỏ trống")
     @Column(name = "LoaiVoucher")
     private String loaiVoucher;
