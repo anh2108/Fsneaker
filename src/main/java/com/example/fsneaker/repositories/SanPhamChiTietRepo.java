@@ -78,4 +78,31 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
     //Sắp xếp theo tên
     @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac ORDER BY spct.sanPham.tenSanPham ASC")
     Page<Object[]> findNikeByName(@Param("idThuongHieu") Integer idThuongHieu, Pageable pageable);
+
+
+
+
+    ////////////////hai
+    @Query("select o from SanPhamChiTiet o where o.sanPham.thuongHieu.id = ?1")
+    Page<SanPhamChiTiet> findByPumaThuongHieu(Integer id, Pageable pageable);
+
+    @Query("select o from SanPhamChiTiet o where o.sanPham.thuongHieu.id = ?1" +
+            " and (?2 is null or o.mauSac.tenMauSac = ?2)" +
+            " and (?3 is null or o.kichThuoc.tenKichThuoc =?3)" +
+            " and (?4 is null or o.giaBan >= ?4)" +
+            " and (?5 is null or o.giaBan <= ?5)")
+    Page<SanPhamChiTiet> findByThuongHieuPuma(Integer idThuongHieu,String tenMauSac,String tenKichThuoc,Double fromGiaBan,Double toGiaBan, Pageable page);
+
+    @Query("select o from SanPhamChiTiet o where o.sanPham.thuongHieu.id = ?1 order by o.giaBan")
+    Page<SanPhamChiTiet> findByPumaSortAsc(Integer id, Pageable pageable);
+
+    @Query("select o from SanPhamChiTiet o where o.sanPham.thuongHieu.id = ?1 order by o.giaBan desc")
+    Page<SanPhamChiTiet> findByPumaSortDesc(Integer id, Pageable pageable);
+
+    @Query("select o from SanPhamChiTiet o where o.sanPham.thuongHieu.id = ?1 order by o.sanPham.tenSanPham")
+    Page<SanPhamChiTiet> findByPumaSortName(Integer id, Pageable pageable);
+
+    @Query("select o from SanPhamChiTiet o where o.sanPham.thuongHieu.id = ?1 order by o.ngayTao desc")
+    Page<SanPhamChiTiet> findByPumaSortProductNew(Integer id, Pageable pageable);
+
 }

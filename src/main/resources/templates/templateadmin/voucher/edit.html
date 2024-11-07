@@ -961,11 +961,21 @@
 
                                 <div class="col-6">
                                     <label class="form-label">Tên voucher</label>
-                                    <input type="text" class="form-control" th:name="loaiVoucher"
-                                           th:value="${data.loaiVoucher}">
+                                    <input type="text" class="form-control" th:name="tenVoucher"
+                                           th:value="${data.tenVoucher}">
+                                    <span th:if="${errors != null and errors['tenVoucher'] != null}"
+                                          style="color: red" th:text="${errors['tenVoucher']}"></span>
+
+                                </div>
+
+                                <div class="col-6 mt-2">
+                                    <label class="form-label">Loại Voucher: </label>
+                                    <select class="form-control" th:name="loaiVoucher">
+                                        <option value="Giảm giá %" th:selected="${data.loaiVoucher == 'Giảm giá %'}">Giảm giá %</option>
+                                        <option value="Giảm giá số tiền" th:selected="${data.loaiVoucher == 'Giảm giá số tiền'}">Giảm giá số tiền</option>
+                                    </select>
                                     <span th:if="${errors != null and errors['loaiVoucher'] != null}"
                                           style="color: red" th:text="${errors['loaiVoucher']}"></span>
-
                                 </div>
 
                                 <div class="col-6">

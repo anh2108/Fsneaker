@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface VoucherRepo extends JpaRepository<Voucher,Integer> {
-    @Query("select o from Voucher o where o.loaiVoucher like ?1 or o.maVoucher like ?1 " +
+    @Query("select o from Voucher o where o.loaiVoucher like ?1 or o.maVoucher like ?1 or o.tenVoucher like ?1" +
             " and (?2 is null or o.ngayBatDau >=?2) " +
             " and (?3 is null or o.ngayKetThuc <=?3) " +
             " and (?4 is null or o.trangThai = ?4) " +
