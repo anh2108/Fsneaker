@@ -47,6 +47,9 @@
     <!--modernizr min js here-->
     <script src="js/templateuse/vendor/modernizr-3.7.1.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.7.0/nouislider.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.7.0/nouislider.min.js"></script>
+
 </head>
 
 <body>
@@ -427,24 +430,59 @@
                                 <li class="sub_categories1"><a href="/san-pham-nike">Nike</a></li>
                                 <li class="sub_categories2"><a href="/san-pham-adidas">Adidas</a></li>
                                 <li class="sub_categories3"><a href="/san-pham-asics">Asics</a></li>
-                                <li class=""><a href="/san-pham-puma" >Puma</a></li>
+                                <li class=""><a href="/san-pham-puma">Puma</a></li>
                                 <li class=""><a href="/san-pham-newbalance">New Balance</a></li>
                             </ul>
                         </div>
-                        <div class="widget_list widget_filter">
+                        <div class="widget_list widget_filter filter-price">
                             <h3>Lọc theo giá</h3>
-                            <form action="#">
-                                <div id="slider-range"></div>
-                                <button type="submit">Lọc</button>
-                                <input type="text" name="text" id="amount" />
-
-                            </form>
+                            <div id="priceSlider" style="margin: 20px"></div>
+                            <span id="fromGiaBan">0</span> - <span id="toGiaBan">2,000,000</span>
+                            <button class="btn btn-success" onclick="filterProducts()">Lọc</button>
                         </div>
+                        <script>
+                            // Initialize the range slider with noUiSlider
+                            var priceSlider = document.getElementById('priceSlider');
+
+                            noUiSlider.create(priceSlider, {
+                                start: [0, 2000000], // Starting range
+                                connect: true,
+                                range: {
+                                    'min': 0,
+                                    'max': 2000000
+                                },
+                                step: 10000,
+                                tooltips: [true, true], // Show tooltips with values
+                                format: {
+                                    to: function (value) {
+                                        return Math.round(value).toLocaleString(); // Format as currency
+                                    },
+                                    from: function (value) {
+                                        return Number(value.replace(/,/g, ''));
+                                    }
+                                }
+                            });
+
+                            // Update displayed min and max values when slider is changed
+                            priceSlider.noUiSlider.on('update', function (values, handle) {
+                                document.getElementById('fromGiaBan').innerText = values[0];
+                                document.getElementById('toGiaBan').innerText = values[1];
+                            });
+
+                            // Function to handle filter button click
+                            function filterProducts() {
+                                const range = priceSlider.noUiSlider.get();
+                                const minGia = parseInt(range[0].replace(/[^\d]/g, ''));
+                                const maxGia = parseInt(range[1].replace(/[^\d]/g, ''));
+                                window.location.href = `/san-pham-asics?fromGiaBan=${minGia}&toGiaBan=${maxGia}`;
+                            }
+                        </script>
                         <div class="widget_list widget_color">
                             <h3>Chọn theo màu sắc</h3>
                             <ul th:each="mauSac : ${mauSacVoiSanPham}">
                                 <li>
-                                    <a href="/san-pham-nike" th:text="${mauSac[0] + ' ('+ mauSac[1]+')'}">Black </a>
+                                    <a th:href="@{/san-pham-asics(tenMauSac=${mauSac[0]})}"
+                                       th:text="${mauSac[0] + ' ('+ mauSac[1]+')'}">Black </a>
                                 </li>
                             </ul>
                         </div>
@@ -452,7 +490,8 @@
                             <h3>Chọn theo kích thước</h3>
                             <ul th:each="kt : ${kichThuocVoiSanPham}">
                                 <li>
-                                    <a href="/san-pham-nike" th:text="${kt[0] +' ('+kt[1] +')'}">S</a>
+                                    <a th:href="@{/san-pham-asics(tenKichThuoc=${kt[0]})}"
+                                       th:text="${kt[0] +' ('+kt[1] +')'}">S</a>
                                 </li>
                             </ul>
                         </div>
@@ -466,20 +505,26 @@
                 <div class="shop_toolbar_wrapper">
                     <div class="shop_toolbar_btn">
 
-                        <button data-role="grid_3" type="button" class="active btn-grid-3" data-bs-toggle="tooltip" title="3"></button>
+                        <button data-role="grid_3" type="button" class="active btn-grid-3" data-bs-toggle="tooltip"
+                                title="3"></button>
 
-                        <button data-role="grid_4" type="button"  class=" btn-grid-4" data-bs-toggle="tooltip" title="4"></button>
+                        <button data-role="grid_4" type="button" class=" btn-grid-4" data-bs-toggle="tooltip"
+                                title="4"></button>
 
-                        <button data-role="grid_list" type="button"  class="btn-list" data-bs-toggle="tooltip" title="List"></button>
+                        <button data-role="grid_list" type="button" class="btn-list" data-bs-toggle="tooltip"
+                                title="List"></button>
                     </div>
-                    <div class=" niceselect_option">
-                        <form class="select_option" action="#">
-                            <select name="orderby" id="short">
-                                <option selected value="1">Sắp xếp theo độ phổ biến</option>
-                                <option value="2">Sắp xếp theo sản phẩm mới</option>
-                                <option value="3">Sắp xếp theo giá: từ thấp đến cao</option>
-                                <option value="4">Sắp xếp theo giá: từ cao xuống thấp</option>
-                                <option value="5">Sắp xếp theo tên</option>
+                    <div>
+                        <form th:action="@{/san-pham-asics-sap-xep}" method="get">
+                            <select name="sortBy" id="short" onchange="this.form.submit()" style="height: 30px">
+                                <option value="0" th:selected="${sortBy == '0'}"> Sắp xếp theo mặc định</option>
+                                <option value="1" th:selected="${sortBy == '1'}">Sắp xếp theo độ phổ biến</option>
+                                <option value="2" th:selected="${sortBy == '2'}">Sắp xếp theo sản phẩm mới</option>
+                                <option value="3" th:selected="${sortBy == '3'}">Sắp xếp theo giá: từ thấp đến cao
+                                </option>
+                                <option value="4" th:selected="${sortBy == '4'}">Sắp xếp theo giá: từ cao xuống thấp
+                                </option>
+                                <option value="5" th:selected="${sortBy == '5'}">Sắp xếp theo tên</option>
                             </select>
                         </form>
                     </div>
@@ -488,66 +533,185 @@
                     <!--                    </div>-->
                 </div>
                 <!--shop toolbar end-->
-                <div class="row shop_wrapper">
-                    <div class="col-lg-4 col-md-4 col-12 " th:each="asics : ${tatCaSanPhamAsics}">
-                        <article class="single_product">
-                            <figure>
-                                <div class="product_thumb">
-                                    <a class="primary_img" href="product-details.html"><img src="images/product/product60.jpg" alt=""></a>
-                                    <a class="secondary_img" href="product-details.html"><img src="images/product/product61.jpg" alt=""></a>
-                                    <div class="action_links">
-                                        <ul>
-                                            <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
-                                            <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
+                <div th:if="${tatCaSanPhamAsics != null}">
+                    <div class="row shop_wrapper">
+                        <div class="col-lg-4 col-md-4 col-12 " th:each="asics : ${tatCaSanPhamAsics}">
+                            <article class="single_product">
+                                <figure>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" href="product-details.html"><img
+                                                src="images/product/product56.jpg" alt=""></a>
+                                        <a class="secondary_img" href="product-details.html"><img
+                                                src="images/product/product57.jpg" alt=""></a>
+                                        <div class="action_links">
+                                            <ul>
+                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i
+                                                        class="bx bx-cart"></i></a></li>
+                                                <li class="compare"><a href="#" title="Mua ngay"><i
+                                                        class="bx bx-money"></i></a></li>
 
-                                            <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"  title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product_content grid_content">
-                                    <div class="product_content-header">
-                                        <h4 class="product_name"><a href="product-details.html" th:text="${asics[0]}">Lorem Ipsum</a></h4>
-                                        <div class="wishlist-btn">
-                                            <a href="#"><i class="bx bx-heart"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="product_price_rating">
-                                        <div class="price_box">
-                                            <span class="current_price" th:text="${#numbers.formatDecimal(asics[1],0,'COMMA',0,'COMMA')}">$210.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
+                                                                            data-bs-target="#modal_box"
+                                                                            title="Xem chi tiết"> <i
+                                                        class="bx bx-show"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="product_content list_content">
-                                    <h4 class="product_name"><a href="product-details.html" th:text="${asics[0]}">Aliquam Consequat</a></h4>
-                                    <div class="product_desc">
-                                        <p>Sẵn sàng nâng cấp phong cách của bạn với mẫu Asics – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Asics còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
-                                    </div>
-                                    <div class="product_price_rating">
-                                        <div class="price_box">
-                                            <span class="current_price" th:text="${#numbers.formatDecimal(asics[1],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                    <div class="product_content grid_content">
+                                        <div class="product_content-header">
+                                            <h4 class="product_name"><a href="product-details.html"
+                                                                        th:text="${asics.sanPham.tenSanPham}">Lorem
+                                                Ipsum</a></h4>
+                                            <div class="wishlist-btn">
+                                                <a href="#"><i class="bx bx-heart"></i></a>
+                                            </div>
                                         </div>
-                                        <div class="product_rating">
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price"
+                                                      th:text="${#numbers.formatDecimal(asics.giaBan,0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product_content list_content">
+                                        <h4 class="product_name"><a href="product-details.html"
+                                                                    th:text="${asics.sanPham.tenSanPham}">Aliquam
+                                            Consequat</a></h4>
+                                        <div class="product_desc">
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với mẫu Asics – sự kết hợp hoàn hảo
+                                                giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng,
+                                                đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút
+                                                mọi ánh nhìn. Không chỉ là một món đồ thời trang, Asics còn được biết đến
+                                                với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price"
+                                                      th:text="${#numbers.formatDecimal(asics.giaBan,0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </figure>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${sanPhamAsicsTotalQuantity != null}">
+                    <div class="row shop_wrapper">
+                        <div class="col-lg-4 col-md-4 col-12 " th:each="asics : ${sanPhamAsicsTotalQuantity}">
+                            <article class="single_product">
+                                <figure>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" href="product-details.html"><img
+                                                src="images/product/product56.jpg" alt=""></a>
+                                        <a class="secondary_img" href="product-details.html"><img
+                                                src="images/product/product57.jpg" alt=""></a>
+                                        <div class="action_links">
                                             <ul>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i
+                                                        class="bx bx-cart"></i></a></li>
+                                                <li class="compare"><a href="#" title="Mua ngay"><i
+                                                        class="bx bx-money"></i></a></li>
+
+                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
+                                                                            data-bs-target="#modal_box"
+                                                                            title="Xem chi tiết"> <i
+                                                        class="bx bx-show"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
-                            </figure>
-                        </article>
+                                    <div class="product_content grid_content">
+                                        <div class="product_content-header">
+                                            <h4 class="product_name"><a href="product-details.html"
+                                                                        th:text="${asics[0]}">Lorem Ipsum</a></h4>
+                                            <div class="wishlist-btn">
+                                                <a href="#"><i class="bx bx-heart"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price"
+                                                      th:text="${#numbers.formatDecimal(asics[1],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product_content list_content">
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${asics[0]}">Aliquam
+                                            Consequat</a></h4>
+                                        <div class="product_desc">
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với mẫu Asics – sự kết hợp hoàn hảo
+                                                giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng,
+                                                đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút
+                                                mọi ánh nhìn. Không chỉ là một món đồ thời trang, Asics còn được biết đến
+                                                với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price"
+                                                      th:text="${#numbers.formatDecimal(asics[1],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </figure>
+                            </article>
+                        </div>
                     </div>
                 </div>
 
