@@ -66,4 +66,24 @@ public class SanPhamChiTietService {
         return sanPhamChiTietRepo.findNikeByName(idThuongHieu, PageRequest.of(page, size));
     }
 
+    //code của luận
+
+    //Sắp xếp theo sản phẩm mới
+    public Page<Object[]> getAdidasNyNewest(Integer idThuongHieu, int page, int size){
+        return sanPhamChiTietRepo.findAdidasByNewest(idThuongHieu, PageRequest.of(page,size));
+    }
+
+    //Sắp xếp theo giá từ thấp lên cáo
+    public Page<Object[]> getAdidasByPriceAsc(Integer idThuongHieu, int page, int size){
+        return sanPhamChiTietRepo.findAdidasByPriceAsc(idThuongHieu, PageRequest.of(page,size));
+    }
+    //Sắp xếp theo giá từ cao xuống thấp
+    public Page<Object[]> getAdidasByPriceDesc(Integer idThuongHieu , int page, int size){
+        return sanPhamChiTietRepo.findAdidasByPriceDesc(idThuongHieu, PageRequest.of(page, size));
+    }
+    //Sắp xếp theo tên
+    public Page<Object[]> getAdidasByName(Integer idThuongHieu, int page, int size){
+        return sanPhamChiTietRepo.findAdidasByName(idThuongHieu, PageRequest.of(page, size));
+    }
+
 }
