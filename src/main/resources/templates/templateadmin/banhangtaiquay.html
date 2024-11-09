@@ -7,6 +7,17 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .disabled-link {
+            opacity: 0.5;
+            pointer-events: none; /* Ngăn người dùng nhấn vào liên kết */
+            cursor: not-allowed;
+        }
+    </style>
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <!-- Thêm Line Awesome CDN -->
@@ -872,6 +883,37 @@
                                     <form th:action="@{/don-hang/huy/{maDonHang}(maDonHang=${donHang.maDonHang})}" method="post" style="display:inline;">
                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn hủy hóa đơn này?');">Hủy</button>
                                     </form>
+<!--                                    <script>-->
+<!--                                        function showConfirmModal() {-->
+<!--                                            // Hiển thị modal-->
+<!--                                            const modal = new bootstrap.Modal(document.getElementById('confirmCancelModal'));-->
+<!--                                            modal.show();-->
+
+<!--                                            // Xử lý khi người dùng bấm nút "Đồng ý"-->
+<!--                                            document.getElementById('confirmCancelButton').onclick = function() {-->
+<!--                                                // Thêm hành động hủy hóa đơn ở đây, ví dụ gửi form hoặc điều hướng-->
+<!--                                                window.location.href = "[[@{/don-hang/huy/{maDonHang}(maDonHang=${donHang.maDonHang})}]]"; // Thay bằng hành động cụ thể của bạn-->
+<!--                                            };-->
+<!--                                        }-->
+<!--                                    </script>-->
+                                    <!-- Modal Xác Nhận Hủy -->
+<!--                                    <div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelModalLabel" aria-hidden="true">-->
+<!--                                        <div class="modal-dialog">-->
+<!--                                            <div class="modal-content">-->
+<!--                                                <div class="modal-header">-->
+<!--                                                    <h5 class="modal-title" id="confirmCancelModalLabel">Xác nhận hủy hóa đơn</h5>-->
+<!--                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                                                </div>-->
+<!--                                                <div class="modal-body">-->
+<!--                                                    Bạn có chắc muốn hủy hóa đơn này không?-->
+<!--                                                </div>-->
+<!--                                                <div class="modal-footer">-->
+<!--                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>-->
+<!--                                                    <button type="button" class="btn btn-danger" id="confirmCancelButton">Đồng ý</button>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
                                 </td>
                             </tr>
                             </tbody>
@@ -880,7 +922,21 @@
                         <div class="" style="height: 700px; ">
                             <div class="mb-3 d-flex justify-content-between align-items-center">
                                 <h4>Sản phẩm</h4>
-                                <a href="/don-hang/them-san-pham-vao-hoa-don" class="btn btn-success" >Thêm sản phẩm</a>
+                                <!-- Hiển thị nút "Thêm sản phẩm" khi không có voucher -->
+                                <a th:href="@{/don-hang/them-san-pham-vao-hoa-don/{id}(id=${donHang.id})}" class="btn btn-success" th:if="${hasVoucher != null and !hasVoucher}">Thêm sản phẩm</a>
+
+                                <!-- Nút bị vô hiệu khi có voucher, dùng CSS để tạo hiệu ứng mờ -->
+                                <a class="btn btn-success disabled-link" th:if="${hasVoucher}" onclick="return false;">Thêm sản phẩm</a>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        const hasVoucher = /*[[${hasVoucher}]]*/ false;  // Thymeleaf sẽ thay thế giá trị này
+                                        if (hasVoucher) {
+                                            const addButton = document.querySelector(".btn-success");
+                                            addButton.classList.add("disabled-link");
+                                            addButton.setAttribute("onclick", "return false;");  // Ngăn chặn hành động nhấp
+                                        }
+                                    });
+                                </script>
                             </div>
                             <div th:if="${#lists.isEmpty(gioHangs)}">
                                 <td colspan="7" class="text-center">Chưa có sản phẩm nào trong hóa đơn!</td>
@@ -902,9 +958,9 @@
                                             <div class="input-step">
                                                 <input type="hidden" name="idDonHang" th:value="${item.donHang.id}">
                                                 <input type="hidden" name="idSanPhamChiTiet" th:value="${item.sanPhamChiTiet.id}">
-                                                <button type="button" class="minus material-shadow" onclick="updateQuantity(this, 'decrease')">-</button>
+                                                <button type="button" class="minus material-shadow" th:disabled="${hasVoucher}" onclick="updateQuantity(this, 'decrease')">-</button>
                                                 <input type="number" class="product-quantity" th:value="${item.soLuong}" min="1" th:max="${item.sanPhamChiTiet.soLuong + item.soLuong}" readonly>
-                                                <button type="button" class="minus material-shadow" onclick="updateQuantity(this, 'increase')">+</button>
+                                                <button type="button" class="minus material-shadow" th:disabled="${hasVoucher}" onclick="updateQuantity(this, 'increase')">+</button>
                                             </div>
                                         </div>
                                         <div class="col-sm-auto">
@@ -941,48 +997,6 @@
                                     </div>
                                 </div>
                             </div>
-
-<!--                            <table class="table table-borderless table-nowrap" style="background-color: white">-->
-<!--                                <tr>-->
-<!--                                    <th>ID đơn hàng CT</th>-->
-<!--                                    <th>Id đơn hàng</th>-->
-<!--                                    <th>Tên sản phẩm</th>-->
-<!--                                    <th>Đơn Giá</th>-->
-<!--                                    <th>Số Lượng</th>-->
-<!--                                    <th>Thành Tiền</th>-->
-<!--                                    <th>Hành động</th>-->
-<!--                                </tr>-->
-<!--                                <tr th:if="${#lists.isEmpty(gioHangs)}">-->
-<!--                                    <td colspan="7" class="text-center">Chưa có sản phẩm nào trong hóa đơn!</td>-->
-<!--                                </tr>-->
-<!--                                <tr th:each="item : ${gioHangs}">-->
-<!--                                    <td th:text="${item.id}"></td>-->
-<!--                                    <td th:text="${item.donHang.id}"></td>-->
-<!--                                    <td th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}"></td>-->
-<!--                                    <td th:text="${item.gia}"></td>-->
-<!--                                    <td th:text="${item.soLuong}"></td>-->
-<!--                                    <td th:text="${item.gia * item.soLuong}"></td>-->
-<!--                                    <td class="d-flex align-items-center">-->
-                                        <!-- Form gửi yêu cầu sửa sản phẩm -->
-            <!--                            <form th:action="@{/don-hang/cap-nhat-so-luong}" method="post" class="me-2">-->
-            <!--                                <input type="hidden" name="idSanPhamChiTiet" th:value="${item.sanPhamChiTiet.id}" />-->
-            <!--                                <input type="hidden" name="idDonHangChiTiet" th:value="${item.id}" />-->
-            <!--                                <input type="hidden" name="idDonHang" th:value="${item.donHang.id}" />-->
-            <!--                                <input type="number" id="soLuong" name="soLuong" th:value="${item.soLuong}" min="1" th:max="${item.sanPhamChiTiet.soLuong + item.soLuong}" required />-->
-
-            <!--                                <button type="submit" class="btn btn-success">Cập nhật</button>-->
-            <!--                            </form>-->
-                                        <!-- Form gửi yêu cầu xóa sản phẩm -->
-<!--                                        <form th:action="@{/don-hang/xoa-san-pham/{id}(id=${donHang.id})}" method="post" >-->
-<!--                                            <input type="hidden" name="idDonHang" th:value="${item.donHang.id}">-->
-<!--                                            <input type="hidden" name="idDonHangChiTiet" th:value="${item.id}">-->
-<!--                                            <input type="hidden" name="idSanPhamChiTiet" th:value="${item.sanPhamChiTiet.id}">-->
-<!--                                            <input type="hidden" name="soLuong" th:value="${item.soLuong}">-->
-<!--                                            <button type="submit" class="btn btn-success">Xóa</button>-->
-<!--                                        </form>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
-<!--                            </table>-->
                         </div>
 
 
@@ -1025,20 +1039,28 @@
                                 <div class="mb-3">
                                     <form th:action="@{/don-hang/ap-voucher}" method="post">
                                         <input type="hidden" name="idDonHang" th:each="item : ${gioHangs}" th:value="${item.donHang.id}"/>
-                                        <label>Mã voucher</label>
-                                        <input type="text" name="maVoucher" placeholder="Nhập mã voucher"/>
+                                        <label>Chọn voucher</label>
+                                        <select name="idVoucher" class="form-control">
+                                            <option value="0">Chọn voucher</option>
+                                            <option th:each="voucher : ${vouchers}" th:value="${voucher.id}" th:text="${voucher.maVoucher + ' - '+  #numbers.formatDecimal(voucher.giaTri,0,'COMMA',0,'COMMA') + (voucher.loaiVoucher.equals('Giảm giá %') ? ' %' : ' VND')}"></option>
+                                        </select>
+
+<!--                                        <input type="text" name="maVoucher" placeholder="Nhập mã voucher"/>-->
                                         <div class="text-center mt-3">
                                             <button type="submit" class="btn btn-success">Áp dụng</button>
                                         </div>
                                     </form>
+                                    <div th:if="${hasVoucher}" class="text-center mt-3">
+                                        <form th:action="@{/don-hang/huy-voucher/{id}(id=${donHang.id})}" method="post">
+                                            <button type="submit" class="btn btn-danger">Hủy Voucher</button>
+                                        </form>
+                                    </div>
                                 </div>
                                 <div th:if="${voucher != null}">
                                     <p>Voucher áp dụng: <strong th:text="${voucher.maVoucher}"></strong></p>
-                                    <p>Số tiền được giảm: <strong th:text="${tongTienChuaGiam - tongTien}"></strong></p>
-                                    <p>Tổng tiền sau giảm: <strong th:text="${tongTien}"></strong></p>
                                 </div>
                                 <div class="mb-2">
-                                    <form action="/don-hang/tim-kiem-khach-hang" method="get" onsubmit="return confirmChange();">
+                                    <form action="/don-hang/tim-kiem-khach-hang" method="get">
                                         <label for="keyword">Tìm kiếm khách hàng: </label>
                                         <input type="text" name="keyword" id="keyword" placeholder="Số điện thoại hoặc email" required>
 
@@ -1046,16 +1068,67 @@
 
                                         <div class="text-center mt-3">
                                             <button type="submit" class="btn btn-success">Tìm kiếm</button>
+                                            <button type="button" class="btn btn-success" onclick="showForm()">Thêm khách hàng</button>
                                         </div>
                                     </form>
-                                    <script>
-                                        function confirmChange() {
-                                            const existingCustomer = /*[(${existingCustomer})]*/ false;
-                                            if (existingCustomer) {
-                                                return confirm("Hóa đơn này đã có khách hàng. Bạn có chắc chắn muốn thay thế khách hàng hiện tại?");
+                                    <div id="addCustomerForm" style="display:none; margin-top: 20px" >
+                                        <form th:action="@{/don-hang/them-khach-hang}" method="post" th:object="${khachHang}">
+                                            <input type="hidden" name="idDonHang" th:if="${donHang != null}" th:value="${donHang.id}">
+                                            <div class="mb-3">
+                                                <label class="form-label">Tên khách hàng <span style="color: red">*</span></label>
+                                                <input type="text" class="form-control" th:field="*{tenKhachHang}">
+                                                <div th:if="${errors != null && errors.containsKey('tenKhachHang')}" th:text="${errors['tenKhachHang']}" style="color: red"></div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Email <span style="color: red">*</span></label>
+                                                <input type="text" class="form-control" th:field="*{email}">
+                                                <div th:if="${errors != null && errors.containsKey('email')}" th:text="${errors['email']}" style="color: red"></div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Địa chỉ <span style="color: red">*</span></label>
+                                                <input type="text" class="form-control" th:field="*{diaChi}">
+                                                <div th:if="${errors != null && errors.containsKey('diaChi')}" th:text="${errors['diaChi']}" style="color: red"></div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Số điện thoại <span style="color: red">*</span></label>
+                                                <input type="text" class="form-control" th:field="*{soDienThoai}">
+                                                <div th:if="${errors != null && errors.containsKey('soDienThoai')}" th:text="${errors['soDienThoai']}" style="color: red"></div>
+                                            </div>
+                                            <div class="text-center mt-3">
+                                                <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+                                                <button type="button" class="btn btn-danger" onclick="hideForm()">Hủy</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <script th:inline="javascript">
+                                        // Kiểm tra biến showForm được Thymeleaf truyền vào và hiển thị form nếu có lỗi
+                                        document.addEventListener("DOMContentLoaded", function() {
+                                            /* Thông báo cho JavaScript nhận giá trị từ Thymeleaf */
+                                            var showModal = /*[[${showModal}]]*/ false;
+                                            if (showModal) {
+                                                document.getElementById("addCustomerForm").style.display = "block";
                                             }
-                                            return true; // Nếu không có khách hàng, không cần xác nhận
+                                        });
+                                        // Hiển thị form khi nhấn nút "Thêm khách hàng"
+                                        function showForm() {
+                                            document.getElementById("addCustomerForm").style.display = "block";
                                         }
+
+                                        // Ẩn form khi nhấn nút "Đóng"
+                                        function hideForm() {
+                                            document.getElementById("addCustomerForm").style.display = "none";
+                                        }
+                                        // function toggleForm() {
+                                        //     // Lấy phần tử form thêm khách hàng
+                                        //     var form = document.getElementById("addCustomerForm");
+                                        //
+                                        //     // Kiểm tra trạng thái của form và thay đổi
+                                        //     if (form.style.display === "none" || form.style.display === "") {
+                                        //         form.style.display = "block";  // Hiện form
+                                        //     } else {
+                                        //         form.style.display = "none";   // Ẩn form
+                                        //     }
+                                        // }
                                     </script>
                                 </div>
 <!--                                <div class="text-center">-->
@@ -1065,7 +1138,7 @@
 
                                 <form th:action="@{/don-hang/thanh-toan}" method="post">
                                     <input type="hidden" name="idDonHang" th:each="item: ${gioHangs}" th:value="${item.donHang.id}" />
-                                    <input type="hidden" name="idKH" th:value="${khachHang != null ? khachHang.id : ''}"/>
+                                    <input type="hidden" name="idKH" th:value="${khachHangId != null ? khachHangId.id : ''}"/>
                                     <input type="hidden" name="idVoucher" th:value="${voucher != null ? voucher.id : ''}"/>
                                     <div class="mb-3">
                                         <label for="tongTien">Tổng tiền:</label>
@@ -1082,7 +1155,7 @@
                                     </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-success">Thanh toán</button>
+                                        <button type="submit" class="btn btn-success" onclick="return confirm('Bạn có muốn thanh toán?');">Thanh toán</button>
                                     </div>
                                 </form>
                             </div>

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +26,8 @@ public interface VoucherRepo extends JpaRepository<Voucher,Integer> {
 
 
     //Chỗ này là của trướng nhóm code cấm đụng vào
-    Voucher findByMaVoucher(String maVoucher); //Tìm voucher theo mã;
+    //Voucher findById(int idVoucher); //Tìm voucher theo mã;
+    @Query("SELECT v FROM Voucher v WHERE v.trangThai = :trangThai ORDER BY v.giaTri DESC")
+    List<Voucher> findAllVoucherByTrangThaiAndAndGiaTri(@Param("trangThai") Integer trangThai);
 
 }

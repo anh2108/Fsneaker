@@ -13,7 +13,7 @@
         }
     </style>
     <!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
-    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="shortcut icon" href="../../images/favicon.ico">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <!-- Thêm Line Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
@@ -26,21 +26,21 @@
     <!-- Thêm link tới Boxicons CDN -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- jsvectormap css -->
-    <link href="../css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
 
     <!--Swiper slider css-->
     <link href="../css/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Layout config Js -->
-    <script src="../js/layout.js"></script>
+    <script src="../../js/layout.js"></script>
     <!-- Bootstrap Css -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     n<!-- Icons Css -->
-    <link href="../css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
-    <link href="../css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/app.min.css" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
-    <link href="../css/custom.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/custom.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="layout-wrapper">
@@ -867,21 +867,28 @@
                     </tr>
                 </table>
                 <div>
-                    <!-- Nút về trang đầu -->
-                    <a th:href="@{/don-hang/them-san-pham-vao-hoa-don(page=0)}"
-                       th:classappend="${sanPhamChiTiets.number == 0} ? 'disabled' : ''">First</a>
+<!--                    &lt;!&ndash; Nút về trang đầu &ndash;&gt;-->
+<!--                    <a th:href="@{/don-hang/them-san-pham-vao-hoa-don/{id}(id=${id},page=0)}"-->
+<!--                       th:classappend="${sanPhamChiTiets.number == 0} ? 'disabled' : ''">First</a>-->
 
                     <!-- Nút Previous -->
-                    <a th:href="@{/don-hang/them-san-pham-vao-hoa-don(page=${sanPhamChiTiets.number - 1})}"
+                    <a th:href="@{/don-hang/them-san-pham-vao-hoa-don/{id}(id=${id},page=${sanPhamChiTiets.number - 1})}"
                        th:classappend="${!sanPhamChiTiets.hasPrevious()} ? 'disabled' : ''">Previous</a>
 
+                    <!-- Hiển thị số trang -->
+                    <span th:each="i : ${#numbers.sequence(0, sanPhamChiTiets.totalPages - 1)}">
+                                                            <a th:href="@{/don-hang/them-san-pham-vao-hoa-don/{id}(id=${id},page=${i})}"
+                                                               th:classappend="${sanPhamChiTiets.number == i} ? 'active' : ''"
+                                                               th:text="${i + 1}">1</a>
+                                                        </span>
+
                     <!-- Nút Next -->
-                    <a th:href="@{/don-hang/them-san-pham-vao-hoa-don(page=${sanPhamChiTiets.number + 1})}"
+                    <a th:href="@{/don-hang/them-san-pham-vao-hoa-don/{id}(id=${id},page=${sanPhamChiTiets.number + 1})}"
                        th:classappend="${!sanPhamChiTiets.hasNext()} ? 'disabled' : ''">Next</a>
 
-                    <!-- Nút về trang cuối -->
-                    <a th:href="@{/don-hang/them-san-pham-vao-hoa-don(page=${sanPhamChiTiets.totalPages - 1})}"
-                       th:classappend="${sanPhamChiTiets.number + 1 >= sanPhamChiTiets.totalPages} ? 'disabled' : ''">Last</a>
+<!--                    &lt;!&ndash; Nút về trang cuối &ndash;&gt;-->
+<!--                    <a th:href="@{/don-hang/them-san-pham-vao-hoa-don/{id}(id=${id},page=${sanPhamChiTiets.totalPages - 1})}"-->
+<!--                       th:classappend="${sanPhamChiTiets.number + 1 >= sanPhamChiTiets.totalPages} ? 'disabled' : ''">Last</a>-->
                 </div>
                 <a href="/don-hang/hien-thi" >Trở lại</a>
                 <div class="modal fade" id="quantityModal" tabindex="-1" role="dialog" aria-labelledby="quantityModalLabel" aria-hidden="true">
@@ -897,12 +904,13 @@
                                 <form th:action="@{/don-hang/them-san-pham}" method="post">
                                     <input type="hidden" name="idSanPhamChiTiet" id="selectedProductId">
                                     <label>Mã hóa đơn:</label>
-                                    <select name="idDonHang">
-                                        <option th:each="donHang : ${donHangs}"
-                                                th:value="${donHang.id}"
-                                                th:text="${donHang.khachHang != null ? donHang.id + ' - ' + donHang.maDonHang + ' - ' + donHang.khachHang.tenKhachHang : donHang.id + ' - ' + donHang.maDonHang + ' - Chưa có khách hàng'}">
-                                        </option>
-                                    </select>
+                                    <input type="hidden" name="idDonHang" th:if="${donHang != null}" th:value="${donHang.id}">
+<!--                                    <select name="idDonHang">-->
+<!--                                        <option th:each="donHang : ${donHangs}"-->
+<!--                                                th:value="${donHang.id}"-->
+<!--                                                th:text="${donHang.khachHang != null ? donHang.id + ' - ' + donHang.maDonHang + ' - ' + donHang.khachHang.tenKhachHang : donHang.id + ' - ' + donHang.maDonHang + ' - Chưa có khách hàng'}">-->
+<!--                                        </option>-->
+<!--                                    </select>-->
 
                                     <div class="form-group">
                                         <label for="soLuong1">Số lượng</label>
@@ -935,28 +943,28 @@
 <!-- end main content-->
 
 </div>
-<script src="../js/bootstrap.bundle.min.js"></script>
-<script src="../js/simplebar.min.js"></script>
-<script src="../js/waves.min.js"></script>
-<script src="../js/feather.min.js"></script>
-<script src="../js/lord-icon-2.1.0.js"></script>
-<script src="../js/plugins.js"></script>
+<script src="../../js/bootstrap.bundle.min.js"></script>
+<script src="../../js/simplebar.min.js"></script>
+<script src="../../js/waves.min.js"></script>
+<script src="../../js/feather.min.js"></script>
+<script src="../../js/lord-icon-2.1.0.js"></script>
+<script src="../../js/plugins.js"></script>
 
 <!-- apexcharts -->
-<script src="../js/apexcharts.min.js"></script>
+<script src="../../js/apexcharts.min.js"></script>
 
 <!-- Vector map-->
-<script src="../js/jsvectormap.min.js"></script>
-<script src="../js/world-merc.js"></script>
+<script src="../../js/jsvectormap.min.js"></script>
+<script src="../../js/world-merc.js"></script>
 
 <!--Swiper slider js-->
-<script src="../js/swiper-bundle.min.js"></script>
+<script src="../../js/swiper-bundle.min.js"></script>
 
 <!-- Dashboard init -->
-<script src="../js/dashboard-ecommerce.init.js"></script>
+<script src="../../js/dashboard-ecommerce.init.js"></script>
 
 <!-- App js -->
-<script src="../js/app.js"></script>
+<script src="../../js/app.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script>
