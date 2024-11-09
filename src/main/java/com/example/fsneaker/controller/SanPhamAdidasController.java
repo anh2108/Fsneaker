@@ -59,7 +59,7 @@ public class SanPhamAdidasController {
         model.addAttribute("kichThuocVoiSanPham",kichThuocVoiSanPham);
         Page<Object[]> tatCaSanPhamAdidas;
         switch (sortBy){
-            case "1" -> tatCaSanPhamAdidas = donHangChiTietService.getAdidasByPopularity(2, page ,pageSize);
+            case "1" -> tatCaSanPhamAdidas = donHangChiTietService.getNikeByPopularity(2, page ,pageSize);
             case "2" -> tatCaSanPhamAdidas = sanPhamChiTietService.getAdidasNyNewest(2, page,pageSize);
             case "3" -> tatCaSanPhamAdidas = sanPhamChiTietService.getAdidasByPriceAsc(2, page, pageSize);
             case "4" -> tatCaSanPhamAdidas = sanPhamChiTietService.getAdidasByPriceDesc(2, page, pageSize);

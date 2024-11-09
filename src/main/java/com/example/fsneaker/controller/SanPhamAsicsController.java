@@ -81,7 +81,7 @@ public class SanPhamAsicsController {
         }
         model.addAttribute("tatCaSanPhamAsics",sanPhamChiTietAsics);
         model.addAttribute("sortBy",sortBy);
-        model.addAttribute("sanPhamPumaTotalQuantity",sanPhamAcicsTotalQuantity);
+        model.addAttribute("sanPhamAsicsTotalQuantity",sanPhamAcicsTotalQuantity);
         return "templatekhachhang/san-pham-asics";
     }
 }
