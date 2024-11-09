@@ -1156,37 +1156,25 @@
                                                                     <img src="images/products/img-1.png" alt="" class="img-fluid d-block" />
                                                                 </div>
                                                                 <div>
-                                                                    <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset" th:text="${dhtc[0]}"></a></h5>
-                                                                    <span class="text-muted" th:text="${#dates.format(dhtc[1], 'dd/MM/yyyy')}"></span>
+                                                                    <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset" th:text="${dhtc[1]}"></a></h5>
+                                                                    <span class="text-muted" th:text="${#dates.format(dhtc[2], 'dd/MM/yyyy')}"></span>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[2]}"></h5>
+                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[3]}"></h5>
                                                             <span class="text-muted">Giá</span>
                                                         </td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[3]}"></h5>
+                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[4]}"></h5>
                                                             <span class="text-muted">Số lượng bán</span>
                                                         </td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[4]}"></h5>
+                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[5]}"></h5>
                                                             <span class="text-muted">Số lượng kho</span>
                                                         </td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[5]}"></h5>
-                                                            <span class="text-muted">Màu sắc</span>
-                                                        </td>
-                                                        <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[6]}"></h5>
-                                                            <span class="text-muted">Kích thước</span>
-                                                        </td>
-                                                        <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[7]}"></h5>
-                                                            <span class="text-muted">Thương hiệu</span>
-                                                        </td>
-                                                        <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[2] * dhtc[3]}"></h5>
+                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[3] * dhtc[4]}"></h5>
                                                             <span class="text-muted">Tổng tiền</span>
                                                         </td>
                                                     </tr>
@@ -1357,6 +1345,7 @@
                                                         <th scope="col">Tên khách hàng</th>
                                                         <th scope="col">Email</th>
                                                         <th scope="col">Số điện thoại</th>
+
                                                         <th scope="col">Số lần mua</th>
                                                         <th scope="col">Tổng tiền mua</th>
                                                     </tr>
@@ -1389,7 +1378,7 @@
                                                             <a th:href="@{/trangchuadmin(page=${i})}"
                                                                th:classappend="${orderStarts.number == i} ? 'active' : ''"
                                                                th:text="${i + 1}">1</a>
-                                                        </span>
+                                                            </span>
 
                                                             <!-- Nút Next -->
                                                             <a th:href="@{/trangchuadmin(page=${orderStarts.number + 1})}"

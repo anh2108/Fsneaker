@@ -58,6 +58,7 @@ public class KhachHang {
     @Pattern(regexp = "^\\d+$", message = "Số điện thoại chỉ được chứa chữ số!")
     private String soDienThoai;
 
+    private String matKhau;
     @Column(name = "TrangThai")
     @NotNull(message = "Bạn chưa chọn trạng thái!")
     private Boolean trangThai;

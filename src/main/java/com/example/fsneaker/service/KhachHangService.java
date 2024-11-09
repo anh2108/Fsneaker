@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 
 @Service
@@ -37,7 +38,11 @@ public class KhachHangService {
 //    public KhachHang getKhachHangBySoDienThoai(String sdt){
 //        return khachHangRepo.findBySoDienThoai(sdt);
 //    }
-
+    public String taoMaKhachHang(){
+        String format = "00000";
+        String part = String.format("%05d", new Random().nextInt(1000));
+        return "KH" + part;
+    }
 
     public Page<KhachHang> searchPaginated(String keyword, int page , int size){
         return khachHangRepo.searchByKhachHang(keyword, PageRequest.of(page,size));

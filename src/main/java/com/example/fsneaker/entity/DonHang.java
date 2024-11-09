@@ -25,7 +25,7 @@ public class DonHang {
     @JoinColumn(name = "idNhanVien")
     private NhanVien nhanVien;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idKhachHang")
     private KhachHang khachHang;
 
