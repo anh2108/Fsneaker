@@ -19,7 +19,7 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
             "join spct.sanPham sp " +
             "join  spct.mauSac ms " +
             "join spct.kichThuoc kt " +
-            "where spct.id = :spctId order by spct.ngayTao")
+            "where spct.id = :spctId order by spct.ngayTao desc ")
     public List<SanPhamChiTiet> findBySanPhamChitietId(int spctId);
 
     // Lấy một sản phẩm chi tiết
@@ -35,6 +35,33 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
     @Query("SELECT COALESCE(MAX(CAST(SUBSTRING(maSanPhamChiTiet, 5) AS integer)), 0) FROM SanPhamChiTiet")
     int findMaxStt();
 
+    //Tìm kiếm theo mã sản phẩm chi tiết
+    @Query("select spct from SanPhamChiTiet spct " +
+            "where spct.maSanPhamChiTiet like %:maSanPhamChiTiet% ")
+    public List<SanPhamChiTiet> searchByMaSanPhamChiTiet(String maSanPhamChiTiet);
+
+    //Lọc theo sản phẩm
+    @Query("select spct from SanPhamChiTiet spct " +
+            "join spct.sanPham sp " +
+            "where sp.id = :SanPhamId ")
+    public List<SanPhamChiTiet> searcBySanPhamId(int SanPhamId);
+
+    //lọc theo màu sắc
+    @Query("select spct from SanPhamChiTiet spct " +
+            "join spct.mauSac ms " +
+            "where ms.id = : mauSacId")
+    public List<SanPhamChiTiet> searchByMauSacId(int mauSacId);
+
+    //Lọc theo kích thước
+    @Query("select spct from SanPhamChiTiet spct " +
+            "join spct.kichThuoc kt " +
+            "where kt.id = :kichThuocId ")
+    public List<SanPhamChiTiet> searchByKichThuocId(int kichThuocId);
+
+    //Lọc theo khoảng giá bán
+    @Query("select spct from SanPhamChiTiet spct " +
+            "where spct.giaBan between :minPrice and :maxPrice")
+    public List<SanPhamChiTiet> searchByPrice(Double minPrice, Double maxPrice);
 
 
     //Chỗ này là của trưởng nhóm code cấm đụng

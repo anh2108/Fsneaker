@@ -1,10 +1,9 @@
 package com.example.fsneaker.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.util.Date;
 
@@ -12,6 +11,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 
 @Entity
 @Table(name = "SanPham")
@@ -24,9 +24,12 @@ public class SanPham {
     @Column(name = "Id")
     private int id;
 
+
+    @NotBlank(message = "Mã sản phẩm không được để trống!")
     @Column(name = "MaSanPham")
     private String maSanPham;
 
+    @NotBlank(message = "Tên sản phẩm không được để trống!")
     @Column(name = "TenSanPham")
     private String tenSanPham;
 
@@ -44,6 +47,7 @@ public class SanPham {
     @ManyToOne
     @JoinColumn(name = "IdKhuyenMai", referencedColumnName = "Id")
     private KhuyenMai khuyenMai;
+
 
     @Column(name = "TrangThai")
     private int trangThai;

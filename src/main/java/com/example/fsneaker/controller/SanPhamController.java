@@ -2,18 +2,20 @@ package com.example.fsneaker.controller;
 
 import com.example.fsneaker.entity.*;
 import com.example.fsneaker.repositories.*;
+import com.example.fsneaker.response.ResponseMessage;
+import com.example.fsneaker.response.ValidationErrorResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class SanPhamController {
@@ -38,69 +40,110 @@ public class SanPhamController {
     private MauSacRepo mauSacRepo;
 
     @GetMapping("/qlsanpham")
-   public String index(Model model){
+   public String index(Model model,
+                       @RequestParam(name = "tab", defaultValue = "home") String tab,
+                       @RequestParam(name = "serchSanPham", required = false) String serchSanPham,
+                       @RequestParam(name="idThuongHieu", required = false ) Integer idThuongHieu,
+                       @RequestParam(name="idXuatXu", required = false ) Integer idXuatXu
 
-        List<SanPham> list = sanPhamRepo.findAll();
-        model.addAttribute("listSanPham", list);
+    ){
 
-        List<SanPhamChiTiet> list2 = sanPhamChiTietRepo.findAll();
-        model.addAttribute("listSanPhamChiTiet", list2);
+            List<SanPham> list;
 
-        List<KhuyenMai> listKm = khuyenMaiRepo.findAll();
-        model.addAttribute("listKhuyenMai", listKm);
-        List<ThuongHieu> listTh = thuongHieuRepo.findAll();
-        model.addAttribute("listThuongHieu", listTh);
-        List<XuatXu> listXu = xuatXuRepo.findAll();
-        model.addAttribute("listXuatXu", listXu);
+            if(serchSanPham != null && !serchSanPham.isEmpty()&&idThuongHieu!=null && idXuatXu!=null) {
+                list = sanPhamRepo.findAll();
+            }
 
-        List<KichThuoc> listKichThuoc = kichThuocRepo.findAll();
-        model.addAttribute("listKichThuoc", listKichThuoc);
+            //search theo mã sản phẩm, tên sản phẩm
+            if (serchSanPham != null && !serchSanPham.isEmpty()) {
+                list = sanPhamRepo.serchSanPhamByCodeOrName(serchSanPham);
+            }
+            // lọc theo thương hiệu
+            else if (idThuongHieu != null ) {
+                list =sanPhamRepo.searchByIdThuongHieu(idThuongHieu);
+            }
+           //lọc theo xuất xứ
+             else if (idXuatXu != null) {
+                list=sanPhamRepo.searchByIdXuatXu(idXuatXu);
+            }
+            else {
+                list=sanPhamRepo.findAll();
+            }
 
-        List<MauSac> listMauSac = mauSacRepo.findAll();
-        model.addAttribute("listMauSac", listMauSac);
+            model.addAttribute("listSanPham", list);
 
-
-
-
-        return "templateadmin/qlsanpham.html";
-
+            List<KhuyenMai> listKm = khuyenMaiRepo.findAll();
+            model.addAttribute("listKhuyenMai", listKm);
+            List<ThuongHieu> listTh = thuongHieuRepo.findAll();
+            model.addAttribute("listThuongHieu", listTh);
+            List<XuatXu> listXu = xuatXuRepo.findAll();
+            model.addAttribute("listXuatXu", listXu);
+            model.addAttribute("tab", tab);
+            return "templateadmin/qlsanpham";
     }
+
+        @GetMapping("/qlsanphamchitiet")
+        public String index2(Model model){
+            List<SanPhamChiTiet> list2 = sanPhamChiTietRepo.findAll();
+            model.addAttribute("listSanPhamChiTiet", list2);
+            List<KichThuoc> listKichThuoc = kichThuocRepo.findAll();
+            List<SanPham> listSanPham = sanPhamRepo.findAll();
+            model.addAttribute("listSanPham", listSanPham);
+            model.addAttribute("listKichThuoc", listKichThuoc);
+            List<MauSac> listMauSac = mauSacRepo.findAll();
+            model.addAttribute("listMauSac", listMauSac);
+            model.addAttribute("tab","profile");
+            return "templateadmin/qlsanpham";
+        }
+
 
     @PostMapping("qlsanpham/store")
-    public String store(
+    public ResponseEntity<?> store(
+            @Valid SanPham sanPham,
+            BindingResult result,
             Model model,
-            @RequestParam(name = "khuyenMaiId") Integer khuyenMaiId,
-            @RequestParam(name = "thuongHieuId") Integer thuongHieuId,
-            @RequestParam(name = "xuatXuId") Integer xuatXuId,
-            @RequestParam(name = "maSanPham") String maSanPham,
-            @RequestParam(name = "tenSanPham") String tenSanPham,
-            @RequestParam(name = "trangThai") Integer trangThai
-            ){
+            @RequestParam(value = "thuongHieuId", required = false) Integer thuongHieuId,
+            @RequestParam(value = "khuyenMaiId", required = false) Integer khuyenMaiId,
+            @RequestParam(value = "xuatXuId", required = false) Integer xuatXuId,
+            @RequestParam(value = "isAjax", defaultValue = "false") boolean isAjax) {
 
-        Optional<KhuyenMai> kmOptional = khuyenMaiRepo.findById(khuyenMaiId);
-        Optional<ThuongHieu> thuongHieuOptional = thuongHieuRepo.findById(thuongHieuId);
-        Optional<XuatXu> xuatOptional = xuatXuRepo.findById(xuatXuId);
+        if(result.hasErrors()) {
+            if (isAjax) {
+                Map<String, String> errors = result.getFieldErrors().stream()
+                        .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+                return new ResponseEntity<>(new ValidationErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
 
-        SanPham sp = new SanPham();
-        sp.setKhuyenMai(kmOptional.get());
-        sp.setThuongHieu(thuongHieuOptional.get());
-        sp.setXuatXu(xuatOptional.get());
-        sp.setMaSanPham(maSanPham);
-        sp.setTenSanPham(tenSanPham);
-        sp.setNgayTao(new Date());
-        sp.setTrangThai(trangThai);
+            model.addAttribute("errors", result.getFieldErrors().stream()
+                    .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)));
 
-        sanPhamRepo.save(sp);
+            model.addAttribute("showAddModal", true);
 
-        return "redirect:/qlsanpham";
+            model.addAttribute("sanPham", sanPham);
+            model.addAttribute("listKhuyenMai", khuyenMaiRepo.findAll());
+            model.addAttribute("listThuongHieu", thuongHieuRepo.findAll());
+            model.addAttribute("listXuatXu", xuatXuRepo.findAll());
 
+            return ResponseEntity.status(HttpStatus.OK).body("templateadmin/qlsanpham");
+        }
+        KhuyenMai km = khuyenMaiRepo.findById(khuyenMaiId).get();
+        XuatXu xuatXu = xuatXuRepo.findById(xuatXuId).get();
+        ThuongHieu thuongHieu = thuongHieuRepo.findById(thuongHieuId).get();
+
+        sanPham.setThuongHieu(thuongHieu);
+        sanPham.setXuatXu(xuatXu);
+        sanPham.setKhuyenMai(km);
+
+        sanPhamRepo.save(sanPham);
+
+        return ResponseEntity.status(HttpStatus.OK).body("templateadmin/qlsanpham");
     }
+
+
 
     @GetMapping("/qlsanpham/edit/{id}")
     public String edit(@PathVariable Integer id, Model model){
         SanPham sanPham = sanPhamRepo.getSanPhamsById(id);
-
-
         List<ThuongHieu> listTh = thuongHieuRepo.findAll();
         model.addAttribute("listThuongHieu", listTh);
         List<XuatXu> listXu = xuatXuRepo.findAll();
@@ -110,39 +153,74 @@ public class SanPhamController {
 
         model.addAttribute("sanPham", sanPham);
 
-        return "templateadmin/qlsanpham.html";
+        return "templateadmin/qlsanpham";
     }
 
     @PostMapping("qlsanpham/update")
-    public String update(
+    public ResponseEntity<?> update(
+            @Valid SanPham sanPham,
+            BindingResult result,
+            @RequestParam(value = "thuongHieuId", required = false) Integer thuongHieuId,
+            @RequestParam(value = "khuyenMaiId", required = false) Integer khuyenMaiId,
+            @RequestParam(value = "xuatXuId", required = false) Integer xuatXuId,
             Model model,
-            @RequestParam Integer id,
-            @RequestParam(name = "khuyenMaiId") Integer khuyenMaiId,
-            @RequestParam(name = "thuongHieuId") Integer thuongHieuId,
-            @RequestParam(name = "xuatXuId") Integer xuatXuId,
+            @RequestParam(value = "isAjax", defaultValue = "false") boolean isAjax
+    ) {
 
-            @RequestParam(name = "maSanPham") String maSanPham,
-            @RequestParam(name = "tenSanPham") String tenSanPham,
-            @RequestParam(name = "trangThai") Integer trangThai
-    ){
 
-        Optional<KhuyenMai> kmOptional = khuyenMaiRepo.findById(khuyenMaiId);
-        Optional<ThuongHieu> thuongHieuOptional = thuongHieuRepo.findById(thuongHieuId);
-        Optional<XuatXu> xuatOptional = xuatXuRepo.findById(xuatXuId);
+        // Kiểm tra lỗi dữ liệu
+        if (result.hasErrors()) {
+            if (isAjax) {
+                // Trả về lỗi dưới dạng JSON nếu là yêu cầu AJAX
+                Map<String, String> errors = result.getFieldErrors().stream()
+                        .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+                return new ResponseEntity<>(new ValidationErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
 
-        SanPham sp = sanPhamRepo.getSanPhamsById(id);
-        if (sp != null && kmOptional.isPresent() && thuongHieuOptional.isPresent() && xuatOptional.isPresent()) {
-            sp.setKhuyenMai(kmOptional.get());
-            sp.setThuongHieu(thuongHieuOptional.get());
-            sp.setXuatXu(xuatOptional.get());
-            sp.setMaSanPham(maSanPham);
-            sp.setTenSanPham(tenSanPham);
-            sp.setTrangThai(trangThai);
-            sp.setNgayTao(new Date()); // Ngày tạo có thể không thay đổi khi cập nhật
-            sanPhamRepo.save(sp);
+            // Nếu không phải là AJAX, trả lại model với thông báo lỗi để hiển thị trên trang
+            model.addAttribute("errors", result.getFieldErrors().stream()
+                    .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)));
+            model.addAttribute("showAddModal", true);
+            model.addAttribute("sanPham", sanPham);
+            model.addAttribute("listKhuyenMai", khuyenMaiRepo.findAll());
+            model.addAttribute("listThuongHieu", thuongHieuRepo.findAll());
+            model.addAttribute("listXuatXu", xuatXuRepo.findAll());
+
+            // Trả về lại trang HTML với thông báo lỗi
+            return ResponseEntity.status(HttpStatus.OK).body("templateadmin/qlsanpham");
         }
-        return "redirect:/qlsanpham";
 
+        if (sanPham != null) {
+            // Lấy các đối tượng liên quan từ repository
+            KhuyenMai km = khuyenMaiRepo.findById(khuyenMaiId).orElse(null);
+            XuatXu xuatXu = xuatXuRepo.findById(xuatXuId).orElse(null);
+            ThuongHieu thuongHieu = thuongHieuRepo.findById(thuongHieuId).orElse(null);
+
+            // Gán các thuộc tính cho sanPham
+            if (km != null) sanPham.setKhuyenMai(km);
+            if (xuatXu != null) sanPham.setXuatXu(xuatXu);
+            if (thuongHieu != null) sanPham.setThuongHieu(thuongHieu);
+
+            // Lưu lại sanPham đã cập nhật
+            sanPhamRepo.save(sanPham);
+        }
+
+        // Trả về thông báo thành công nếu là AJAX
+        if (isAjax) {
+            return new ResponseEntity<>(new ResponseMessage("Update thành công!"), HttpStatus.OK);
+        }
+
+        // Nếu không phải AJAX, trả về thông báo thành công và chuyển hướng
+        model.addAttribute("successMessage", "Update thành công!");
+        model.addAttribute("sanPham", sanPham);
+        model.addAttribute("listKhuyenMai", khuyenMaiRepo.findAll());
+        model.addAttribute("listThuongHieu", thuongHieuRepo.findAll());
+        model.addAttribute("listXuatXu", xuatXuRepo.findAll());
+
+        // Trả về view sau khi cập nhật thành công
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", "/qlsanpham")
+                .build();
     }
 
 

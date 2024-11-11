@@ -8,17 +8,27 @@ import com.example.fsneaker.repositories.KichThuocRepo;
 import com.example.fsneaker.repositories.MauSacRepo;
 import com.example.fsneaker.repositories.SanPhamChiTietRepo;
 import com.example.fsneaker.repositories.SanPhamRepo;
+import com.example.fsneaker.response.ValidationErrorResponse;
+import com.example.fsneaker.service.StorageService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Controller
 public class SanPhamChiTietController {
@@ -31,66 +41,91 @@ public class SanPhamChiTietController {
     private MauSacRepo mauSacRepo;
     @Autowired
     private KichThuocRepo kichThuocRepo;
+    @Autowired
+    private StorageService storageService;
 
-    @GetMapping("/qlsanphamchitiet")
-     public String index(Model model) {
-        return "templateadmin/qlsanphamchitiet.html";
-     }
+//    @GetMapping("/qlsanphamchitiet")
+//     public String index(Model model) {
+//        return "templateadmin/qlsanphamchitiet.html";
+//     }
 
-     @PostMapping("/qlsanphamchitiet/store")
-    public String store(
-             Model model,
-             @RequestParam(name = "maSanPhamChiTiet") String maSanPhamChiTiet,
-             @RequestParam(name = "soLuong") Integer soLuong,
-             @RequestParam(name = "giaBan") Double giaBan,
-             @RequestParam(name = "giaBanGiamGia") Double giaBanGiamGia,
-             @RequestParam(name = "ngaySanXuat") java.sql.Date ngaySanXuat,
-             @RequestParam(name = "sanPhamId") Integer sanPhamId,
-             @RequestParam(name = "kichThuocIds") List<Integer> kichThuocIds,
-             @RequestParam(name = "mauSacIds") List<Integer> mauSacIds
+    @PostMapping("/qlsanphamchitiet/store")
+    public ResponseEntity<?> store(@Valid SanPhamChiTiet sanPhamChiTiet,
+                                   BindingResult result,
+                                   Model model,
+                                   @RequestParam(value = "isAjax", defaultValue = "0") Integer isAjax,
+                                   @RequestParam(value = "sanPhamId", required = false) Integer sanPhamId,
+                                   @RequestParam(value = "kichThuocIds", required = false) Integer[] kichThuocIds,
+                                   @RequestParam(value = "mauSacIds", required = false) Integer[] mauSacIds,
+                                   @RequestParam(value = "fileStore", required = false) MultipartFile fileStore) {
 
-             ){
+        // Kiểm tra lỗi từ BindingResult
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
 
-         Optional<SanPham> sanPhamOptional = sanPhamRepo.findById(sanPhamId);
-         // Kiểm tra xem sản phẩm có tồn tại không
-         if (sanPhamOptional.isPresent()) {
-             int maxStt = sanPhamChiTietRepo.findMaxStt();
-             int index = maxStt + 1;
-             for (Integer mauSacId : mauSacIds) {
-                 Optional<MauSac> mauSacOptional = mauSacRepo.findById(mauSacId);
+            if (isAjax == 1) {
+                for (FieldError fieldError : result.getFieldErrors()) {
+                    errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+                }
+                return new ResponseEntity<>(new ValidationErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
 
-                 // Kiểm tra màu sắc có tồn tại không
-                 if (mauSacOptional.isPresent()) {
-                     for (Integer kichThuocId : kichThuocIds) {
-                         Optional<KichThuoc> kichThuocOptional = kichThuocRepo.findById(kichThuocId);
+            for (FieldError fieldError : result.getFieldErrors()) {
+                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
 
-                         // Kiểm tra kích thước có tồn tại không
-                         if (kichThuocOptional.isPresent()) {
-                             SanPhamChiTiet sanPhamChiTiet = new SanPhamChiTiet();
-                             String uniqueMaSanPhamChiTiet = "SPCT" + index;
-                             sanPhamChiTiet.setMaSanPhamChiTiet(uniqueMaSanPhamChiTiet);
-                             sanPhamChiTiet.setSoLuong(soLuong);
-                             sanPhamChiTiet.setGiaBan(giaBan);
-                             sanPhamChiTiet.setGiaBanGiamGia(giaBanGiamGia);
-                             sanPhamChiTiet.setNgaySanXuat(ngaySanXuat);
-                             sanPhamChiTiet.setNgayTao(new Date()); // Lấy ngày hiện tại
-                             sanPhamChiTiet.setSanPham(sanPhamOptional.get());
-                             sanPhamChiTiet.setKichThuoc(kichThuocOptional.get());
-                             sanPhamChiTiet.setMauSac(mauSacOptional.get());
+            model.addAttribute("errors", errors);
+            model.addAttribute("showAddModal", true); // Mở lại modal nếu có lỗi
+            model.addAttribute("sanPhamChiTiet", sanPhamChiTiet);
+            model.addAttribute("listSanPham", sanPhamRepo.findAll());
+            model.addAttribute("listKichThuoc", kichThuocRepo.findAll());
+            model.addAttribute("listMauSac", mauSacRepo.findAll());
 
-                             // Lưu mỗi sản phẩm chi tiết với màu sắc và kích thước đã chọn
-                             index++;
-                             sanPhamChiTietRepo.save(sanPhamChiTiet);
-                         }
-                     }
-                 }
-             }
-         }
+            return ResponseEntity.status(HttpStatus.OK).body("Lưu thành công");
 
-         return "redirect:/qlsanpham";
-     }
+        }
 
-      @GetMapping("/qlsanphamchitiet/edit/{id}")
+        // Kiểm tra xem sản phẩm có được chọn không
+        Optional<SanPham> sanPhamOptional = sanPhamRepo.findById(sanPhamId);
+        if (!sanPhamOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sản phẩm không tồn tại.");
+        }
+        SanPham sanPham = sanPhamOptional.get();
+
+        // Tiến hành lưu trữ sản phẩm chi tiết với các kích thước và màu sắc được chọn
+        for (Integer kichThuocId : kichThuocIds) {
+            for (Integer mauSacId : mauSacIds) {
+                int maxStt = sanPhamChiTietRepo.findMaxStt();
+                int index = maxStt + 1;
+
+                SanPhamChiTiet newSanPhamChiTiet = new SanPhamChiTiet();
+                String uniqueMaSanPhamChiTiet = "SPCT" + index;
+                newSanPhamChiTiet.setMaSanPhamChiTiet(uniqueMaSanPhamChiTiet);
+                newSanPhamChiTiet.setSanPham(sanPham);
+                newSanPhamChiTiet.setKichThuoc(kichThuocRepo.findById(kichThuocId).orElse(null));
+                newSanPhamChiTiet.setMauSac(mauSacRepo.findById(mauSacId).orElse(null));
+                newSanPhamChiTiet.setSoLuong(sanPhamChiTiet.getSoLuong());
+                newSanPhamChiTiet.setGiaBan(sanPhamChiTiet.getGiaBan());
+                newSanPhamChiTiet.setGiaBanGiamGia(sanPhamChiTiet.getGiaBanGiamGia());
+
+                // Xử lý upload file
+                if (fileStore != null && !fileStore.isEmpty()) {
+                    LocalDateTime ldt = LocalDateTime.now();
+                    String fileName = "product_" + ldt;
+                    String saveLink = storageService.uploadFile(fileStore, fileName);
+                    newSanPhamChiTiet.setImanges(saveLink);
+                }
+
+                index++;
+                sanPhamChiTietRepo.save(newSanPhamChiTiet);
+                return ResponseEntity.status(HttpStatus.CREATED).body(newSanPhamChiTiet);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Thêm sản phẩm chi tiết thành công!");
+    }
+
+    @GetMapping("/qlsanphamchitiet/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepo.findBySanPhamChitietI2d(id);
         List<SanPham> listSp = sanPhamRepo.findAll();
@@ -108,38 +143,50 @@ public class SanPhamChiTietController {
       }
 
 
-      @PostMapping("/qlsanphamchitiet/update")
-    public String update(Model model,
-                         @RequestParam Integer id,
-                         @RequestParam(name = "sanPhamId") Integer sanPhamId,
-                         @RequestParam(name = "kichThuocId") Integer kichThuocId,
-                         @RequestParam(name = "mauSacId") Integer mauSacId,
-                         @RequestParam(name = "maSanPhamChiTiet") String maSanPhamChiTiet,
-                         @RequestParam(name = "soLuong") Integer soLuong,
-                         @RequestParam(name = "giaBan") Double giaBan,
-                         @RequestParam(name = "giaBanGiamGia") Double giaBanGiamGia,
-                         @RequestParam(name = "ngaySanXuat") java.sql.Date ngaySanXuat
-                         ){
+    @PostMapping("/qlsanphamchitiet/update")
+    public ResponseEntity<?> update(@Valid SanPhamChiTiet sanPhamChiTiet,
+                                    BindingResult result,
+                                    @RequestParam(name = "sanPhamId", required = false) Integer sanPhamId,
+                                    @RequestParam(name = "kichThuocId", required = false) Integer kichThuocId,
+                                    @RequestParam(name = "mauSacId", required = false) Integer mauSacId,
+                                    @RequestParam(name = "fileEdit", required = false) MultipartFile fileEdit,
+                                    Model model) {
 
+        // Nếu có lỗi validation, trả lỗi về dạng JSON
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError fieldError : result.getFieldErrors()) {
+                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+
+            return new ResponseEntity<>(new ValidationErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+
+        // Nếu không có lỗi, thực hiện cập nhật
         Optional<SanPham> sanPhamOptional = sanPhamRepo.findById(sanPhamId);
         Optional<KichThuoc> kichThuocOptional = kichThuocRepo.findById(kichThuocId);
         Optional<MauSac> mauSacOptional = mauSacRepo.findById(mauSacId);
 
-          SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepo.findBySanPhamChitietI2d(id);
+        if(!fileEdit.isEmpty() && fileEdit != null) {
+            LocalDateTime ldt = LocalDateTime.now();
+            String fileName = "product_" + ldt;
+            String saveLink = "";
+            saveLink = storageService.uploadFile(fileEdit, fileName);
+            sanPhamChiTiet.setImanges(saveLink);
+        }
 
 
-            sanPhamChiTiet.setMaSanPhamChiTiet(maSanPhamChiTiet);
-            sanPhamChiTiet.setSoLuong(soLuong);
-            sanPhamChiTiet.setGiaBan(giaBan);
-            sanPhamChiTiet.setGiaBanGiamGia(giaBanGiamGia);
-            sanPhamChiTiet.setNgaySanXuat(ngaySanXuat);
+        if (sanPhamOptional.isPresent() && kichThuocOptional.isPresent() && mauSacOptional.isPresent()) {
             sanPhamChiTiet.setSanPham(sanPhamOptional.get());
             sanPhamChiTiet.setKichThuoc(kichThuocOptional.get());
             sanPhamChiTiet.setMauSac(mauSacOptional.get());
+
             sanPhamChiTietRepo.save(sanPhamChiTiet);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("Cập nhật thành công");
+    }
 
 
-          return "redirect:/qlsanpham?tab=profile";
-      }
 
 }
