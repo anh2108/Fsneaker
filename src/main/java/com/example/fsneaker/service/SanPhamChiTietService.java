@@ -65,7 +65,6 @@ public class SanPhamChiTietService {
     public Page<Object[]> getNikeByName(Integer idThuongHieu, int page, int size){
         return sanPhamChiTietRepo.findNikeByName(idThuongHieu, PageRequest.of(page, size));
     }
-
     //code của luận
 
     //Sắp xếp theo sản phẩm mới
@@ -85,5 +84,14 @@ public class SanPhamChiTietService {
     public Page<Object[]> getAdidasByName(Integer idThuongHieu, int page, int size){
         return sanPhamChiTietRepo.findAdidasByName(idThuongHieu, PageRequest.of(page, size));
     }
+    public List<Object[]> getNiekByTenSanPham(Integer idThuongHieu){
+        return sanPhamChiTietRepo.findBySanPham(idThuongHieu);
+    }
 
+    public Page<Object[]> getNikeByTenSanPhamAndThuongHieu(Integer idThuongHieu, String tenSanPham, int page, int size){
+        return sanPhamChiTietRepo.findByTenSanPham(idThuongHieu, tenSanPham, PageRequest.of(page,size));
+    }
+    public List<SanPhamChiTiet> getSanPhamChiTietBySanPhamIdAndMauSacId(int idSanPham, int idMauSac){
+        return sanPhamChiTietRepo.findBySanPhamIdAndMauSacId(idSanPham, idMauSac);
+    }
 }

@@ -71,45 +71,46 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
             " spct.kichThuoc.tenKichThuoc LIKE %:keyword% OR" +
             " spct.mauSac.tenMauSac LIKE %:keyword")
     Page<SanPhamChiTiet> searchSanPhamById(@Param("keyword") String keyword, Pageable pageable);
+
     Page<SanPhamChiTiet> findAll(Pageable pageable);
 
     //Chỗ trưởng nhóm code cấm đụng vào
 
-    @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :id GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac")
+    @Query("SELECT MIN(spct.id), spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :id GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac")
     Page<Object[]> findBySanPhamThuongHieuTenThuongHieu(Integer id, Pageable pageable);
 
-    @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu AND spct.mauSac.tenMauSac = :tenMauSac GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac")
-    Page<Object[]> findByThuongHieuAndMauSac(@Param("idThuongHieu")Integer idThuongHieu,@Param("tenMauSac")String tenMauSac, Pageable pageable);
+    @Query("SELECT MIN(spct.id), spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu AND spct.mauSac.tenMauSac = :tenMauSac GROUP BY  spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac")
+    Page<Object[]> findByThuongHieuAndMauSac(@Param("idThuongHieu") Integer idThuongHieu, @Param("tenMauSac") String tenMauSac, Pageable pageable);
 
-    @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu AND spct.kichThuoc.tenKichThuoc = :tenKichThuoc GROUP BY spct.sanPham.tenSanPham,spct.giaBan,spct.mauSac.tenMauSac")
-    Page<Object[]> findByThuongHieuAndKichThuoc(@Param("idThuongHieu") Integer idThuongHieu, @Param("tenKichThuoc")String tenKichThuoc, Pageable pageable);
+    @Query("SELECT MIN(spct.id), spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu AND spct.kichThuoc.tenKichThuoc = :tenKichThuoc GROUP BY  spct.sanPham.tenSanPham,spct.giaBan,spct.mauSac.tenMauSac")
+    Page<Object[]> findByThuongHieuAndKichThuoc(@Param("idThuongHieu") Integer idThuongHieu, @Param("tenKichThuoc") String tenKichThuoc, Pageable pageable);
 
-    @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan , spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu AND spct.giaBan BETWEEN :minGia AND :maxGia GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac")
-    Page<Object[]> findByThuongHieuAndGiaBanBetween(@Param("idThuongHieu") int idThuongHieu,@Param("minGia") int minGia, @Param("maxGia")int maxGia, Pageable pageable);
+    @Query("SELECT MIN(spct.id), spct.sanPham.tenSanPham, spct.giaBan , spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu AND spct.giaBan BETWEEN :minGia AND :maxGia GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac")
+    Page<Object[]> findByThuongHieuAndGiaBanBetween(@Param("idThuongHieu") int idThuongHieu, @Param("minGia") int minGia, @Param("maxGia") int maxGia, Pageable pageable);
 
-    @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham, spct.giaBan ,spct.mauSac.tenMauSac")
-    Page<Object[]> findByThuongHieuId(@Param("idThuongHieu")Integer idThuongHieu, Pageable pageable);
+    @Query("SELECT MIN(spct.id), spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY  spct.sanPham.tenSanPham, spct.giaBan ,spct.mauSac.tenMauSac")
+    Page<Object[]> findByThuongHieuId(@Param("idThuongHieu") Integer idThuongHieu, Pageable pageable);
 
     //Sắp xếp theo sản phẩm mới
-    @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac, spct.ngayTao  FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham,spct.giaBan,spct.mauSac.tenMauSac, spct.ngayTao ORDER BY spct.ngayTao DESC")
-    Page<Object[]> findNikeByNewest(@Param("idThuongHieu")Integer idThuongHieu, Pageable pageable);
+    @Query("SELECT MIN(spct.id), spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac, spct.ngayTao  FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham,spct.giaBan,spct.mauSac.tenMauSac, spct.ngayTao ORDER BY spct.ngayTao DESC")
+    Page<Object[]> findNikeByNewest(@Param("idThuongHieu") Integer idThuongHieu, Pageable pageable);
 
     //Sắp xếp theo giá từ thấp đến cao
-    @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan , spct.mauSac.tenMauSac FROM SanPhamChiTiet  spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac ORDER BY spct.giaBan ASC")
+    @Query("SELECT MIN(spct.id), spct.sanPham.tenSanPham, spct.giaBan , spct.mauSac.tenMauSac FROM SanPhamChiTiet  spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac ORDER BY spct.giaBan ASC")
     Page<Object[]> findNikeByPriceAsc(@Param("idThuongHieu") Integer idThuongHieu, Pageable pageable);
 
     //Sắp xếp theo giá từ cáo xuống thấp
-    @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac ORDER BY spct.giaBan DESC")
+    @Query("SELECT MIN(spct.id), spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac ORDER BY spct.giaBan DESC")
     Page<Object[]> findNikeByPriceDesc(@Param("idThuongHieu") Integer idThuongHieu, Pageable pageable);
 
     //Sắp xếp theo tên
-    @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac ORDER BY spct.sanPham.tenSanPham ASC")
+    @Query("SELECT  MIN(spct.id), spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac ORDER BY spct.sanPham.tenSanPham ASC")
     Page<Object[]> findNikeByName(@Param("idThuongHieu") Integer idThuongHieu, Pageable pageable);
 
     //coda của luận
     //Sắp xếp theo sản phẩm mới
     @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac, spct.ngayTao  FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham,spct.giaBan,spct.mauSac.tenMauSac, spct.ngayTao ORDER BY spct.ngayTao DESC")
-    Page<Object[]> findAdidasByNewest(@Param("idThuongHieu")Integer idThuongHieu, Pageable pageable);
+    Page<Object[]> findAdidasByNewest(@Param("idThuongHieu") Integer idThuongHieu, Pageable pageable);
 
     //Sắp xếp theo giá từ thấp đến cao
     @Query("SELECT spct.sanPham.tenSanPham, spct.giaBan , spct.mauSac.tenMauSac FROM SanPhamChiTiet  spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac ORDER BY spct.giaBan ASC")
@@ -124,8 +125,6 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
     Page<Object[]> findAdidasByName(@Param("idThuongHieu") Integer idThuongHieu, Pageable pageable);
 
 
-
-
     ////////////////hai
     @Query("select o from SanPhamChiTiet o where o.sanPham.thuongHieu.id = ?1")
     Page<SanPhamChiTiet> findByPumaThuongHieu(Integer id, Pageable pageable);
@@ -135,7 +134,7 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
             " and (?3 is null or o.kichThuoc.tenKichThuoc =?3)" +
             " and (?4 is null or o.giaBan >= ?4)" +
             " and (?5 is null or o.giaBan <= ?5)")
-    Page<SanPhamChiTiet> findByThuongHieuPuma(Integer idThuongHieu,String tenMauSac,String tenKichThuoc,Double fromGiaBan,Double toGiaBan, Pageable page);
+    Page<SanPhamChiTiet> findByThuongHieuPuma(Integer idThuongHieu, String tenMauSac, String tenKichThuoc, Double fromGiaBan, Double toGiaBan, Pageable page);
 
     @Query("select o from SanPhamChiTiet o where o.sanPham.thuongHieu.id = ?1 order by o.giaBan")
     Page<SanPhamChiTiet> findByPumaSortAsc(Integer id, Pageable pageable);
@@ -149,5 +148,11 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
     @Query("select o from SanPhamChiTiet o where o.sanPham.thuongHieu.id = ?1 order by o.ngayTao desc")
     Page<SanPhamChiTiet> findByPumaSortProductNew(Integer id, Pageable pageable);
 
+    @Query("SELECT DISTINCT spct.sanPham.id, spct.sanPham.tenSanPham FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu")
+    List<Object[]> findBySanPham(@Param("idThuongHieu") Integer thuongHieu);
 
+    @Query("SELECT Min(spct.id), spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE spct.sanPham.thuongHieu.id = :idThuongHieu AND spct.sanPham.tenSanPham = :tenSanPham GROUP BY spct.sanPham.tenSanPham, spct.giaBan, spct.mauSac.tenMauSac ")
+    Page<Object[]> findByTenSanPham(@Param("idThuongHieu") Integer idThuongHieu, @Param("tenSanPham") String tenSanPham, Pageable pageable);
+
+    List<SanPhamChiTiet> findBySanPhamIdAndMauSacId(int idSanPham, int idMauSac);
 }

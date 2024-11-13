@@ -281,48 +281,28 @@
                                 <nav>
                                     <ul>
                                         <li><a href="/san-pham-nike">Nike<i class="fa fa-angle-down"></i></a>
-                                            <ul class="sub_menu pages">
-                                                <li><a href="blog-details.html">Nike Air Max</a></li>
-                                                <li><a href="blog-fullwidth.html">Nike Air Jordan</a></li>
-                                                <li><a href="blog-sidebar.html">Nike React</a></li>
-                                                <li><a href="#">Nike Air Force</a></li>
+                                            <ul class="sub_menu pages" >
+                                                <li th:each="nike : ${tenSanPhamVoiSanPham}"><a th:href="@{/san-pham-nike(tenSanPham=${nike[1]})}" th:text="${nike[1]}">Nike Air Max</a></li>
                                             </ul>
                                         </li>
                                         <li><a href="/san-pham-adidas">Adidas<i class="fa fa-angle-down"></i></a>
-                                            <ul class="sub_menu pages">
-                                                <li><a href="blog-details.html">Adidas Ultraboost</a></li>
-                                                <li><a href="blog-fullwidth.html">Adidas Superstar</a></li>
-                                                <li><a href="blog-sidebar.html">Adidas Stan Smith</a></li>
+                                            <ul class="sub_menu pages" >
+                                                <li th:each="adidas : ${tenSanPhamAdidasVoiSanPham}"><a th:href="@{/san-pham-adidas(tenSanPham=${adidas[1]})}" th:text="${adidas[1]}">Adidas Ultraboost</a></li>
                                             </ul>
                                         </li>
                                         <li><a href="/san-pham-asics">Asics <i class="fa fa-angle-down"></i></a>
                                             <ul class="sub_menu pages">
-                                                <li><a href="about.html">Asics Gel-Kayano</a></li>
-                                                <li><a href="services.html">Asics Gel-Nimbus</a></li>
-                                                <li><a href="faq.html">Asics Gel-Cumulus</a></li>
-                                                <li><a href="contact.html">Asics GT-2000</a></li>
-                                                <li><a href="login.html">Asics Novablast</a></li>
-                                                <li><a href="404.html">Asics Metaspeed</a></li>
+                                                <li th:each="asics : ${tenSanPhamAsicsVoiSanPham}"><a th:href="@{/san-pham-asics(tenSanPham=${asics[1]})}" th:text="${asics[1]}">Asics Gel-Kayano</a></li>
                                             </ul>
                                         </li>
                                         <li><a href="/san-pham-puma">Puma <i class="fa fa-angle-down"></i></a>
                                             <ul class="sub_menu pages">
-                                                <li><a href="about.html">Puma RS-X</a></li>
-                                                <li><a href="services.html">Puma Clyde</a></li>
-                                                <li><a href="faq.html">Puma Cell</a></li>
-                                                <li><a href="contact.html">Puma Suede</a></li>
-                                                <li><a href="login.html">Puma Future Rider</a></li>
-                                                <li><a href="404.html">Puma Roma</a></li>
+                                                <li th:each="puma : ${tenSanPhamPumaVoiSanPham}"><a th:href="@{/san-pham-puma(tenSanPham=${puma[1]})}" th:text="${puma[1]}">Puma RS-X</a></li>
                                             </ul>
                                         </li>
                                         <li><a href="/san-pham-newbalance">New Balance <i class="fa fa-angle-down"></i></a>
                                             <ul class="sub_menu pages">
-                                                <li><a href="about.html">New Balance 990</a></li>
-                                                <li><a href="services.html">New Balance 574</a></li>
-                                                <li><a href="faq.html">New Balance 860</a></li>
-                                                <li><a href="contact.html">New Balance 1080</a></li>
-                                                <li><a href="login.html">New Balance Fresh Foam</a></li>
-                                                <li><a href="404.html">New Balance Minimus</a></li>
+                                                <li th:each="newbalance : ${tenSanPhamNewBalanceVoiSanPham}"><a th:href="@{/san-pham-newbalance(tenSanPham=${newbalance[1]})}" th:text="${newbalance[1]}">New Balance 990</a></li>
                                             </ul>
                                         </li>
                                         <li><a href="about.html">Giới thiệu</a></li>
@@ -343,14 +323,24 @@
                                             </form>
                                         </div>
                                     </li>
-                                    <li class="header_account"><a href="javascript:void(0)"><img
-                                            src="images/icon/icon-account.png" alt=""></a>
+                                    <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="images/icon/icon-account.png" alt=""></a>
                                         <div class="dropdown_account">
+                                            <span th:text="${#authentication.principal.displayName}" style="color: white"></span>
                                             <div class="dropdown_account-list">
                                                 <ul>
                                                     <li><a href="/thong-tin-ca-nhan">Thông tin cá nhân</a></li>
                                                     <li><a href="/gio-hang">Giỏ hàng</a></li>
                                                     <li><a href="/thanh-toan">Thanh Toán</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li th:if="${#authentication.name == 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><i class="bx bx-user"></i></a>
+                                        <div class="dropdown_account">
+                                            <div class="dropdown_account-list">
+                                                <ul>
+                                                    <li><a href="/login">Đăng nhập</a></li>
+                                                    <li><a href="/dang-ky">Đăng ký</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -557,8 +547,7 @@
                                                 <li class="compare"><a href="#" title="Mua ngay"><i
                                                         class="bx bx-money"></i></a></li>
 
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
+                                                <li class="quick_button"><a href="#"
                                                                             title="Xem chi tiết"> <i
                                                         class="bx bx-show"></i></a></li>
                                             </ul>
@@ -649,8 +638,7 @@
                                                 <li class="compare"><a href="#" title="Mua ngay"><i
                                                         class="bx bx-money"></i></a></li>
 
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
+                                                <li class="quick_button"><a href="#"
                                                                             title="Xem chi tiết"> <i
                                                         class="bx bx-show"></i></a></li>
                                             </ul>
@@ -869,130 +857,6 @@
     </div>
 </footer>
 <!--footer area end-->
-
-
-<!-- hiển thị chi tiết-->
-<div class="modal fade" id="modal_box" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="zmdi zmdi-close"></i></span>
-            </button>
-            <div class="modal_body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-5 col-md-5 col-sm-12">
-                            <div class="modal_tab">
-                                <div class="tab-content product-details-large">
-                                    <div class="tab-pane fade show active" id="tab1" role="tabpanel">
-                                        <div class="modal_tab_img">
-                                            <a href="#"><img src="images/product/productbig1.jpg" alt=""></a>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="tab2" role="tabpanel">
-                                        <div class="modal_tab_img">
-                                            <a href="#"><img src="images/product/productbig2.jpg" alt=""></a>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="tab3" role="tabpanel">
-                                        <div class="modal_tab_img">
-                                            <a href="#"><img src="images/product/productbig3.jpg" alt=""></a>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="tab4" role="tabpanel">
-                                        <div class="modal_tab_img">
-                                            <a href="#"><img src="images/product/productbig4.jpg" alt=""></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal_tab_button">
-                                    <ul class="nav product_navactive owl-carousel" role="tablist">
-                                        <li>
-                                            <a class="nav-link active" data-bs-toggle="tab" href="#tab1" role="tab"
-                                               aria-controls="tab1" aria-selected="false"><img
-                                                    src="images/product/product1.jpg" alt=""></a>
-                                        </li>
-                                        <li>
-                                            <a class="nav-link" data-bs-toggle="tab" href="#tab2" role="tab"
-                                               aria-controls="tab2" aria-selected="false"><img
-                                                    src="images/product/product2.jpg" alt=""></a>
-                                        </li>
-                                        <li>
-                                            <a class="nav-link button_three" data-bs-toggle="tab" href="#tab3"
-                                               role="tab" aria-controls="tab3" aria-selected="false"><img
-                                                    src="images/product/product3.jpg" alt=""></a>
-                                        </li>
-                                        <li>
-                                            <a class="nav-link" data-bs-toggle="tab" href="#tab4" role="tab"
-                                               aria-controls="tab4" aria-selected="false"><img
-                                                    src="images/product/product8.jpg" alt=""></a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-7 col-md-7 col-sm-12">
-                            <div class="modal_right">
-                                <div class="modal_title mb-10">
-                                    <h2>Donec Ac Tempus</h2>
-                                </div>
-                                <div class="modal_price mb-10">
-                                    <span class="new_price">$64.99</span>
-                                    <span class="old_price">$78.99</span>
-                                </div>
-                                <div class="modal_description mb-15">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia iste laborum
-                                        ad impedit pariatur esse optio tempora sint ullam autem deleniti nam in quos qui
-                                        nemo ipsum numquam, reiciendis maiores quidem aperiam, rerum vel recusandae </p>
-                                </div>
-                                <div class="variants_selects">
-                                    <div class="variants_size">
-                                        <h2>size</h2>
-                                        <select class="select_option">
-                                            <option selected value="1">s</option>
-                                            <option value="1">m</option>
-                                            <option value="1">l</option>
-                                            <option value="1">xl</option>
-                                            <option value="1">xxl</option>
-                                        </select>
-                                    </div>
-                                    <div class="variants_color">
-                                        <h2>color</h2>
-                                        <select class="select_option">
-                                            <option selected value="1">purple</option>
-                                            <option value="1">violet</option>
-                                            <option value="1">black</option>
-                                            <option value="1">pink</option>
-                                            <option value="1">orange</option>
-                                        </select>
-                                    </div>
-                                    <div class="modal_add_to_cart">
-                                        <form action="#">
-                                            <input min="1" max="100" step="2" value="1" type="number">
-                                            <button type="submit">add to cart</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="modal_social">
-                                    <h2>Share this product</h2>
-                                    <ul>
-                                        <li class="facebook"><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                        <li class="twitter"><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                        <li class="pinterest"><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                                        <li class="google-plus"><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                        <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- modal area end-->
 
 
 <!-- JS

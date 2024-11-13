@@ -22,4 +22,13 @@ public class LoginController {
         }
         return "redirect:/login?error";
     }
+    @GetMapping("/dang-ky")
+    public String dangKy(){
+        return "dangky";
+    }
+
+    @GetMapping("/quen-mat-khau")
+    public String quenMatKhau(){
+        return "quenmatkhau";
+    }
 }

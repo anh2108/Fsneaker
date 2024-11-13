@@ -23,6 +23,16 @@ public class SanPhamNewBalanceController {
     @GetMapping("/san-pham-newbalance")
     public String hienThiNewBalance(@RequestParam(value = "page",defaultValue = "0")int page, Model model){
         int pageSize = 12;
+        List<Object[]> tenSanPhamVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(1);
+        model.addAttribute("tenSanPhamVoiSanPham", tenSanPhamVoiSanPham);
+        List<Object[]> tenSanPhamPumaVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(3);
+        model.addAttribute("tenSanPhamPumaVoiSanPham", tenSanPhamPumaVoiSanPham);
+        List<Object[]> tenSanPhamAdidasVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(2);
+        model.addAttribute("tenSanPhamAdidasVoiSanPham",tenSanPhamAdidasVoiSanPham);
+        List<Object[]> tenSanPhamNewBalanceVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(4);
+        model.addAttribute("tenSanPhamNewBalanceVoiSanPham",tenSanPhamNewBalanceVoiSanPham);
+        List<Object[]> tenSanPhamAsicsVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(5);
+        model.addAttribute("tenSanPhamAsicsVoiSanPham", tenSanPhamAsicsVoiSanPham);
         List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(4);
         model.addAttribute("mauSacVoiSanPham",mauSacVoiSanPham);
         List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(4);
