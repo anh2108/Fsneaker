@@ -63,9 +63,9 @@ public class TrangAdminController {
             tongSoDonHang = donHangService.tongDonHang();
             tongSanPham = (long) donHangService.tongSanPhamDaBan();
             if("tongTien".equals(sortBy)){
-                orderStarts = donHangService.thongKeKHTheoTongTien(page,pageSize);
+                orderStarts = donHangService.thongKeKHTheoTongTien("Đã thanh toán",page,pageSize);
             }else{
-                orderStarts = donHangService.thongKeKHTheoSoLanMua(page,pageSize);
+                orderStarts = donHangService.thongKeKHTheoSoLanMua("Đã thanh toán",page,pageSize);
             }
         }else{
             // Kiểm tra nếu ngày kết thúc trước ngày bắt đầu

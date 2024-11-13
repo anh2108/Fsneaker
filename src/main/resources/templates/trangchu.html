@@ -338,11 +338,24 @@
                                             </form>
                                         </div>
                                     </li>
-                                    <li class="header_account"><a href="javascript:void(0)"><i class="bx bx-user"></i></a>
+                                    <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="images/icon/icon-account.png" alt=""></a>
+                                        <div class="dropdown_account">
+                                            <span th:text="${#authentication.principal.displayName}" style="color: white"></span>
+                                            <div class="dropdown_account-list">
+                                                <ul>
+                                                    <li><a href="/thong-tin-ca-nhan">Thông tin cá nhân</a></li>
+                                                    <li><a href="/gio-hang">Giỏ hàng</a></li>
+                                                    <li><a href="/thanh-toan">Thanh Toán</a></li>
+                                                    <li><a href="/logout">Đăng xuất</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li th:if="${#authentication.name == 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><i class="bx bx-user"></i></a>
                                         <div class="dropdown_account">
                                             <div class="dropdown_account-list">
                                                 <ul>
-                                                    <li><a href="/dang-nhap">Đăng nhập</a></li>
+                                                    <li><a href="/login">Đăng nhập</a></li>
                                                     <li><a href="/dang-ky">Đăng ký</a></li>
                                                 </ul>
                                             </div>

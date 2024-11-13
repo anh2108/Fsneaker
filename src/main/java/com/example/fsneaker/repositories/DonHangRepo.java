@@ -41,10 +41,10 @@ public interface DonHangRepo extends JpaRepository<DonHang, Integer> {
     Page<Object[]> thongKeKhachHangTheoSoLanMua(@Param("startDate") LocalDate startDate, @Param("endDate")LocalDate endDate, Pageable pageable);
     @Query("SELECT dh.khachHang.tenKhachHang,dh.khachHang.email,dh.khachHang.soDienThoai, count(dh.id) as soLanMua,SUM(COALESCE(dh.tongTienGiamGia,dh.tongTien)) as tongTienMua from DonHang dh WHERE dh.ngayMua BETWEEN :startDate AND :endDate GROUP BY dh.khachHang.tenKhachHang ,dh.khachHang.email,dh.khachHang.soDienThoai ORDER BY tongTienMua DESC")
     Page<Object[]> thongKeKhachHangTheoTongTien(@Param("startDate") LocalDate startDate, @Param("endDate")LocalDate endDate, Pageable pageable);
-    @Query("SELECT dh.khachHang.tenKhachHang,dh.khachHang.email,dh.khachHang.soDienThoai, count(dh.id) as soLanMua,SUM(COALESCE(dh.tongTienGiamGia,dh.tongTien)) as tongTienMua from DonHang dh GROUP BY dh.khachHang.tenKhachHang ,dh.khachHang.email,dh.khachHang.soDienThoai ORDER BY soLanMua DESC")
-    Page<Object[]> thongKeKHTheoSoLanMua(Pageable pageable);
-    @Query("SELECT dh.khachHang.tenKhachHang,dh.khachHang.email,dh.khachHang.soDienThoai, count(dh.id) as soLanMua,SUM(COALESCE(dh.tongTienGiamGia,dh.tongTien)) as tongTienMua from DonHang dh GROUP BY dh.khachHang.tenKhachHang ,dh.khachHang.email,dh.khachHang.soDienThoai ORDER BY tongTienMua DESC")
-    Page<Object[]> thongKeKHTheoTongTien(Pageable pageable);
+    @Query("SELECT dh.khachHang.tenKhachHang,dh.khachHang.email,dh.khachHang.soDienThoai, count(dh.id) as soLanMua,SUM(COALESCE(dh.tongTienGiamGia,dh.tongTien)) as tongTienMua from DonHang dh WHERE dh.trangThai = :trangThai GROUP BY dh.khachHang.tenKhachHang ,dh.khachHang.email,dh.khachHang.soDienThoai ORDER BY soLanMua DESC")
+    Page<Object[]> thongKeKHTheoSoLanMua(@Param("trangThai")String trangThai, Pageable pageable);
+    @Query("SELECT dh.khachHang.tenKhachHang,dh.khachHang.email,dh.khachHang.soDienThoai, count(dh.id) as soLanMua,SUM(COALESCE(dh.tongTienGiamGia,dh.tongTien)) as tongTienMua from DonHang dh WHERE dh.trangThai = :trangThai GROUP BY dh.khachHang.tenKhachHang ,dh.khachHang.email,dh.khachHang.soDienThoai ORDER BY tongTienMua DESC")
+    Page<Object[]> thongKeKHTheoTongTien(@Param("trangThai")String trangthai, Pageable pageable);
     DonHang findByMaDonHang(String maDonHang);
 
     //Tính tổng thu nhập trong khoảng thời gian

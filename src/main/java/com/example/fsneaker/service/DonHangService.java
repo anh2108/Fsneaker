@@ -134,12 +134,12 @@ public class DonHangService {
     public Page<Object[]> thongKeKhachHangTheoSoLanMua(LocalDate startDate, LocalDate endDate, int page, int size){
         return donHangRepo.thongKeKhachHangTheoSoLanMua(startDate,endDate, PageRequest.of(page,size));
     }
-    public Page<Object[]> thongKeKHTheoTongTien( int page, int size){
-        return donHangRepo.thongKeKHTheoTongTien(PageRequest.of(page,size));
+    public Page<Object[]> thongKeKHTheoTongTien(String trangThai, int page, int size){
+        return donHangRepo.thongKeKHTheoTongTien(trangThai,PageRequest.of(page,size));
     }
 
-    public Page<Object[]> thongKeKHTheoSoLanMua( int page, int size){
-        return donHangRepo.thongKeKHTheoSoLanMua(PageRequest.of(page,size));
+    public Page<Object[]> thongKeKHTheoSoLanMua(String trangThai, int page, int size){
+        return donHangRepo.thongKeKHTheoSoLanMua(trangThai, PageRequest.of(page,size));
     }
     //Hủy đơn hàng
     public DonHang getDonHangByMa(String maDonHang){

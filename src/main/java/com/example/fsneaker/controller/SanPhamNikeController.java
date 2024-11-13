@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -31,8 +32,18 @@ public class SanPhamNikeController {
     @Autowired
     private DonHangChiTietService donHangChiTietService;
     @GetMapping("/san-pham-nike")
-    public String hienThiSanPhamNike(@RequestParam(value = "page",defaultValue = "0")int page,@RequestParam(value = "color", required = false)String color,@RequestParam(value = "kichThuoc",required = false)String kichThuoc,@RequestParam(value = "minGia",required = false)Integer minGia,@RequestParam(value = "maxGia",required = false)Integer maxGia, Model model){
+    public String hienThiSanPhamNike(@RequestParam(value = "page",defaultValue = "0")int page,@RequestParam(value ="tenSanPham",required = false) String tenSanPham,@RequestParam(value = "color", required = false)String color,@RequestParam(value = "kichThuoc",required = false)String kichThuoc,@RequestParam(value = "minGia",required = false)Integer minGia,@RequestParam(value = "maxGia",required = false)Integer maxGia, Model model){
         int pageSize = 12;
+        List<Object[]> tenSanPhamVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(1);
+        model.addAttribute("tenSanPhamVoiSanPham", tenSanPhamVoiSanPham);
+        List<Object[]> tenSanPhamPumaVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(3);
+        model.addAttribute("tenSanPhamPumaVoiSanPham", tenSanPhamPumaVoiSanPham);
+        List<Object[]> tenSanPhamAdidasVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(2);
+        model.addAttribute("tenSanPhamAdidasVoiSanPham",tenSanPhamAdidasVoiSanPham);
+        List<Object[]> tenSanPhamNewBalanceVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(4);
+        model.addAttribute("tenSanPhamNewBalanceVoiSanPham",tenSanPhamNewBalanceVoiSanPham);
+        List<Object[]> tenSanPhamAsicsVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(5);
+        model.addAttribute("tenSanPhamAsicsVoiSanPham", tenSanPhamAsicsVoiSanPham);
         List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(1);
         model.addAttribute("mauSacVoiSanPham",mauSacVoiSanPham);
         List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(1);
@@ -46,7 +57,10 @@ public class SanPhamNikeController {
         }else if(minGia != null && maxGia != null) {
             Page<Object[]> sanPhamTheoGia = sanPhamChiTietService.getSanPhamTheoThuongHieuVaGia(1,minGia, maxGia, page, pageSize);
             model.addAttribute("sanPhamTheoGia", sanPhamTheoGia);
-        }else{
+        }else if(tenSanPham != null && !tenSanPham.isEmpty()){
+             Page<Object[]> sanPhamTheoTenSanPham = sanPhamChiTietService.getNikeByTenSanPhamAndThuongHieu(1,tenSanPham, page,pageSize);
+             model.addAttribute("sanPhamTheoTenSanPham", sanPhamTheoTenSanPham);
+         }else{
             Page<Object[]> tatCaSanPhamNike = sanPhamChiTietService.getThuongHieuTenThuongHieu(1, page, pageSize);
             model.addAttribute("tatCaSanPhamNike", tatCaSanPhamNike);
         }
@@ -76,5 +90,24 @@ public class SanPhamNikeController {
         model.addAttribute("tatCaSanPhamNike",tatCaSanPhamNike);
         model.addAttribute("sortBy",sortBy);
         return "templatekhachhang/san-pham-nike";
+    }
+    @GetMapping("/xem-chi-tiet/{id}")
+    public String xemChiTiet(@PathVariable("id") Integer id,Model model){
+        List<Object[]> tenSanPhamVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(1);
+        model.addAttribute("tenSanPhamVoiSanPham", tenSanPhamVoiSanPham);
+        List<Object[]> tenSanPhamPumaVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(3);
+        model.addAttribute("tenSanPhamPumaVoiSanPham", tenSanPhamPumaVoiSanPham);
+        List<Object[]> tenSanPhamAdidasVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(2);
+        model.addAttribute("tenSanPhamAdidasVoiSanPham",tenSanPhamAdidasVoiSanPham);
+        List<Object[]> tenSanPhamNewBalanceVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(4);
+        model.addAttribute("tenSanPhamNewBalanceVoiSanPham",tenSanPhamNewBalanceVoiSanPham);
+        List<Object[]> tenSanPhamAsicsVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(5);
+        model.addAttribute("tenSanPhamAsicsVoiSanPham", tenSanPhamAsicsVoiSanPham);
+        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(1);
+        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getSanPhamChiTietById(id);
+        model.addAttribute("sanPhamChiTiet", sanPhamChiTiet);
+        List<SanPhamChiTiet> sanPhamChiTiets = sanPhamChiTietService.getSanPhamChiTietBySanPhamIdAndMauSacId(sanPhamChiTiet.getSanPham().getId(), sanPhamChiTiet.getMauSac().getId());
+        model.addAttribute("sanPhamChiTiets", sanPhamChiTiets);
+        return "templatekhachhang/chi-tiet-san-pham";
     }
 }

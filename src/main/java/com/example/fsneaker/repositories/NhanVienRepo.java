@@ -15,4 +15,6 @@ public interface NhanVienRepo extends JpaRepository<NhanVien, Integer> {
     Page<NhanVien> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     NhanVien findByMaNhanVien(String maNhanVien);
+
+    NhanVien findByEmailOrSoDienThoai(String email, String soDienThoai);
 }
