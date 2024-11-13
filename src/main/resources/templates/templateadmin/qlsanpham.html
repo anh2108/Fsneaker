@@ -1229,7 +1229,30 @@
                                         </td>
                                     </tr>
                                     </tbody>
+
                                 </table>
+                                <th:block th:if="${listSanPham.totalPages > 1}">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center">
+                                            <!-- Nút Previous -->
+                                            <li class="page-item" th:classappend="${!listSanPham.hasPrevious()} ? 'disabled'">
+                                                <a class="page-link"
+                                                   th:href="@{/qlsanpham(page=${listSanPham.number - 1}, serchSanPham=${param.serchSanPham}, idThuongHieu=${param.idThuongHieu}, idXuatXu=${param.idXuatXu})}">Previous</a>
+                                            </li>
+                                            <!-- Các số trang -->
+                                            <th:block th:each="i : ${#numbers.sequence(0, listSanPham.totalPages - 1)}">
+                                                <li class="page-item" th:classappend="${i == listSanPham.number} ? 'active'">
+                                                    <a class="page-link" th:href="@{/qlsanpham(page=${i}, serchSanPham=${param.serchSanPham}, idThuongHieu=${param.idThuongHieu}, idXuatXu=${param.idXuatXu})}" th:text="${i + 1}"></a>
+                                                </li>
+                                            </th:block>
+                                            <!-- Nút Next -->
+                                            <li class="page-item" th:classappend="${!listSanPham.hasNext()} ? 'disabled'">
+                                                <a class="page-link"
+                                                   th:href="@{/qlsanpham(page=${listSanPham.number + 1}, serchSanPham=${param.serchSanPham}, idThuongHieu=${param.idThuongHieu}, idXuatXu=${param.idXuatXu})}">Next</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </th:block>
                             </div>
                         </div>
                     </div>
@@ -1258,13 +1281,9 @@
                                                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
                                             </div>
                                         </div>
-                                        <div class="row g-5">
-
-                                        </div>
-
-
                                     </form>
                                 </div>
+
                                 <div class="mt-3">
                                     <button type="button" class="link-primary" data-bs-toggle="modal"
                                             th:data-bs-target="'#addModal2'">
@@ -1597,6 +1616,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
                     </div>
@@ -1671,6 +1691,7 @@
                 success: function (response) {
                     alert('Sản phẩm đã được thêm thành công!');
                     $('#addModal').modal('hide');
+                    location.reload();
 
                 },
                 error: function (xhr) {
@@ -1684,6 +1705,41 @@
                 }
             });
         });
+
+
+        $('#productEditForm').on('submit', function (e) {
+            e.preventDefault();  // Ngừng gửi form theo cách thông thường
+
+            // Xóa các thông báo lỗi cũ
+            $('.error').text('');
+
+            var formData = $(this).serialize() + '&isAjax=true';  // Gửi dữ liệu với isAjax=true
+
+            // Thực hiện gửi AJAX
+            $.ajax({
+                url: '/qlsanpham/update',  // Đường dẫn gửi request đến server
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    alert('Cập nhật sản phẩm thành công!');
+                    $('#editModal').modal('hide');  // Đóng modal sau khi thành công
+                    location.reload();  // Tải lại trang nếu cần
+                },
+                error: function (xhr) {
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errors = xhr.responseJSON.errors;  // Lấy thông báo lỗi từ response
+
+                        // Duyệt qua các lỗi và hiển thị chúng trên các trường tương ứng
+                        $.each(errors, function (field, message) {
+                            $('#' + field + 'Error1').text(message);  // Hiển thị lỗi ở các thẻ với ID tương ứng
+                        });
+                    } else {
+                        alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+                    }
+                }
+            });
+        });
+
 
         $('#productDetailInsertForm').on('submit', function(e) {
             e.preventDefault();
@@ -1714,21 +1770,8 @@
                     console.log("Dữ liệu đã được gửi thành công!");
                     alert('Sản phẩm chi tiết đã được thêm thành công!');
                     $('#addModal2').modal('hide');
-                    $('#productForm')[0].reset();
-                    var newTable = `
-                        <tr>
-                            <td>${response.index+1}</td>
-                            <td>${response.maSanPhamChiTiet}</td>
-                            <td>${response.tenSanPham}</td>
-                            <td>${response.tenKichThuoc}</td>
-                            <td>${response.tenMauSac}</td>
-                            <td>${response.soLuong}</td>
-                            <td>${response.giaBan}</td>
-                            <td>${response.ngaySanXuat}</td>
-                            <td><img src="${response.images}" alt="Image" width="50"></td>
-                        </tr>
-                    `;
-                    $('table body').prepend(newTable);
+                    location.reload();
+
                 },
                 error: function(xhr) {
                     console.log("Có lỗi xảy ra khi gửi yêu cầu AJAX.");

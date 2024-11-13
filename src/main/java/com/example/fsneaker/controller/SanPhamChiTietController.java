@@ -122,7 +122,10 @@ public class SanPhamChiTietController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Thêm sản phẩm chi tiết thành công!");
+        // Trả về view sau khi cập nhật thành công
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", "/qlsanpham")
+                .build();
     }
 
     @GetMapping("/qlsanphamchitiet/edit/{id}")
@@ -167,13 +170,13 @@ public class SanPhamChiTietController {
         Optional<KichThuoc> kichThuocOptional = kichThuocRepo.findById(kichThuocId);
         Optional<MauSac> mauSacOptional = mauSacRepo.findById(mauSacId);
 
-        if(!fileEdit.isEmpty() && fileEdit != null) {
-            LocalDateTime ldt = LocalDateTime.now();
-            String fileName = "product_" + ldt;
-            String saveLink = "";
-            saveLink = storageService.uploadFile(fileEdit, fileName);
-            sanPhamChiTiet.setImanges(saveLink);
-        }
+//        if(!fileEdit.isEmpty() && fileEdit != null) {
+//            LocalDateTime ldt = LocalDateTime.now();
+//            String fileName = "product_" + ldt;
+//            String saveLink = "";
+//            saveLink = storageService.uploadFile(fileEdit, fileName);
+//            sanPhamChiTiet.setImanges(saveLink);
+//        }
 
 
         if (sanPhamOptional.isPresent() && kichThuocOptional.isPresent() && mauSacOptional.isPresent()) {
@@ -184,7 +187,10 @@ public class SanPhamChiTietController {
             sanPhamChiTietRepo.save(sanPhamChiTiet);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body("Cập nhật thành công");
+        // Trả về view sau khi cập nhật thành công
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", "/qlsanpham")
+                .build();
     }
 
 
