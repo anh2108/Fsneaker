@@ -28,6 +28,8 @@ public class SanPhamAsicsController {
     private SanPhamChiTietRepo sanPhamChiTietRepo;
     @Autowired
     DonHangChiTietRepo donHangChiTietRepo;
+    @Autowired
+    private SanPhamChiTietService sanPhamChiTietService;
     @GetMapping("/san-pham-asics")
     public String hienThiAsicsTimKiem(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -39,6 +41,16 @@ public class SanPhamAsicsController {
             Model model
     ) {
         PageRequest pageRequest = PageRequest.of(page, pageSize);
+        List<Object[]> tenSanPhamVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(1);
+        model.addAttribute("tenSanPhamVoiSanPham", tenSanPhamVoiSanPham);
+        List<Object[]> tenSanPhamPumaVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(3);
+        model.addAttribute("tenSanPhamPumaVoiSanPham", tenSanPhamPumaVoiSanPham);
+        List<Object[]> tenSanPhamAdidasVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(2);
+        model.addAttribute("tenSanPhamAdidasVoiSanPham",tenSanPhamAdidasVoiSanPham);
+        List<Object[]> tenSanPhamNewBalanceVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(4);
+        model.addAttribute("tenSanPhamNewBalanceVoiSanPham",tenSanPhamNewBalanceVoiSanPham);
+        List<Object[]> tenSanPhamAsicsVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(5);
+        model.addAttribute("tenSanPhamAsicsVoiSanPham", tenSanPhamAsicsVoiSanPham);
         List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(3);
         model.addAttribute("mauSacVoiSanPham", mauSacVoiSanPham);
         List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(3);
