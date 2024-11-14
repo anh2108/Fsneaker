@@ -23,7 +23,7 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
     public List<SanPhamChiTiet> findBySanPhamChitietId(int spctId);
 
     // Lấy một sản phẩm chi tiết
-    @Query("select spct,sp.tenSanPham, ms.tenMauSac,kt.tenKichThuoc from SanPhamChiTiet spct " +
+    @Query("select spct, spct.ngaySanXuat,sp.tenSanPham, ms.tenMauSac,kt.tenKichThuoc from SanPhamChiTiet spct " +
             "join spct.sanPham sp " +
             "join  spct.mauSac ms " +
             "join spct.kichThuoc kt " +
@@ -38,30 +38,30 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
     //Tìm kiếm theo mã sản phẩm chi tiết
     @Query("select spct from SanPhamChiTiet spct " +
             "where spct.maSanPhamChiTiet like %:maSanPhamChiTiet% ")
-    public List<SanPhamChiTiet> searchByMaSanPhamChiTiet(String maSanPhamChiTiet);
+    public Page<SanPhamChiTiet> searchByMaSanPhamChiTiet(String maSanPhamChiTiet,  Pageable pageable);
 
     //Lọc theo sản phẩm
     @Query("select spct from SanPhamChiTiet spct " +
             "join spct.sanPham sp " +
             "where sp.id = :SanPhamId ")
-    public List<SanPhamChiTiet> searcBySanPhamId(int SanPhamId);
+    public Page<SanPhamChiTiet> searcBySanPhamId(int SanPhamId,Pageable pageable);
 
     //lọc theo màu sắc
     @Query("select spct from SanPhamChiTiet spct " +
             "join spct.mauSac ms " +
-            "where ms.id = : mauSacId")
-    public List<SanPhamChiTiet> searchByMauSacId(int mauSacId);
+            "where ms.id = :idMauSac")
+    public Page<SanPhamChiTiet> searchByMauSacId(int idMauSac,Pageable pageable);
 
     //Lọc theo kích thước
     @Query("select spct from SanPhamChiTiet spct " +
             "join spct.kichThuoc kt " +
-            "where kt.id = :kichThuocId ")
-    public List<SanPhamChiTiet> searchByKichThuocId(int kichThuocId);
+            "where kt.id = :idKichThuoc ")
+    public Page<SanPhamChiTiet> searchByKichThuocId(int idKichThuoc,Pageable pageable);
 
     //Lọc theo khoảng giá bán
     @Query("select spct from SanPhamChiTiet spct " +
             "where spct.giaBan between :minPrice and :maxPrice")
-    public List<SanPhamChiTiet> searchByPrice(Double minPrice, Double maxPrice);
+    public Page<SanPhamChiTiet> searchByPrice(Double minPrice, Double maxPrice,Pageable pageable);
 
 
     //Chỗ này là của trưởng nhóm code cấm đụng

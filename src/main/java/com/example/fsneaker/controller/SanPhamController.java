@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Reader;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -88,18 +89,43 @@ public class SanPhamController {
     }
 
     @GetMapping("/qlsanphamchitiet")
-    public String index2(Model model) {
-        List<SanPhamChiTiet> list2 = sanPhamChiTietRepo.findAll();
+    public String index2(Model model,
+                         @RequestParam(name = "page", defaultValue = "0") Integer pageNo,
+                         @RequestParam(name = "limit", defaultValue = "5") Integer pageSize,
+                         @RequestParam(name = "searchSanPhamChiTiet", required = false) String searchSanPhamChiTiet,
+                         @RequestParam(name = "idSanPham", required = false) Integer idSanPham,
+                         @RequestParam(name = "idMauSac", required = false) Integer idMauSac,
+                         @RequestParam(name = "idKichThuoc", required = false) Integer idKichThuoc,
+                         @RequestParam(name = "minPrice", required = false) Double minPrice,
+                         @RequestParam(name = "maxPrice", required = false) Double maxPrice) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<SanPhamChiTiet> list2;
+
+
+        if (searchSanPhamChiTiet != null && !searchSanPhamChiTiet.isEmpty()) {
+            list2 = sanPhamChiTietRepo.searchByMaSanPhamChiTiet(searchSanPhamChiTiet, pageable);
+        } else if (idSanPham != null) {
+            list2 = sanPhamChiTietRepo.searcBySanPhamId(idSanPham, pageable);
+        } else if (idMauSac != null) {
+            list2 = sanPhamChiTietRepo.searchByMauSacId(idMauSac, pageable);
+        } else if (idKichThuoc != null) {
+            list2 = sanPhamChiTietRepo.searchByKichThuocId(idKichThuoc, pageable);
+        } else if (minPrice != null && maxPrice != null) {
+            list2 = sanPhamChiTietRepo.searchByPrice(minPrice, maxPrice, pageable);
+        } else {
+            list2 = sanPhamChiTietRepo.findAll(pageable);
+        }
+
         model.addAttribute("listSanPhamChiTiet", list2);
-        List<KichThuoc> listKichThuoc = kichThuocRepo.findAll();
-        List<SanPham> listSanPham = sanPhamRepo.findAll();
-        model.addAttribute("listSanPham", listSanPham);
-        model.addAttribute("listKichThuoc", listKichThuoc);
-        List<MauSac> listMauSac = mauSacRepo.findAll();
-        model.addAttribute("listMauSac", listMauSac);
+        model.addAttribute("listSanPhams", sanPhamRepo.findAll());
+        model.addAttribute("listKichThuoc", kichThuocRepo.findAll());
+        model.addAttribute("listMauSac", mauSacRepo.findAll());
         model.addAttribute("tab", "profile");
+
         return "templateadmin/qlsanpham";
     }
+
 
 
     @PostMapping("qlsanpham/store")

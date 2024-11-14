@@ -957,7 +957,7 @@
                                                 <label class="form-label">Tìm kiếm</label>
                                                 <input type="text" name="serchSanPham" class="form-control"
                                                        th:value="${serchSanPham}"
-                                                       placeholder="Nhập mã hoặc tên sản phẩm">
+                                                       placeholder="Nhập mã hoặc tên sản phẩm"/>
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">Thương hiệu</label>
@@ -1214,7 +1214,7 @@
                                     </tbody>
 
                                 </table>
-                                <th:block th:if="${listSanPham.totalPages > 1}">
+                                <th:block th:if="${listSanPham !=null and listSanPham.totalPages > 1}">
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination justify-content-center">
                                             <!-- Nút Previous -->
@@ -1250,19 +1250,56 @@
                             <div class="card-body">
 
                                 <div class="search">
-                                    <form action="/qlsanphamchitiet" method="post">
+                                    <form action="/qlsanphamchitiet" method="get">
                                         <div class="row g-2">
-                                            <!-- Label and input in one column -->
                                             <div class="col-md-10">
-                                                <label for="maSanPhamChiTiet" class="form-label">Tìm kiếm</label>
-                                                <input type="text" class="form-control" id="maSanPhamChiTiet"
-                                                       name="maSanPhamChiTiet" th:value="${maSanPhamChiTiet}"
-                                                       placeholder="Nhập mã sản phẩm chi tiết để tìm kiếm">
+                                                <label  class="form-label">Tìm kiếm</label>
+                                                <input type="text" class="form-control" name="searchSanPhamChiTiet" th:value="${searchSanPhamChiTiet}" placeholder="Nhập mã sản phẩm chi tiết để tìm kiếm">
                                             </div>
-                                            <!-- Button in the next column, aligned to the bottom -->
                                             <div class="col-md-2 d-flex align-items-end">
                                                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
                                             </div>
+                                        </div>
+                                        <div class="row g-5 ">
+                                            <div class="col-md-2">
+                                                <label class="form-label">Sản phẩm</label>
+                                                <select name="idSanPham" class="form-select"
+                                                        onchange="this.form.submit()">
+                                                    <option value="" disabled selected>Chọn sản phẩm</option>
+                                                    <option th:each="sp : ${listSanPhams}" th:value="${sp.id}"
+                                                            th:text="${sp.tenSanPham}"
+                                                            th:selected="${idSanPham != null && idSanPham == th.id}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label">Màu sắc</label>
+                                                <select name="idMauSac" class="form-select"
+                                                        onchange="this.form.submit()">
+                                                    <option value="" disabled selected>Chọn màu sắc</option>
+                                                    <option th:each="ms : ${listMauSac}" th:value="${ms.id}"
+                                                            th:text="${ms.tenMauSac}"
+                                                            th:selected="${idMauSac != null && idMauSac == th.id}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label">Kích thước</label>
+                                                <select name="idKichThuoc" class="form-select"
+                                                        onchange="this.form.submit()">
+                                                    <option value="" disabled selected>Chọn kích thước</option>
+                                                    <option th:each="kt : ${listKichThuoc}" th:value="${kt.id}"
+                                                            th:text="${kt.tenKichThuoc}"
+                                                            th:selected="${idKichThuoc != null && idKichThuoc == th.id}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="minPrice">Giá Thấp Nhất:</label>
+                                                <input type="number" id="minPrice" name="minPrice">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="maxPrice">Giá Cao Nhất:</label>
+                                                <input type="number" id="maxPrice" name="maxPrice">
+                                            </div>
+
                                         </div>
                                     </form>
                                 </div>
@@ -1331,7 +1368,7 @@
                                                             <select class="form-control" name="sanPhamId">
                                                                 <option value="" disabled selected>Chọn sản phẩm
                                                                 </option>
-                                                                <option th:each="sp : ${listSanPham}"
+                                                                <option th:each="sp : ${listSanPhams}"
                                                                         th:value="${sp.id}" th:text="${sp.tenSanPham}">
                                                                     Sản phẩm
                                                                 </option>
@@ -1509,7 +1546,7 @@
                                                                                 Chọn sản phẩm
                                                                             </option>
                                                                             <!--    Mặc định ban đầu là Chọn sản phẩm- giá trị = 0-->
-                                                                            <option th:each="sp : ${listSanPham}"
+                                                                            <option th:each="sp : ${listSanPhams}"
                                                                                     th:value="${sp.id}"
                                                                                     th:text="${sp.tenSanPham}"
                                                                                     th:selected="${  spct.sanPham.id == sp.id}">
@@ -1599,6 +1636,30 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                                <th:block th:if="${listSanPhamChiTiet != null and listSanPhamChiTiet.totalPages > 1}">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center">
+                                            <!-- Previous Button -->
+                                            <li class="page-item" th:classappend="${!listSanPhamChiTiet.hasPrevious()} ? 'disabled'">
+                                                <a class="page-link"
+                                                   th:href="@{/qlsanphamchitiet(page=${listSanPhamChiTiet.number - 1}, searchSanPhamChiTiet=${param.searchSanPhamChiTiet}, idSanPham=${param.idSanPham}, idMauSac=${param.idMauSac}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}">Previous</a>
+                                            </li>
+                                            <!-- Page Numbers -->
+                                            <th:block th:each="i : ${#numbers.sequence(0, listSanPhamChiTiet.totalPages - 1)}">
+                                                <li class="page-item" th:classappend="${i == listSanPhamChiTiet.number} ? 'active'">
+                                                    <a class="page-link"
+                                                       th:href="@{/qlsanphamchitiet(page=${i}, searchSanPhamChiTiet=${param.searchSanPhamChiTiet}, idSanPham=${param.idSanPham}, idMauSac=${param.idMauSac}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}"
+                                                       th:text="${i + 1}"></a>
+                                                </li>
+                                            </th:block>
+                                            <!-- Next Button -->
+                                            <li class="page-item" th:classappend="${!listSanPhamChiTiet.hasNext()} ? 'disabled'">
+                                                <a class="page-link"
+                                                   th:href="@{/qlsanphamchitiet(page=${listSanPhamChiTiet.number + 1}, searchSanPhamChiTiet=${param.searchSanPhamChiTiet}, idSanPham=${param.idSanPham}, idMauSac=${param.idMauSac}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}">Next</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </th:block>
 
                             </div>
                         </div>
