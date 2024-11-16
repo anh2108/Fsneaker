@@ -28,6 +28,8 @@ public class SanPhamAsicsController {
     private SanPhamChiTietRepo sanPhamChiTietRepo;
     @Autowired
     DonHangChiTietRepo donHangChiTietRepo;
+    @Autowired
+    private SanPhamChiTietService sanPhamChiTietService;
     @GetMapping("/san-pham-asics")
     public String hienThiAsicsTimKiem(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -39,14 +41,25 @@ public class SanPhamAsicsController {
             Model model
     ) {
         PageRequest pageRequest = PageRequest.of(page, pageSize);
-        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(5);
+        
+        List<Object[]> tenSanPhamVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(1);
+        model.addAttribute("tenSanPhamVoiSanPham", tenSanPhamVoiSanPham);
+        List<Object[]> tenSanPhamPumaVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(3);
+        model.addAttribute("tenSanPhamPumaVoiSanPham", tenSanPhamPumaVoiSanPham);
+        List<Object[]> tenSanPhamAdidasVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(2);
+        model.addAttribute("tenSanPhamAdidasVoiSanPham",tenSanPhamAdidasVoiSanPham);
+        List<Object[]> tenSanPhamNewBalanceVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(4);
+        model.addAttribute("tenSanPhamNewBalanceVoiSanPham",tenSanPhamNewBalanceVoiSanPham);
+        List<Object[]> tenSanPhamAsicsVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(5);
+        model.addAttribute("tenSanPhamAsicsVoiSanPham", tenSanPhamAsicsVoiSanPham);
+        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(3);
         model.addAttribute("mauSacVoiSanPham", mauSacVoiSanPham);
-        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(5);
+        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(3);
         model.addAttribute("kichThuocVoiSanPham", kichThuocVoiSanPham);
 
 //        Page<Object[]> tatCaSanPhamPuma = sanPhamChiTietService.getThuongHieuTenThuongHieu(4, page, pageSize);
         Page<SanPhamChiTiet> tatCaSanPhamAsics = sanPhamChiTietRepo.findByThuongHieuPuma(
-                5,
+                3,
                 tenMauSac.orElse(null),
                 tenKichThuoc.orElse(null),
                 fromGiaBan.orElse(null),
@@ -64,20 +77,20 @@ public class SanPhamAsicsController {
             Model model
     ){
         PageRequest pageRequest = PageRequest.of(page, pageSize);
-        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(5);
+        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(3);
         model.addAttribute("mauSacVoiSanPham", mauSacVoiSanPham);
-        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(5);
+        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(3);
         model.addAttribute("kichThuocVoiSanPham", kichThuocVoiSanPham);
 
         Page<SanPhamChiTiet> sanPhamChiTietAsics = null;
         Page<Object[]> sanPhamAcicsTotalQuantity = null;
         switch (sortBy){
-            case "1" -> sanPhamAcicsTotalQuantity = donHangChiTietRepo.findNikeByPopularity(5,pageRequest);
-            case "2" -> sanPhamChiTietAsics = sanPhamChiTietRepo.findByPumaSortProductNew(5, pageRequest);
-            case "3" -> sanPhamChiTietAsics = sanPhamChiTietRepo.findByPumaSortAsc(5, pageRequest);
-            case "4" -> sanPhamChiTietAsics = sanPhamChiTietRepo.findByPumaSortDesc(5, pageRequest);
-            case "5" -> sanPhamChiTietAsics = sanPhamChiTietRepo.findByPumaSortName(5,pageRequest);
-            default -> sanPhamChiTietAsics = sanPhamChiTietRepo.findByPumaThuongHieu(5,pageRequest);
+            case "1" -> sanPhamAcicsTotalQuantity = donHangChiTietRepo.findNikeByPopularity(3,pageRequest);
+            case "2" -> sanPhamChiTietAsics = sanPhamChiTietRepo.findByPumaSortProductNew(3, pageRequest);
+            case "3" -> sanPhamChiTietAsics = sanPhamChiTietRepo.findByPumaSortAsc(3, pageRequest);
+            case "4" -> sanPhamChiTietAsics = sanPhamChiTietRepo.findByPumaSortDesc(3, pageRequest);
+            case "5" -> sanPhamChiTietAsics = sanPhamChiTietRepo.findByPumaSortName(3,pageRequest);
+            default -> sanPhamChiTietAsics = sanPhamChiTietRepo.findByPumaThuongHieu(3,pageRequest);
         }
         model.addAttribute("tatCaSanPhamAsics",sanPhamChiTietAsics);
         model.addAttribute("sortBy",sortBy);
