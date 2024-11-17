@@ -39,6 +39,7 @@ public class SanPhamPumaController {
             @RequestParam Optional<String> tenKichThuoc,
             @RequestParam Optional<Double> fromGiaBan,
             @RequestParam Optional<Double> toGiaBan,
+            @RequestParam Optional<String> tenSanPham,
             Model model
     ) {
         PageRequest pageRequest = PageRequest.of(page, pageSize);
@@ -52,18 +53,19 @@ public class SanPhamPumaController {
         model.addAttribute("tenSanPhamNewBalanceVoiSanPham",tenSanPhamNewBalanceVoiSanPham);
         List<Object[]> tenSanPhamAsicsVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(5);
         model.addAttribute("tenSanPhamAsicsVoiSanPham", tenSanPhamAsicsVoiSanPham);
-        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(4);
+        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(3);
         model.addAttribute("mauSacVoiSanPham", mauSacVoiSanPham);
-        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(4);
+        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(3);
         model.addAttribute("kichThuocVoiSanPham", kichThuocVoiSanPham);
 
 //        Page<Object[]> tatCaSanPhamPuma = sanPhamChiTietService.getThuongHieuTenThuongHieu(4, page, pageSize);
         Page<SanPhamChiTiet> tatCaSanPhamPuma = sanPhamChiTietRepo.findByThuongHieuPuma(
-                4,
+                3,
                 tenMauSac.orElse(null),
                 tenKichThuoc.orElse(null),
                 fromGiaBan.orElse(null),
                 toGiaBan.orElse(null),
+                tenSanPham.orElse(null),
                 pageRequest) ;
         model.addAttribute("tatCaSanPhamPuma", tatCaSanPhamPuma);
         return "templatekhachhang/san-pham-puma";
@@ -77,20 +79,30 @@ public class SanPhamPumaController {
             Model model
     ){
         PageRequest pageRequest = PageRequest.of(page, pageSize);
-        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(4);
+        List<Object[]> tenSanPhamVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(1);
+        model.addAttribute("tenSanPhamVoiSanPham", tenSanPhamVoiSanPham);
+        List<Object[]> tenSanPhamPumaVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(3);
+        model.addAttribute("tenSanPhamPumaVoiSanPham", tenSanPhamPumaVoiSanPham);
+        List<Object[]> tenSanPhamAdidasVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(2);
+        model.addAttribute("tenSanPhamAdidasVoiSanPham",tenSanPhamAdidasVoiSanPham);
+        List<Object[]> tenSanPhamNewBalanceVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(4);
+        model.addAttribute("tenSanPhamNewBalanceVoiSanPham",tenSanPhamNewBalanceVoiSanPham);
+        List<Object[]> tenSanPhamAsicsVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(5);
+        model.addAttribute("tenSanPhamAsicsVoiSanPham", tenSanPhamAsicsVoiSanPham);
+        List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(3);
         model.addAttribute("mauSacVoiSanPham", mauSacVoiSanPham);
-        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(4);
+        List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(3);
         model.addAttribute("kichThuocVoiSanPham", kichThuocVoiSanPham);
 
         Page<SanPhamChiTiet> sanPhamChiTietPuma = null;
         Page<Object[]> sanPhamPumaTotalQuantity = null;
         switch (sortBy){
-            case "1" -> sanPhamPumaTotalQuantity = donHangChiTietRepo.findNikeByPopularity(4,pageRequest);
-            case "2" -> sanPhamChiTietPuma = sanPhamChiTietRepo.findByPumaSortProductNew(4, pageRequest);
-            case "3" -> sanPhamChiTietPuma = sanPhamChiTietRepo.findByPumaSortAsc(4, pageRequest);
-            case "4" -> sanPhamChiTietPuma = sanPhamChiTietRepo.findByPumaSortDesc(4, pageRequest);
-            case "5" -> sanPhamChiTietPuma = sanPhamChiTietRepo.findByPumaSortName(4,pageRequest);
-            default -> sanPhamChiTietPuma = sanPhamChiTietRepo.findByPumaThuongHieu(4,pageRequest);
+            case "1" -> sanPhamPumaTotalQuantity = donHangChiTietRepo.findNikeByPopularity(3,pageRequest);
+            case "2" -> sanPhamChiTietPuma = sanPhamChiTietRepo.findByPumaSortProductNew(3, pageRequest);
+            case "3" -> sanPhamChiTietPuma = sanPhamChiTietRepo.findByPumaSortAsc(3, pageRequest);
+            case "4" -> sanPhamChiTietPuma = sanPhamChiTietRepo.findByPumaSortDesc(3, pageRequest);
+            case "5" -> sanPhamChiTietPuma = sanPhamChiTietRepo.findByPumaSortName(3,pageRequest);
+            default -> sanPhamChiTietPuma = sanPhamChiTietRepo.findByPumaThuongHieu(3,pageRequest);
         }
         model.addAttribute("tatCaSanPhamPuma",sanPhamChiTietPuma);
         model.addAttribute("sortBy",sortBy);
