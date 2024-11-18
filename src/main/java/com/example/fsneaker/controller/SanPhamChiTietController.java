@@ -94,7 +94,7 @@ public class SanPhamChiTietController {
 
         // Tiến hành lưu trữ sản phẩm chi tiết với các kích thước và màu sắc được chọn
         for (Integer kichThuocId : kichThuocIds) {
-            for (Integer mauSacId : mauSacIds) {
+             for (Integer mauSacId : mauSacIds) {
                 int maxStt = sanPhamChiTietRepo.findMaxStt();
                 int index = maxStt + 1;
 

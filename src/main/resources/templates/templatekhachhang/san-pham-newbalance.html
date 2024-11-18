@@ -12,6 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.7.0/nouislider.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.7.0/nouislider.min.js"></script>
 
     <!-- CSS
     ========================= -->
@@ -423,20 +425,54 @@
                                 <li class=""><a href="/san-pham-newbalance">New Balance</a></li>
                             </ul>
                         </div>
-                        <div class="widget_list widget_filter">
+                        <div class="widget_list widget_filter filter-price">
                             <h3>Lọc theo giá</h3>
-                            <form action="#">
-                                <div id="slider-range"></div>
-                                <button type="submit">Lọc</button>
-                                <input type="text" name="text" id="amount" />
-
-                            </form>
+                            <div id="priceSlider" style="margin: 20px"></div>
+                            <span id="minPriceDisplay">0</span> - <span id="maxPriceDisplay">2,000,000</span>
+                            <button class="btn btn-success" onclick="filterProducts()">Lọc</button>
                         </div>
+                        <script>
+                            // Initialize the range slider with noUiSlider
+                            var priceSlider = document.getElementById('priceSlider');
+
+                            noUiSlider.create(priceSlider, {
+                                start: [0, 2000000], // Starting range
+                                connect: true,
+                                range: {
+                                    'min': 0,
+                                    'max': 2000000
+                                },
+                                step: 10000,
+                                tooltips: [true, true], // Show tooltips with values
+                                format: {
+                                    to: function (value) {
+                                        return Math.round(value).toLocaleString(); // Format as currency
+                                    },
+                                    from: function (value) {
+                                        return Number(value.replace(/,/g, ''));
+                                    }
+                                }
+                            });
+
+                            // Update displayed min and max values when slider is changed
+                            priceSlider.noUiSlider.on('update', function (values, handle) {
+                                document.getElementById('minPriceDisplay').innerText = values[0];
+                                document.getElementById('maxPriceDisplay').innerText = values[1];
+                            });
+
+                            // Function to handle filter button click
+                            function filterProducts() {
+                                const range = priceSlider.noUiSlider.get();
+                                const minGia = parseInt(range[0].replace(/,/g, ''));
+                                const maxGia = parseInt(range[1].replace(/,/g, ''));
+                                window.location.href = `/san-pham-newbalance?minGia=${minGia}&maxGia=${maxGia}`;
+                            }
+                        </script>
                         <div class="widget_list widget_color">
                             <h3>Chọn theo màu sắc</h3>
                             <ul th:each="mauSac : ${mauSacVoiSanPham}">
                                 <li>
-                                    <a href="/san-pham-nike" th:text="${mauSac[0] + ' ('+ mauSac[1]+')'}">Black </a>
+                                    <a th:href="@{/san-pham-newbalance(color=${mauSac[0]})}" th:text="${mauSac[0] + ' ('+ mauSac[1]+')'}">Black </a>
                                 </li>
                             </ul>
                         </div>
@@ -444,7 +480,7 @@
                             <h3>Chọn theo kích thước</h3>
                             <ul th:each="kt : ${kichThuocVoiSanPham}">
                                 <li>
-                                    <a href="/san-pham-nike" th:text="${kt[0] +' ('+kt[1] +')'}">S</a>
+                                    <a th:href="@{/san-pham-newbalance(kichThuoc=${kt[0]})}" th:text="${kt[0] +' ('+kt[1] +')'}">S</a>
                                 </li>
                             </ul>
                         </div>
@@ -464,112 +500,489 @@
 
                         <button data-role="grid_list" type="button"  class="btn-list" data-bs-toggle="tooltip" title="List"></button>
                     </div>
-                    <div class=" niceselect_option">
-                        <form class="select_option" action="#">
-                            <select name="orderby" id="short">
-                                <option selected value="1">Sắp xếp theo độ phổ biến</option>
-                                <option value="2">Sắp xếp theo sản phẩm mới</option>
-                                <option value="3">Sắp xếp theo giá: từ thấp đến cao</option>
-                                <option value="4">Sắp xếp theo giá: từ cao xuống thấp</option>
-                                <option value="5">Sắp xếp theo tên</option>
+                    <div >
+                        <form action="/san-pham-sapxep" method="get">
+                            <select name="            sortBy" id="short" onchange="this.form.submit()" style="height: 30px">
+                                <option value="0" th:selected="${sortBy == '0'}"> Sắp xếp theo mặc định</option>
+                                <option value="1" th:selected="${sortBy == '1'}">Sắp xếp theo độ phổ biến</option>
+                                <option value="2" th:selected="${sortBy == '2'}">Sắp xếp theo sản phẩm mới</option>
+                                <option value="3" th:selected="${sortBy == '3'}">Sắp xếp theo giá: từ thấp đến cao</option>
+                                <option value="4" th:selected="${sortBy == '4'}">Sắp xếp theo giá: từ cao xuống thấp</option>
+                                <option value="5" th:selected="${sortBy == '5'}">Sắp xếp theo tên</option>
                             </select>
                         </form>
+                        <input type="hidden" name="page" value="0"/>
                     </div>
                     <!--                    <div class="page_amount">-->
                     <!--                        <p>Showing 1–9 of 21 results</p>-->
                     <!--                    </div>-->
                 </div>
                 <!--shop toolbar end-->
-                <div class="row shop_wrapper">
-                    <div class="col-lg-4 col-md-4 col-12 " th:each="newbalance : ${tatCaSanPhamNewBalance}">
-                        <article class="single_product">
-                            <figure>
-                                <div class="product_thumb">
-                                    <a class="primary_img" href="product-details.html"><img src="images/product/product58.jpg" alt=""></a>
-                                    <a class="secondary_img" href="product-details.html"><img src="images/product/product59.jpg" alt=""></a>
-                                    <div class="action_links">
-                                        <ul>
-                                            <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
-                                            <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
+                <!-- hiển thị sản phẩm theo màu sắc -->
+                <div th:if="${sanPhamTheoMauSac}">
+                    <div class="row shop_wrapper">
+                        <div class="col-lg-4 col-md-4 col-12 " th:each="newbalance : ${sanPhamTheoMauSac}">
+                            <article class="single_product">
+                                <figure>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" href="product-details.html"><img src="images/product/product51.jpg" alt=""></a>
+                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product53.jpg" alt=""></a>
+                                        <div class="action_links">
+                                            <ul>
+                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
+                                                <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
 
-                                            <li class="quick_button"><a href="#" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product_content grid_content">
-                                    <div class="product_content-header">
-                                        <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Lorem Ipsum</a></h4>
-                                        <div class="wishlist-btn">
-                                            <a href="#"><i class="bx bx-heart"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="product_price_rating">
-                                        <div class="price_box">
-                                            <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2],0,'COMMA',0,'COMMA')}">$210.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet/{id}(id=${newbalance[0]})}" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="product_content list_content">
-                                    <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Aliquam Consequat</a></h4>
-                                    <div class="product_desc">
-                                        <p>Sẵn sàng nâng cấp phong cách của bạn với mẫu New Balance – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, New Balance còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
-                                    </div>
-                                    <div class="product_price_rating">
-                                        <div class="price_box">
-                                            <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                    <div class="product_content grid_content">
+                                        <div class="product_content-header">
+                                            <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Lorem Ipsum</a></h4>
+                                            <div class="wishlist-btn">
+                                                <a href="#"><i class="bx bx-heart"></i></a>
+                                            </div>
                                         </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                            </ul>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2], 0, 'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </figure>
-                        </article>
+                                    <div class="product_content list_content">
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Aliquam Consequat</a> </h4>
+                                        <div class="product_desc">
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với Nike  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Air còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </figure>
+                            </article>
+                        </div>
+                    </div>
+                    <div th:if="${sanPhamTheoMauSac != null}">
+                        <div th:if="${sanPhamTheoMauSac.totalPages > 0}">
+                            <!-- Nút về trang đầu -->
+                            <a th:href="@{/san-pham-newbalance(page=0)}"
+                               th:classappend="${sanPhamTheoMauSac.number == 0} ? 'disabled' : ''">&laquo;</a>
+
+                            <!-- Nút Previous -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoMauSac.number - 1})}"
+                               th:classappend="${!sanPhamTheoMauSac.hasPrevious()} ? 'disabled' : ''">&lt;</a>
+
+                            <!-- Hiển thị số trang -->
+                            <span th:each="i : ${#numbers.sequence(0, sanPhamTheoMauSac.totalPages - 1)}">
+                                                            <a th:href="@{/san-pham-newbalance(page=${i})}"
+                                                               th:classappend="${sanPhamTheoMauSac.number == i} ? 'active' : ''"
+                                                               th:text="${i + 1}">1</a>
+                                                        </span>
+
+                            <!-- Nút Next -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoMauSac.number + 1})}"
+                               th:classappend="${!sanPhamTheoMauSac.hasNext()} ? 'disabled' : ''">&gt;</a>
+
+                            <!-- Nút về trang cuối -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoMauSac.totalPages - 1})}"
+                               th:classappend="${sanPhamTheoMauSac.number + 1 >= sanPhamTheoMauSac.totalPages} ? 'disabled' : ''">&raquo;</a>
+                        </div>
+                        <!-- Thông báo nếu không có trang -->
+                        <p th:if="${sanPhamTheoMauSac.totalPages == 0}">Không có sản phẩm nào để hiển thị.</p>
                     </div>
                 </div>
+                <!-- Hiển thị sản phầm theo kích thước -->
+                <div th:if="${sanPhamTheoKichThuoc} and ${sanPhamTheoMauSac == null}">
+                    <div class="row shop_wrapper">
+                        <div class="col-lg-4 col-md-4 col-12 " th:each="newbalance : ${sanPhamTheoKichThuoc}">
+                            <article class="single_product">
+                                <figure>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" href="product-details.html"><img src="images/product/product51.jpg" alt=""></a>
+                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product53.jpg" alt=""></a>
+                                        <div class="action_links">
+                                            <ul>
+                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
+                                                <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
 
-                <div th:if="${tatCaSanPhamNewBalance != null}">
-                    <div th:if="${tatCaSanPhamNewBalance.totalPages > 0}">
-                        <!-- Nút về trang đầu -->
-                        <a th:href="@{/san-pham-newbalance(page=0)}"
-                           th:classappend="${tatCaSanPhamNewBalance.number == 0} ? 'disabled' : ''">&laquo;</a>
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet/{id}(id=${newbalance[0]})}" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product_content grid_content">
+                                        <div class="product_content-header">
+                                            <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Lorem Ipsum</a> </h4>
+                                            <div class="wishlist-btn">
+                                                <a href="#"><i class="bx bx-heart"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2], 0, 'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product_content list_content">
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Aliquam Consequat</a></h4>
+                                        <div class="product_desc">
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với Nike  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Air còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </figure>
+                            </article>
+                        </div>
+                    </div>
+                    <div th:if="${sanPhamTheoKichThuoc != null}">
+                        <div th:if="${sanPhamTheoKichThuoc.totalPages > 0}">
+                            <!-- Nút về trang đầu -->
+                            <a th:href="@{/san-pham-newbalance(page=0)}"
+                               th:classappend="${sanPhamTheoKichThuoc.number == 0} ? 'disabled' : ''">&laquo;</a>
 
-                        <!-- Nút Previous -->
-                        <a th:href="@{/san-pham-newbalance(page=${tatCaSanPhamNewBalance.number - 1})}"
-                           th:classappend="${!tatCaSanPhamNewBalance.hasPrevious()} ? 'disabled' : ''">&lt;</a>
+                            <!-- Nút Previous -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoKichThuoc.number - 1})}"
+                               th:classappend="${!sanPhamTheoKichThuoc.hasPrevious()} ? 'disabled' : ''">&lt;</a>
 
-                        <!-- Hiển thị số trang -->
-                        <span th:each="i : ${#numbers.sequence(0, tatCaSanPhamNewBalance.totalPages - 1)}">
+                            <!-- Hiển thị số trang -->
+                            <span th:each="i : ${#numbers.sequence(0, sanPhamTheoKichThuoc.totalPages - 1)}">
+                                                            <a th:href="@{/san-pham-newbalance(page=${i})}"
+                                                               th:classappend="${sanPhamTheoKichThuoc.number == i} ? 'active' : ''"
+                                                               th:text="${i + 1}">1</a>
+                                                        </span>
+
+                            <!-- Nút Next -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoKichThuoc.number + 1})}"
+                               th:classappend="${!sanPhamTheoKichThuoc.hasNext()} ? 'disabled' : ''">&gt;</a>
+
+                            <!-- Nút về trang cuối -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoKichThuoc.totalPages - 1})}"
+                               th:classappend="${sanPhamTheoKichThuoc.number + 1 >= sanPhamTheoKichThuoc.totalPages} ? 'disabled' : ''">&raquo;</a>
+                        </div>
+                        <!-- Thông báo nếu không có trang -->
+                        <p th:if="${sanPhamTheoKichThuoc.totalPages == 0}">Không có sản phẩm nào để hiển thị.</p>
+                    </div>
+                </div>
+                <!-- Hiển thị sản phẩm theo giá -->
+                <!-- hiển thị tất ca -->
+                <div th:if="${sanPhamTheoGia} and ${sanPhamTheoMauSac == null} and ${sanPhamTheoKichThuoc == null}">
+                    <div class="row shop_wrapper">
+                        <div class="col-lg-4 col-md-4 col-12 " th:each="newbalance : ${sanPhamTheoGia}">
+                            <article class="single_product">
+                                <figure>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" href="product-details.html"><img src="images/product/product51.jpg" alt=""></a>
+                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product53.jpg" alt=""></a>
+                                        <div class="action_links">
+                                            <ul>
+                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
+                                                <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
+
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet/{id}(id=${newbalance[0]})}" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product_content grid_content">
+                                        <div class="product_content-header">
+                                            <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Lorem Ipsum</a> </h4>
+                                            <div class="wishlist-btn">
+                                                <a href="#"><i class="bx bx-heart"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2], 0, 'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product_content list_content">
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Aliquam Consequat</a> </h4>
+                                        <div class="product_desc">
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với Nike  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Air còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </figure>
+                            </article>
+                        </div>
+                    </div>
+                    <div th:if="${sanPhamTheoGia != null}">
+                        <div th:if="${sanPhamTheoGia.totalPages > 0}">
+                            <!-- Nút về trang đầu -->
+                            <a th:href="@{/san-pham-newbalance(page=0)}"
+                               th:classappend="${sanPhamTheoGia.number == 0} ? 'disabled' : ''">&laquo;</a>
+
+                            <!-- Nút Previous -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoGia.number - 1})}"
+                               th:classappend="${!sanPhamTheoGia.hasPrevious()} ? 'disabled' : ''">&lt;</a>
+
+                            <!-- Hiển thị số trang -->
+                            <span th:each="i : ${#numbers.sequence(0, sanPhamTheoGia.totalPages - 1)}">
+                                                            <a th:href="@{/san-pham-newbalance(page=${i})}"
+                                                               th:classappend="${sanPhamTheoGia.number == i} ? 'active' : ''"
+                                                               th:text="${i + 1}">1</a>
+                                                        </span>
+
+                            <!-- Nút Next -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoGia.number + 1})}"
+                               th:classappend="${!sanPhamTheoGia.hasNext()} ? 'disabled' : ''">&gt;</a>
+
+                            <!-- Nút về trang cuối -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoGia.totalPages - 1})}"
+                               th:classappend="${sanPhamTheoGia.number + 1 >= sanPhamTheoGia.totalPages} ? 'disabled' : ''">&raquo;</a>
+                        </div>
+                        <!-- Thông báo nếu không có trang -->
+                        <p th:if="${sanPhamTheoGia.totalPages == 0}">Không có sản phẩm nào để hiển thị.</p>
+                    </div>
+                </div>
+                <!-- sản phẩm theo tên sản phẩm -->
+                <div th:if="${sanPhamTheoTenSanPham} and ${sanPhamTheoMauSac == null} and ${sanPhamTheoKichThuoc == null} and ${sanPhamTheoGia == null}">
+                    <div class="row shop_wrapper">
+                        <div class="col-lg-4 col-md-4 col-12 " th:each="nike : ${sanPhamTheoTenSanPham}">
+                            <article class="single_product">
+                                <figure>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" href="product-details.html"><img src="images/product/product51.jpg" alt=""></a>
+                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product53.jpg" alt=""></a>
+                                        <div class="action_links">
+                                            <ul>
+                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
+                                                <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
+
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet/{id}(id=${newbalance[0]})}" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product_content grid_content">
+                                        <div class="product_content-header">
+                                            <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Lorem Ipsum</a> </h4>
+                                            <div class="wishlist-btn">
+                                                <a href="#"><i class="bx bx-heart"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2], 0, 'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product_content list_content">
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Aliquam Consequat</a> </h4>
+                                        <div class="product_desc">
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với Nike  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Air còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </figure>
+                            </article>
+                        </div>
+                    </div>
+                    <div th:if="${sanPhamTheoTenSanPham != null}">
+                        <div th:if="${sanPhamTheoTenSanPham.totalPages > 0}">
+                            <!-- Nút về trang đầu -->
+                            <a th:href="@{/san-pham-newbalance(page=0)}"
+                               th:classappend="${sanPhamTheoTenSanPham.number == 0} ? 'disabled' : ''">&laquo;</a>
+
+                            <!-- Nút Previous -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoTenSanPham.number - 1})}"
+                               th:classappend="${!sanPhamTheoTenSanPham.hasPrevious()} ? 'disabled' : ''">&lt;</a>
+
+                            <!-- Hiển thị số trang -->
+                            <span th:each="i : ${#numbers.sequence(0, sanPhamTheoTenSanPham.totalPages - 1)}">
+                                                            <a th:href="@{/san-pham-newbalance(page=${i})}"
+                                                               th:classappend="${sanPhamTheoTenSanPham.number == i} ? 'active' : ''"
+                                                               th:text="${i + 1}">1</a>
+                                                        </span>
+
+                            <!-- Nút Next -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoTenSanPham.number + 1})}"
+                               th:classappend="${!sanPhamTheoTenSanPham.hasNext()} ? 'disabled' : ''">&gt;</a>
+
+                            <!-- Nút về trang cuối -->
+                            <a th:href="@{/san-pham-newbalance(page=${sanPhamTheoTenSanPham.totalPages - 1})}"
+                               th:classappend="${sanPhamTheoTenSanPham.number + 1 >= sanPhamTheoTenSanPham.totalPages} ? 'disabled' : ''">&raquo;</a>
+                        </div>
+                        <!-- Thông báo nếu không có trang -->
+                        <p th:if="${sanPhamTheoTenSanPham.totalPages == 0}">Không có sản phẩm nào để hiển thị.</p>
+                    </div>
+                </div>
+                <!-- hiển thị tất ca -->
+                <div th:if="${tatCaSanPhamNewBalance} and ${sanPhamTheoMauSac == null} and ${sanPhamTheoKichThuoc == null} and ${sanPhamTheoGia == null} and ${sanPhamTheoTenSanPham == null}">
+                    <div class="row shop_wrapper">
+                        <div class="col-lg-4 col-md-4 col-12 " th:each="newbalance : ${tatCaSanPhamNewBalance}">
+                            <article class="single_product">
+                                <figure>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" href="product-details.html"><img src="images/product/product51.jpg" alt=""></a>
+                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product53.jpg" alt=""></a>
+                                        <div class="action_links">
+                                            <ul>
+                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
+                                                <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
+
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet/{id}(id=${newbalance[0]})}" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product_content grid_content">
+                                        <div class="product_content-header">
+                                            <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Lorem Ipsum</a> </h4>
+                                            <div class="wishlist-btn">
+                                                <a href="#"><i class="bx bx-heart"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2], 0, 'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product_content list_content">
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${newbalance[1]}">Aliquam Consequat</a> </h4>
+                                        <div class="product_desc">
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với Nike  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Air còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(newbalance[2],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </figure>
+                            </article>
+                        </div>
+                    </div>
+                    <div th:if="${tatCaSanPhamNewBalance != null}">
+                        <div th:if="${tatCaSanPhamNewBalance.totalPages > 0}">
+                            <!-- Nút về trang đầu -->
+                            <a th:href="@{/san-pham-newbalance(page=0)}"
+                               th:classappend="${tatCaSanPhamNewBalance.number == 0} ? 'disabled' : ''">&laquo;</a>
+
+                            <!-- Nút Previous -->
+                            <a th:href="@{/san-pham-newbalance(page=${tatCaSanPhamNewBalance.number - 1})}"
+                               th:classappend="${!tatCaSanPhamNewBalance.hasPrevious()} ? 'disabled' : ''">&lt;</a>
+
+                            <!-- Hiển thị số trang -->
+                            <span th:each="i : ${#numbers.sequence(0, tatCaSanPhamNewBalance.totalPages - 1)}">
                                                             <a th:href="@{/san-pham-newbalance(page=${i})}"
                                                                th:classappend="${tatCaSanPhamNewBalance.number == i} ? 'active' : ''"
                                                                th:text="${i + 1}">1</a>
                                                         </span>
 
-                        <!-- Nút Next -->
-                        <a th:href="@{/san-pham-newbalance(page=${tatCaSanPhamNewBalance.number + 1})}"
-                           th:classappend="${!tatCaSanPhamNewBalance.hasNext()} ? 'disabled' : ''">&gt;</a>
+                            <!-- Nút Next -->
+                            <a th:href="@{/san-pham-newbalance(page=${tatCaSanPhamNewBalance.number + 1})}"
+                               th:classappend="${!tatCaSanPhamNewBalance.hasNext()} ? 'disabled' : ''">&gt;</a>
 
-                        <!-- Nút về trang cuối -->
-                        <a th:href="@{/san-pham-newbalance(page=${tatCaSanPhamNewBalance.totalPages - 1})}"
-                           th:classappend="${tatCaSanPhamNewBalance.number + 1 >= tatCaSanPhamNewBalance.totalPages} ? 'disabled' : ''">&raquo;</a>
+                            <!-- Nút về trang cuối -->
+                            <a th:href="@{/san-pham-newbalance(page=${tatCaSanPhamNewBalance.totalPages - 1})}"
+                               th:classappend="${tatCaSanPhamNewBalance.number + 1 >= tatCaSanPhamNewBalance.totalPages} ? 'disabled' : ''">&raquo;</a>
+                        </div>
+                        <!-- Thông báo nếu không có trang -->
+                        <p th:if="${tatCaSanPhamNewBalance.totalPages == 0}">Không có sản phẩm nào để hiển thị.</p>
                     </div>
-                    <!-- Thông báo nếu không có trang -->
-                    <p th:if="${tatCaSanPhamNewBalance.totalPages == 0}">Không có sản phẩm nào để hiển thị.</p>
                 </div>
                 <!--shop toolbar end-->
                 <!--shop wrapper end-->
