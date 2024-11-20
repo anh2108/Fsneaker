@@ -504,13 +504,15 @@
                         <button data-role="grid_list" type="button"  class="btn-list" data-bs-toggle="tooltip" title="List"></button>
                     </div>
                     <div>
-                        <form  action="/san-pham-sap-xep-adidas" method="get" >
+                        <form th:action="@{/san-pham-sap-xep-adidas}" method="get">
                             <select name="sortBy" id="short" onchange="this.form.submit()" style="height: 30px">
                                 <option value="0" th:selected="${sortBy == '0'}"> Sắp xếp theo mặc định</option>
                                 <option value="1" th:selected="${sortBy == '1'}">Sắp xếp theo độ phổ biến</option>
                                 <option value="2" th:selected="${sortBy == '2'}">Sắp xếp theo sản phẩm mới</option>
-                                <option value="3" th:selected="${sortBy == '3'}">Sắp xếp theo giá: từ thấp đến cao</option>
-                                <option value="4" th:selected="${sortBy == '4'}">Sắp xếp theo giá: từ cao xuống thấp</option>
+                                <option value="3" th:selected="${sortBy == '3'}">Sắp xếp theo giá: từ thấp đến cao
+                                </option>
+                                <option value="4" th:selected="${sortBy == '4'}">Sắp xếp theo giá: từ cao xuống thấp
+                                </option>
                                 <option value="5" th:selected="${sortBy == '5'}">Sắp xếp theo tên</option>
                             </select>
                         </form>
@@ -536,20 +538,20 @@
                                                 <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
                                                 <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
 
-                                                <li class="quick_button"><a href="#" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet-adidas/{id}(id=${adidas[1]})}" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="product_content grid_content">
                                         <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html" th:text="${adidas[0]}">Lorem Ipsum</a></h4>
+                                            <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Lorem Ipsum</a></h4>
                                             <div class="wishlist-btn">
                                                 <a href="#"><i class="bx bx-heart"></i></a>
                                             </div>
                                         </div>
                                         <div class="product_price_rating">
                                             <div class="price_box">
-                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[1], 0, 'COMMA',0,'COMMA')}">$210.00</span>
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2], 0, 'COMMA',0,'COMMA')}">$210.00</span>
                                             </div>
                                             <div class="product_rating">
                                                 <ul>
@@ -563,14 +565,14 @@
                                         </div>
                                     </div>
                                     <div class="product_content list_content">
-                                        <h4 class="product_name"><a href="product-details.html" th:text="${adidas[0]}">Aliquam Consequat</a></h4>
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Aliquam Consequat</a></h4>
                                         <div class="product_desc">
                                             <p>Sẵn sàng nâng cấp phong cách của bạn với
                                                 – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Air còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
                                         </div>
                                         <div class="product_price_rating">
                                             <div class="price_box">
-                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[1],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2],0,'COMMA',0,'COMMA')}">$210.00</span>
                                             </div>
                                             <div class="product_rating">
                                                 <ul>
@@ -631,20 +633,20 @@
                                                 <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
                                                 <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
 
-                                                <li class="quick_button"><a href="#" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet-adidas/{id}(id=${adidas[0]})}" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="product_content grid_content">
                                         <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html" th:text="${adidas[0]}">Lorem Ipsum</a></h4>
+                                            <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Lorem Ipsum</a></h4>
                                             <div class="wishlist-btn">
                                                 <a href="#"><i class="bx bx-heart"></i></a>
                                             </div>
                                         </div>
                                         <div class="product_price_rating">
                                             <div class="price_box">
-                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[1], 0, 'COMMA',0,'COMMA')}">$210.00</span>
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2], 0, 'COMMA',0,'COMMA')}">$210.00</span>
                                             </div>
                                             <div class="product_rating">
                                                 <ul>
@@ -658,13 +660,13 @@
                                         </div>
                                     </div>
                                     <div class="product_content list_content">
-                                        <h4 class="product_name"><a href="product-details.html" th:text="${adidas[0]}">Aliquam Consequat</a></h4>
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Aliquam Consequat</a></h4>
                                         <div class="product_desc">
                                             <p>Sẵn sàng nâng cấp phong cách của bạn với Adidas  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Air còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
                                         </div>
                                         <div class="product_price_rating">
                                             <div class="price_box">
-                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[1],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2],0,'COMMA',0,'COMMA')}">$210.00</span>
                                             </div>
                                             <div class="product_rating">
                                                 <ul>
@@ -711,6 +713,7 @@
                     </div>
                 </div>
 
+                <!-- Hiển thị sản phẩm theo giá -->
                 <!-- hiển thị tất ca -->
                 <div th:if="${sanPhamTheoGia} and ${sanPhamTheoMauSac == null} and ${sanPhamTheoKichThuoc == null}">
                     <div class="row shop_wrapper">
@@ -725,20 +728,20 @@
                                                 <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
                                                 <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
 
-                                                <li class="quick_button"><a href="#" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet-adidas/{id}(id=${adidas[0]})}" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="product_content grid_content">
                                         <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html" th:text="${adidas[0]}">Lorem Ipsum</a></h4>
+                                            <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Lorem Ipsum</a> (<span th:text="${adidas[3]}"></span>)</h4>
                                             <div class="wishlist-btn">
                                                 <a href="#"><i class="bx bx-heart"></i></a>
                                             </div>
                                         </div>
                                         <div class="product_price_rating">
                                             <div class="price_box">
-                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[1], 0, 'COMMA',0,'COMMA')}">$210.00</span>
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2], 0, 'COMMA',0,'COMMA')}">$210.00</span>
                                             </div>
                                             <div class="product_rating">
                                                 <ul>
@@ -752,13 +755,13 @@
                                         </div>
                                     </div>
                                     <div class="product_content list_content">
-                                        <h4 class="product_name"><a href="product-details.html" th:text="${adidas[0]}">Aliquam Consequat</a></h4>
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Aliquam Consequat</a> (<span th:text="${adidas[3]}"></span>)</h4>
                                         <div class="product_desc">
                                             <p>Sẵn sàng nâng cấp phong cách của bạn với Adidas  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Air còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
                                         </div>
                                         <div class="product_price_rating">
                                             <div class="price_box">
-                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[1],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2],0,'COMMA',0,'COMMA')}">$210.00</span>
                                             </div>
                                             <div class="product_rating">
                                                 <ul>
@@ -805,97 +808,192 @@
                     </div>
                 </div>
 
-<!--    hiển thị tất cả sản phẩm-->
-                <div class="row shop_wrapper">
-                    <div class="col-lg-4 col-md-4 col-12" th:each="adidas : ${tatCaSanPhamAdidas}">
-                        <article class="single_product">
-                            <figure>
-                                <div class="product_thumb">
-                                    <a class="primary_img" href="product-details.html"><img src="images/product/product53.jpg" alt=""></a>
-                                    <a class="secondary_img" href="product-details.html"><img src="images/product/product54.jpg" alt=""></a>
-                                    <div class="action_links">
-                                        <ul>
-                                            <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
-                                            <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
+                <!-- sản phẩm theo tên sản phẩm -->
+                <div th:if="${sanPhamTheoTenSanPham} and ${sanPhamTheoMauSac == null} and ${sanPhamTheoKichThuoc == null} and ${sanPhamTheoGia == null}">
+                    <div class="row shop_wrapper">
+                        <div class="col-lg-4 col-md-4 col-12 " th:each="adidas : ${sanPhamTheoTenSanPham}">
+                            <article class="single_product">
+                                <figure>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" href="product-details.html"><img src="images/product/product53.jpg" alt=""></a>
+                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product54.jpg" alt=""></a>
+                                        <div class="action_links">
+                                            <ul>
+                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
+                                                <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
 
-                                            <li class="quick_button"><a href="#" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product_content grid_content">
-                                    <div class="product_content-header">
-                                        <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Lorem Ipsum</a></h4>
-                                        <div class="wishlist-btn">
-                                            <a href="#"><i class="bx bx-heart"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="product_price_rating">
-                                        <div class="price_box">
-                                            <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2],0,'COMMA',0,'COMMA')}">$210.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet-adidas/{id}(id=${adidas[0]})}" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="product_content list_content">
-                                    <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Aliquam Consequat</a></h4>
-                                    <div class="product_desc">
-                                        <p>Sẵn sàng nâng cấp phong cách của bạn với mẫu Adidas  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Adidas còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
-                                    </div>
-                                    <div class="product_price_rating">
-                                        <div class="price_box">
-                                            <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                    <div class="product_content grid_content">
+                                        <div class="product_content-header">
+                                            <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Lorem Ipsum</a> (<span th:text="${adidas[3]}"></span>)</h4>
+                                            <div class="wishlist-btn">
+                                                <a href="#"><i class="bx bx-heart"></i></a>
+                                            </div>
                                         </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                                            </ul>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2], 0, 'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </figure>
-                        </article>
+                                    <div class="product_content list_content">
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Aliquam Consequat</a> (<span th:text="${adidas[3]}"></span>)</h4>
+                                        <div class="product_desc">
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với Adidas  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Air còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </figure>
+                            </article>
+                        </div>
+                    </div>
+                    <div th:if="${sanPhamTheoTenSanPham != null}">
+                        <div th:if="${sanPhamTheoTenSanPham.totalPages > 0}">
+                            <!-- Nút về trang đầu -->
+                            <a th:href="@{/san-pham-adidas(page=0)}"
+                               th:classappend="${sanPhamTheoTenSanPham.number == 0} ? 'disabled' : ''">&laquo;</a>
+
+                            <!-- Nút Previous -->
+                            <a th:href="@{/san-pham-adidas(page=${sanPhamTheoTenSanPham.number - 1})}"
+                               th:classappend="${!sanPhamTheoTenSanPham.hasPrevious()} ? 'disabled' : ''">&lt;</a>
+
+                            <!-- Hiển thị số trang -->
+                            <span th:each="i : ${#numbers.sequence(0, sanPhamTheoTenSanPham.totalPages - 1)}">
+                                                            <a th:href="@{/san-pham-adidas(page=${i})}"
+                                                               th:classappend="${sanPhamTheoTenSanPham.number == i} ? 'active' : ''"
+                                                               th:text="${i + 1}">1</a>
+                                                        </span>
+
+                            <!-- Nút Next -->
+                            <a th:href="@{/san-pham-adidas(page=${sanPhamTheoTenSanPham.number + 1})}"
+                               th:classappend="${!sanPhamTheoTenSanPham.hasNext()} ? 'disabled' : ''">&gt;</a>
+
+                            <!-- Nút về trang cuối -->
+                            <a th:href="@{/san-pham-adidas(page=${sanPhamTheoTenSanPham.totalPages - 1})}"
+                               th:classappend="${sanPhamTheoTenSanPham.number + 1 >= sanPhamTheoTenSanPham.totalPages} ? 'disabled' : ''">&raquo;</a>
+                        </div>
+                        <!-- Thông báo nếu không có trang -->
+                        <p th:if="${sanPhamTheoTenSanPham.totalPages == 0}">Không có sản phẩm nào để hiển thị.</p>
                     </div>
                 </div>
 
-                <div th:if="${tatCaSanPhamAdidas != null}">
-                    <div th:if="${tatCaSanPhamAdidas.totalPages > 0}">
-                        <!-- Nút về trang đầu -->
-                        <a th:href="@{/san-pham-adidas(page=0)}"
-                           th:classappend="${tatCaSanPhamAdidas.number == 0} ? 'disabled' : ''">&laquo;</a>
+                <!-- hiển thị tất ca -->
+                <div th:if="${tatCaSanPhamAdidas} and ${sanPhamTheoMauSac == null} and ${sanPhamTheoKichThuoc == null} and ${sanPhamTheoGia == null} and ${sanPhamTheoTenSanPham == null}">
+                    <div class="row shop_wrapper">
+                        <div class="col-lg-4 col-md-4 col-12 " th:each="adidas : ${tatCaSanPhamAdidas}">
+                            <article class="single_product">
+                                <figure>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" href="product-details.html"><img src="images/product/product53.jpg" alt=""></a>
+                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product54.jpg" alt=""></a>
+                                        <div class="action_links">
+                                            <ul>
+                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i class="bx bx-cart"></i></a></li>
+                                                <li class="compare"><a href="#" title="Mua ngay"><i class="bx bx-money"></i></a></li>
 
-                        <!-- Nút Previous -->
-                        <a th:href="@{/san-pham-adidas(page=${tatCaSanPhamAdidas.number - 1})}"
-                           th:classappend="${!tatCaSanPhamAdidas.hasPrevious()} ? 'disabled' : ''">&lt;</a>
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet-adidas/{id}(id=${adidas[0]})}" title="Xem chi tiết"> <i class="bx bx-show"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product_content grid_content">
+                                        <div class="product_content-header">
+                                            <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Lorem Ipsum</a> (<span th:text="${adidas[3]}"></span>)</h4>
+                                            <div class="wishlist-btn">
+                                                <a href="#"><i class="bx bx-heart"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2], 0, 'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product_content list_content">
+                                        <h4 class="product_name"><a href="product-details.html" th:text="${adidas[1]}">Aliquam Consequat</a> (<span th:text="${adidas[3]}"></span>)</h4>
+                                        <div class="product_desc">
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với Adidas  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, Air còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
+                                        </div>
+                                        <div class="product_price_rating">
+                                            <div class="price_box">
+                                                <span class="current_price" th:text="${#numbers.formatDecimal(adidas[2],0,'COMMA',0,'COMMA')}">$210.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </figure>
+                            </article>
+                        </div>
+                    </div>
+                    <div th:if="${tatCaSanPhamAdidas != null}">
+                        <div th:if="${tatCaSanPhamAdidas.totalPages > 0}">
+                            <!-- Nút về trang đầu -->
+                            <a th:href="@{/san-pham-adidas(page=0)}"
+                               th:classappend="${tatCaSanPhamAdidas.number == 0} ? 'disabled' : ''">&laquo;</a>
 
-                        <!-- Hiển thị số trang -->
-                        <span th:each="i : ${#numbers.sequence(0, tatCaSanPhamAdidas.totalPages - 1)}">
+                            <!-- Nút Previous -->
+                            <a th:href="@{/san-pham-adidas(page=${tatCaSanPhamAdidas.number - 1})}"
+                               th:classappend="${!tatCaSanPhamAdidas.hasPrevious()} ? 'disabled' : ''">&lt;</a>
+
+                            <!-- Hiển thị số trang -->
+                            <span th:each="i : ${#numbers.sequence(0, tatCaSanPhamAdidas.totalPages - 1)}">
                                                             <a th:href="@{/san-pham-adidas(page=${i})}"
                                                                th:classappend="${tatCaSanPhamAdidas.number == i} ? 'active' : ''"
                                                                th:text="${i + 1}">1</a>
                                                         </span>
 
-                        <!-- Nút Next -->
-                        <a th:href="@{/san-pham-adidas(page=${tatCaSanPhamAdidas.number + 1})}"
-                           th:classappend="${!tatCaSanPhamAdidas.hasNext()} ? 'disabled' : ''">&gt;</a>
+                            <!-- Nút Next -->
+                            <a th:href="@{/san-pham-adidas(page=${tatCaSanPhamAdidas.number + 1})}"
+                               th:classappend="${!tatCaSanPhamAdidas.hasNext()} ? 'disabled' : ''">&gt;</a>
 
-                        <!-- Nút về trang cuối -->
-                        <a th:href="@{/san-pham-adidas(page=${tatCaSanPhamAdidas.totalPages - 1})}"
-                           th:classappend="${tatCaSanPhamAdidas.number + 1 >= tatCaSanPhamAdidas.totalPages} ? 'disabled' : ''">&raquo;</a>
+                            <!-- Nút về trang cuối -->
+                            <a th:href="@{/san-pham-adidas(page=${tatCaSanPhamAdidas.totalPages - 1})}"
+                               th:classappend="${tatCaSanPhamAdidas.number + 1 >= tatCaSanPhamAdidas.totalPages} ? 'disabled' : ''">&raquo;</a>
+                        </div>
+                        <!-- Thông báo nếu không có trang -->
+                        <p th:if="${tatCaSanPhamAdidas.totalPages == 0}">Không có sản phẩm nào để hiển thị.</p>
                     </div>
-                    <!-- Thông báo nếu không có trang -->
-                    <p th:if="${tatCaSanPhamAdidas.totalPages == 0}">Không có sản phẩm nào để hiển thị.</p>
                 </div>
                 <!--shop toolbar end-->
                 <!--shop wrapper end-->
