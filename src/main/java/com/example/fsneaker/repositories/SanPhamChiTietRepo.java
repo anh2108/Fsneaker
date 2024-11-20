@@ -133,9 +133,8 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
             " and (?2 is null or o.mauSac.tenMauSac = ?2)" +
             " and (?3 is null or o.kichThuoc.tenKichThuoc =?3)" +
             " and (?4 is null or o.giaBan >= ?4)" +
-            " and (?5 is null or o.giaBan <= ?5)" +
-            " and (?6 is null or o.sanPham.tenSanPham = ?6)")
-    Page<SanPhamChiTiet> findByThuongHieuPuma(Integer idThuongHieu, String tenMauSac, String tenKichThuoc, Double fromGiaBan, Double toGiaBan,String tenSanPham, Pageable page);
+            " and (?5 is null or o.giaBan <= ?5)")
+    Page<SanPhamChiTiet> findByThuongHieuPuma(Integer idThuongHieu, String tenMauSac, String tenKichThuoc, Double fromGiaBan, Double toGiaBan, Pageable page);
 
     @Query("select o from SanPhamChiTiet o where o.sanPham.thuongHieu.id = ?1 order by o.giaBan")
     Page<SanPhamChiTiet> findByPumaSortAsc(Integer id, Pageable pageable);
