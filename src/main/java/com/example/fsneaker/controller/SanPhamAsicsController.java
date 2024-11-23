@@ -42,7 +42,7 @@ public class SanPhamAsicsController {
             Model model
     ) {
         PageRequest pageRequest = PageRequest.of(page, pageSize);
-        
+
         List<Object[]> tenSanPhamVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(1);
         model.addAttribute("tenSanPhamVoiSanPham", tenSanPhamVoiSanPham);
         List<Object[]> tenSanPhamPumaVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(3);
