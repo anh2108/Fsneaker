@@ -1417,13 +1417,10 @@
                                                         </div>
                                                     </div>
 
+                                                    <!-- hình ảnhh -->
                                                     <div class="mb-3">
                                                         <label class="form-label">Hình ảnh</label>
-                                                        <input type="file" class="form-control" name="fileStore"
-                                                               accept="image/*"/>
-                                                        <img id="previewImage2" src="#" alt="Hình ảnh xem trước"
-                                                             class="mt-2"
-                                                             style="display:none; width: 100%; max-height: 200px; object-fit: cover;"/>
+                                                        <input type="file" id="image" name="image" /><br/>
                                                     </div>
 
                                                     <div class="modal-footer">
@@ -1472,7 +1469,8 @@
                                             <span th:case="5">Ngừng kinh doanh</span>
                                         </td>
                                         <td th:text="${#dates.format(spct.ngaySanXuat, 'dd/MM/yyyy')}"></td>
-                                        <td>v</td>
+                                        <td> <img th:src="@{'/images/' + ${spct.imanges}}" width="100" height="100"/></td>
+<!--                                        <td>[[${spct.imanges}]]</td>-->
                                         <td>
                                             <button type="button" class="link-primary" data-bs-toggle="modal"
                                                     th:data-bs-target="'#editModal-' + ${spct.id}">
@@ -1784,23 +1782,6 @@
             });
         });
 
-
-        $('#productDetailInsertForm').on('submit', function(e) {
-            e.preventDefault();
-
-            $('.error').text('');
-
-            var formData = new FormData(this);
-
-            // Kiểm tra xem tệp có được chọn không
-            var fileInput = $('input[name="fileStore"]')[0];
-            if (fileInput.files.length > 0) {
-                console.log("Tệp tin được chọn:", fileInput.files[0].name);
-            } else {
-                console.log("Không có tệp tin nào được chọn");
-            }
-
-
             formData.append('isAjax', 1);
 
 
@@ -1810,18 +1791,17 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
-                    console.log("Dữ liệu đã được gửi thành công!");
+                success: function (response) {
                     alert('Sản phẩm chi tiết đã được thêm thành công!');
                     $('#addModal2').modal('hide');
                     location.reload();
 
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     console.log("Có lỗi xảy ra khi gửi yêu cầu AJAX.");
                     if (xhr.responseJSON && xhr.responseJSON.errors) {
                         var errors = xhr.responseJSON.errors;
-                        $.each(errors, function(field, message) {
+                        $.each(errors, function (field, message) {
                             $('#' + field + 'Error').text(message);
                         });
                     } else {
@@ -1829,7 +1809,7 @@
                     }
                 }
             });
-        });
+
 
 
         $('#productDetailEditForm').on('submit', function (e) {
@@ -1901,19 +1881,38 @@
 
     });
 
-    function previewImage(input) {
-        let preview = document.getElementById('previewImage');
-        let file = input.files[0];
+    // function previewImage(input) {
+    //     let preview = document.getElementById('previewImage');
+    //     let file = input.files[0];
+    //
+    //     if (file) {
+    //         let reader = new FileReader();
+    //
+    //         reader.onload = function (e) {
+    //             preview.src = e.target.result;
+    //         }
+    //         reader.readAsDataURL(file);
+    //     }
+    // }
 
-        if (file) {
-            let reader = new FileReader();
 
-            reader.onload = function (e) {
-                preview.src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        }
-    }
+    //     function previewImage(input) {
+    //     const preview = document.getElementById('previewImage2');
+    //
+    //     if (input.files && input.files[0]) {
+    //     const reader = new FileReader();
+    //
+    //     reader.onload = function (e) {
+    //     preview.src = e.target.result; // Gán đường dẫn ảnh vào thẻ <img>
+    //     preview.style.display = 'block'; // Hiển thị thẻ <img>
+    // };
+    //
+    //     reader.readAsDataURL(input.files[0]); // Đọc file và convert thành DataURL
+    // } else {
+    //     preview.src = '#'; // Đặt lại giá trị khi không có file
+    //     preview.style.display = 'none'; // Ẩn thẻ <img>
+    // }}
+</script>
 
 </script>
 

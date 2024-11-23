@@ -6,6 +6,7 @@ import com.example.fsneaker.response.ResponseMessage;
 import com.example.fsneaker.response.ValidationErrorResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Reader;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -157,13 +160,14 @@ public class SanPhamController {
 
             return ResponseEntity.status(HttpStatus.OK).body("templateadmin/qlsanpham");
         }
-        KhuyenMai km = khuyenMaiRepo.findById(khuyenMaiId).get();
+        KhuyenMai km = khuyenMaiId !=null? khuyenMaiRepo.findById(khuyenMaiId).orElse(null):null;
         XuatXu xuatXu = xuatXuRepo.findById(xuatXuId).get();
         ThuongHieu thuongHieu = thuongHieuRepo.findById(thuongHieuId).get();
 
         sanPham.setThuongHieu(thuongHieu);
         sanPham.setXuatXu(xuatXu);
         sanPham.setKhuyenMai(km);
+        sanPham.setNgayTao(Date.valueOf(LocalDate.now()));
 
         sanPhamRepo.save(sanPham);
 

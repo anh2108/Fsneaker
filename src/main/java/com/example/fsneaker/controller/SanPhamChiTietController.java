@@ -9,7 +9,7 @@ import com.example.fsneaker.repositories.MauSacRepo;
 import com.example.fsneaker.repositories.SanPhamChiTietRepo;
 import com.example.fsneaker.repositories.SanPhamRepo;
 import com.example.fsneaker.response.ValidationErrorResponse;
-import com.example.fsneaker.service.StorageService;
+//import com.example.fsneaker.service.StorageService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +25,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -41,8 +46,8 @@ public class SanPhamChiTietController {
     private MauSacRepo mauSacRepo;
     @Autowired
     private KichThuocRepo kichThuocRepo;
-    @Autowired
-    private StorageService storageService;
+//    @Autowired
+//    private StorageService storageService;
 
 //    @GetMapping("/qlsanphamchitiet")
 //     public String index(Model model) {
@@ -57,7 +62,8 @@ public class SanPhamChiTietController {
                                    @RequestParam(value = "sanPhamId", required = false) Integer sanPhamId,
                                    @RequestParam(value = "kichThuocIds", required = false) Integer[] kichThuocIds,
                                    @RequestParam(value = "mauSacIds", required = false) Integer[] mauSacIds,
-                                   @RequestParam(value = "fileStore", required = false) MultipartFile fileStore) {
+                                   @RequestParam(value = "image", required = false) MultipartFile image
+                                  ) {
 
         // Kiểm tra lỗi từ BindingResult
         if (result.hasErrors()) {
@@ -85,6 +91,22 @@ public class SanPhamChiTietController {
 
         }
 
+        // Kiểm tra nếu có ảnh được upload
+        String imageName = null;
+        if (image != null && !image.isEmpty()) {
+            // Lưu ảnh vào thư mục
+            String uploadDir = "rc/main/resources/static/images/"; // Đường dẫn lưu ảnh
+            imageName = image.getOriginalFilename(); // Lấy tên file ảnh
+            Path path = Paths.get(uploadDir + imageName);
+            model.addAttribute("imageName", imageName);
+            try {
+                Files.createDirectories(path.getParent()); // Tạo thư mục nếu chưa có
+                Files.write(path, image.getBytes()); // Lưu ảnh
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi lưu ảnh.");
+            }
+        }
+
         // Kiểm tra xem sản phẩm có được chọn không
         Optional<SanPham> sanPhamOptional = sanPhamRepo.findById(sanPhamId);
         if (!sanPhamOptional.isPresent()) {
@@ -108,15 +130,12 @@ public class SanPhamChiTietController {
                 newSanPhamChiTiet.setGiaBan(sanPhamChiTiet.getGiaBan());
                 newSanPhamChiTiet.setGiaBanGiamGia(sanPhamChiTiet.getGiaBanGiamGia());
 
-                // Xử lý upload file
-                if (fileStore != null && !fileStore.isEmpty()) {
-                    LocalDateTime ldt = LocalDateTime.now();
-                    String fileName = "product_" + ldt;
-                    String saveLink = storageService.uploadFile(fileStore, fileName);
-                    newSanPhamChiTiet.setImanges(saveLink);
-                }
+                 // Lưu tên ảnh vào sản phẩm chi tiết nếu có
+                 if (imageName != null) {
+                     newSanPhamChiTiet.setImanges(imageName);
+                 }
 
-                index++;
+                 index++;
                 sanPhamChiTietRepo.save(newSanPhamChiTiet);
                 return ResponseEntity.status(HttpStatus.CREATED).body(newSanPhamChiTiet);
             }
