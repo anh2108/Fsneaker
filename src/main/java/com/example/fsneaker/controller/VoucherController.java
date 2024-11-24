@@ -67,14 +67,14 @@ public class VoucherController {
 
         List<NhanVien> listNV = this.nhanVienRepo.findAll();
         model.addAttribute("dataNV", listNV);
-        return "templateadmin/voucher/qlvoucher.html";
+        return "templateadmin/qlvoucher.html";
     }
 
     @GetMapping("/qlvoucher/create")
     public String create(Model model) {
         List<NhanVien> listNV = this.nhanVienRepo.findAll();
         model.addAttribute("dataNV", listNV);
-        return "templateadmin/voucher/add.html";
+        return "templateadmin/add-voucher.html";
     }
 
     @GetMapping("/qlvoucher-edit/{id}")
@@ -85,7 +85,7 @@ public class VoucherController {
         model.addAttribute("dataNV", listNV);
 
         model.addAttribute("data", voucher);
-        return "templateadmin/voucher/edit.html";
+        return "templateadmin/edit-voucher.html";
     }
 
     @PostMapping("/qlvoucher-update/{id}")
@@ -105,7 +105,7 @@ public class VoucherController {
             model.addAttribute("dataNV", listNV);
             model.addAttribute("errors", errors);
             model.addAttribute("data", voucher);
-            return "templateadmin/voucher/edit.html";
+            return "templateadmin/edit-voucher.html";
         }
         this.voucherRepo.save(voucher);
         return "redirect:/qlvoucher";
@@ -128,7 +128,7 @@ public class VoucherController {
             model.addAttribute("dataNV", listNV);
             model.addAttribute("errors", errors);
             model.addAttribute("data", voucher);
-            return "templateadmin/voucher/add.html";
+            return "templateadmin/add-voucher.html";
         }
         this.voucherRepo.save(voucher);
         return "redirect:/qlvoucher";

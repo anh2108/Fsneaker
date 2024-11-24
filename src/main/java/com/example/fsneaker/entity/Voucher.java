@@ -1,5 +1,6 @@
 package com.example.fsneaker.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,16 +9,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -46,37 +48,36 @@ public class Voucher {
     @Column(name = "MoTa")
     private String moTa;
 
-//    @Min(value = 1, message = "Số lượng phải lớn hơn 0")
+    //    @Min(value = 1, message = "Số lượng phải lớn hơn 0")
     @NotNull(message = "SoLuong không được bỏ trống")
     @Column(name = "SoLuong")
     private Integer soLuong;
 
+    @Positive(message = "Gia Tri phải là số dương")
     @DecimalMin(value = "0.0", inclusive = false, message = "Giá trị phải lớn hơn 0")
     @NotNull(message = "GiaTri không được bỏ trống")
     @Column(name = "GiaTri")
     private Double giaTri;
 
+    @Positive(message = "Đơn tối thiểu phải là số dương")
     @NotNull(message = "DonToiThieu không được bỏ trống")
     @Column(name = "DonToiThieu")
     private Double donToiThieu;
 
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     @NotNull(message = "NgayBatDau không được bỏ trống")
-//    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "NgayBatDau")
     private LocalDateTime ngayBatDau;
 
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     @NotNull(message = "NgayKetThuc không được bỏ trống")
-//    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "NgayKetThuc")
     private LocalDateTime ngayKetThuc;
 
-    //    @NotNull(message = "NgayTao không được bỏ trống")
-//    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @CreationTimestamp
     @Column(name = "NgayTao")
-    private LocalDateTime ngayTao;
+    private LocalDate ngayTao;
 
     @NotNull(message = "NhanVien không được bỏ trống")
     @ManyToOne
@@ -86,6 +87,16 @@ public class Voucher {
     //    @NotNull(message = "Trang Thai không được bỏ trống")
     @Column(name = "TrangThai")
     private Integer trangThai;
+
+    @AssertTrue(message = "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc")
+    public boolean isNgayBatDauTruocNgayKetThuc() {
+        return ngayBatDau != null && ngayKetThuc != null && !ngayBatDau.isAfter(ngayKetThuc);
+    }
+
+    @AssertTrue(message = "Đơn tối thiểu phải lớn hơn giá trị giảm")
+    public boolean isDonToiThieuLonHonGiaTriGiam() {
+        return donToiThieu != null && giaTri != null && donToiThieu > giaTri;
+    }
 
     public int getTrangThai() {
         LocalDateTime today = LocalDateTime.now();
