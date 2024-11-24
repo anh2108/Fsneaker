@@ -868,8 +868,8 @@
                                 </div>
 
                                 <div class="col-6">
-                                    <label class="form-label">Loại Voucher: </label>
-                                    <select class="form-control" th:name="loaiVoucher">
+                                    <label class="form-label">Loại Voucher:</label>
+                                    <select class="form-control" id="loaiVoucher" th:name="loaiVoucher" onchange="updateGiaTriLabel()">
                                         <option value="Giảm giá %">Giảm giá %</option>
                                         <option value="Giảm giá số tiền">Giảm giá số tiền</option>
                                     </select>
@@ -891,8 +891,11 @@
                                 <!--                                </div>-->
 
                                 <div class="col-6">
-                                    <label class="form-label">Giá trị</label>
-                                    <input type="text" class="form-control" th:name="giaTri" value="">
+                                    <label class="form-label">Giá trị:</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="giaTri" th:name="giaTri" value="">
+                                        <span class="input-group-text" id="giaTriLabel">%</span>
+                                    </div>
                                     <span th:if="${errors != null and errors['giaTri'] != null}"
                                           style="color: red" th:text="${errors['giaTri']}"></span>
                                 </div>
@@ -991,6 +994,23 @@
 </div>
 <!-- END layout-wrapper -->
 
+<script>
+    function updateGiaTriLabel() {
+        // Lấy giá trị hiện tại của dropdown
+        const loaiVoucher = document.getElementById("loaiVoucher").value;
+        const giaTriLabel = document.getElementById("giaTriLabel");
+
+        // Cập nhật nhãn dựa trên loại voucher
+        if (loaiVoucher === "Giảm giá %") {
+            giaTriLabel.textContent = "%";
+        } else if (loaiVoucher === "Giảm giá số tiền") {
+            giaTriLabel.textContent = "VND";
+        }
+    }
+
+    // Thiết lập nhãn đúng khi tải lại trang (nếu cần)
+    document.addEventListener("DOMContentLoaded", updateGiaTriLabel);
+</script>
 <script src="../js/bootstrap.bundle.min.js"></script>
 <script src="../js/simplebar.min.js"></script>
 <script src="../js/waves.min.js"></script>

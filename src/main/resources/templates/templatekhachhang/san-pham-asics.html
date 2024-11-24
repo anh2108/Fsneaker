@@ -542,7 +542,7 @@
                                                 <li class="compare"><a href="#" title="Mua ngay"><i
                                                         class="bx bx-money"></i></a></li>
 
-                                                <li class="quick_button"><a href="#"
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet/{id}(id=${asics.id})}"
                                                                             title="Xem chi tiết"> <i
                                                         class="bx bx-show"></i></a></li>
                                             </ul>
@@ -552,7 +552,7 @@
                                         <div class="product_content-header">
                                             <h4 class="product_name"><a href="product-details.html"
                                                                         th:text="${asics.sanPham.tenSanPham}">Lorem
-                                                Ipsum</a></h4>
+                                                Ipsum</a>(<span th:text="${asics.mauSac.tenMauSac}"></span>)</h4>
                                             <div class="wishlist-btn">
                                                 <a href="#"><i class="bx bx-heart"></i></a>
                                             </div>
@@ -633,7 +633,7 @@
                                                 <li class="compare"><a href="#" title="Mua ngay"><i
                                                         class="bx bx-money"></i></a></li>
 
-                                                <li class="quick_button"><a href="#"
+                                                <li class="quick_button"><a th:href="@{/xem-chi-tiet/{id}(id=${asics[4]})}"
                                                                             title="Xem chi tiết"> <i
                                                         class="bx bx-show"></i></a></li>
                                             </ul>

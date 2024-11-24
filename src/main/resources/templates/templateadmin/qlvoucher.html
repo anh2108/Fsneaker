@@ -1003,7 +1003,7 @@
                                 <th>Đơn tối thiểu</th>
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
-                                <th> Ngày tạo</th>
+<!--                                <th> Ngày tạo</th>-->
                                 <th>Nhân viên</th>
                                 <th>Trạng thái</th>
                                 <th>Hành động</th>
@@ -1016,11 +1016,14 @@
                                 <td th:text="${i.tenVoucher}"></td>
                                 <td th:text="${i.loaiVoucher}"></td>
                                 <td th:text="${i.soLuong}"></td>
-                                <td th:text="${i.giaTri}"></td>
+                                <td>
+                                    <span th:if="${i.loaiVoucher == 'Giảm giá %'}" th:text="${i.giaTri + ' %'}"></span>
+                                    <span th:if="${i.loaiVoucher == 'Giảm giá số tiền'}" th:text="${i.giaTri + ' VND'}"></span>
+                                </td>
                                 <td th:text="${#numbers.formatDecimal(i.donToiThieu,0,'COMMA',0,'COMMA')}"></td>
                                 <td th:text="${i.ngayBatDau}"></td>
                                 <td th:text="${i.ngayKetThuc}"></td>
-                                <td th:text="${i.ngayTao}"></td>
+<!--                                <td th:text="${i.ngayTao}"></td>-->
                                 <td th:text="${i.nhanVien.tenNhanVien}"></td>
                                 <td th:text="${i.trangThai == 1 ? 'Đang hoạt động' : (i.trangThai == 0 ? 'Ngừng hoạt đông' : (i.trangThai == 2 ? 'Chờ kích hoạt' : 'Không xác định'))}"></td>
                                 <td><a th:href="@{/qlvoucher-edit/{id}(id=${i.id})}" class="link-primary"><i
