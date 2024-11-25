@@ -23,18 +23,26 @@ public class CustomUserDetailService implements UserDetailsService {
         NhanVien nhanVien = nhanVienRepo.findByEmailOrSoDienThoai(username,username);
         if(nhanVien != null){
             return new CustomUserDetails(
+                    nhanVien.getId(),
                     nhanVien.getEmail(),
                     nhanVien.getMatKhau(),
                     nhanVien.getTenNhanVien(),
+                    nhanVien.getDiaChi(),
+                    nhanVien.getSoDienThoai(),
+                    nhanVien.getEmail(),
                     nhanVien.getVaiTro()  ? "ROLE_ADMIN" : "ROLE_STAFF"
             );
         }
         KhachHang khachHang= khachHangRepo.findBySoDienThoaiOrEmail(username,username);
         if(khachHang != null){
             return new CustomUserDetails(
+                    khachHang.getId(),
                     khachHang.getEmail(),
                     khachHang.getMatKhau(),
                     khachHang.getTenKhachHang(),
+                    khachHang.getDiaChi(),
+                    khachHang.getSoDienThoai(),
+                    khachHang.getEmail(),
                     "ROLE_CUSTOMER"
             );
         }

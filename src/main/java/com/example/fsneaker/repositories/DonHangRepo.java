@@ -18,7 +18,7 @@ public interface DonHangRepo extends JpaRepository<DonHang, Integer> {
     //    DonHang findById(int id);
     //Đếm số đơn hàng đã thanh toán
     Long countByTrangThaiEquals(String trangThai);
-
+    DonHang findByKhachHangId(Integer idKhachHang);
     List<DonHang> findByTrangThaiEquals(String trangThai);
     //Lấy tất cả các đơn hàng đã thanh toán trong vòng 1 tuần qua
     List<DonHang> findByNgayMuaBetweenAndTrangThaiEquals(LocalDate startDate, LocalDate endDate, String trangThai);
