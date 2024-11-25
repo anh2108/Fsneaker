@@ -973,11 +973,17 @@
                                                     <li class="list-inline-item">Kích thước: <span class="fw-medium" th:text="${item.sanPhamChiTiet.kichThuoc.tenKichThuoc}">Tên kích thước</span> </li>
                                                 </ul>
                                                 <div class="input-step">
-                                                    <input type="hidden" name="idDonHang" th:value="${item.donHang.id}">
-                                                    <input type="hidden" name="idSanPhamChiTiet" th:value="${item.sanPhamChiTiet.id}">
-                                                    <button type="button" class="minus material-shadow" th:disabled="${hasVoucher}" onclick="updateQuantity(this, 'decrease')">-</button>
-                                                    <input type="number" class="product-quantity" th:value="${item.soLuong}" min="1" th:max="${item.sanPhamChiTiet.soLuong + item.soLuong}" readonly>
-                                                    <button type="button" class="minus material-shadow" th:disabled="${hasVoucher}" onclick="updateQuantity(this, 'increase')">+</button>
+
+                                                    <form th:action="@{/don-hang/cap-nhat-so-luong}" method="post" class="d-flex align-items-center">
+                                                        <input type="hidden" name="idSanPhamChiTiet" th:value="${item.sanPhamChiTiet.id}" />
+                                                        <input type="hidden" name="idDonHangChiTiet" th:value="${item.id}" />
+                                                        <input type="hidden" name="idDonHang" th:value="${item.donHang.id}" />
+<!--                                                        <input type="number" id="soLuong" name="soLuong" th:value="${item.soLuong}" min="1" th:max="${item.sanPhamChiTiet.soLuong + item.soLuong}" required />-->
+                                                        <button type="button" class="minus material-shadow" th:disabled="${hasVoucher}" onclick="updateQuantity(this, 'decrease')">-</button>
+                                                        <input type="number" id="soLuong" name="soLuong" th:disabled="${hasVoucher}" class="product-quantity" th:value="${item.soLuong}" min="1" th:max="${item.sanPhamChiTiet.soLuong + item.soLuong}">
+                                                        <button type="button" class="minus material-shadow" th:disabled="${hasVoucher}" onclick="updateQuantity(this, 'increase')">+</button>
+                                                        <button type="submit" class="d-block text-body p-1 px-2 btn btn-link" th:disabled="${hasVoucher}" style="border:none; background:none;"><i class="ri-refresh-line text-muted align-bottom me-1"></i></button>
+                                                    </form>
                                                 </div>
                                             </div>
                                             <div class="col-sm-auto">
@@ -1070,6 +1076,7 @@
                                     </form>
                                     <div th:if="${hasVoucher}" class="text-center mt-3">
                                         <form th:action="@{/don-hang/huy-voucher/{id}(id=${donHang.id})}" method="post">
+                                            <input type="hidden" name="idVoucher" th:if="${voucher != null}" th:value="${voucher.id}">
                                             <button type="submit" class="btn btn-danger">Hủy Voucher</button>
                                         </form>
                                     </div>
@@ -1088,6 +1095,10 @@
                                             <button type="submit" class="btn btn-success">Tìm kiếm</button>
                                             <button type="button" class="btn btn-success" onclick="showForm()">Thêm khách hàng</button>
                                         </div>
+                                    </form>
+                                    <form class="mt-3 text-center" th:action="@{/don-hang/them-khach-hang-le}" method="get">
+                                        <input type="hidden" name="idDonHang" th:if="${donHang != null}" th:value="${donHang.id}">
+                                        <button type="submit" class="btn btn-success">Khách lẻ</button>
                                     </form>
                                     <div id="addCustomerForm" style="display:none; margin-top: 20px" >
                                         <form th:action="@{/don-hang/them-khach-hang}" method="post" th:object="${khachHang}">
@@ -1136,22 +1147,8 @@
                                         function hideForm() {
                                             document.getElementById("addCustomerForm").style.display = "none";
                                         }
-                                        // function toggleForm() {
-                                        //     // Lấy phần tử form thêm khách hàng
-                                        //     var form = document.getElementById("addCustomerForm");
-                                        //
-                                        //     // Kiểm tra trạng thái của form và thay đổi
-                                        //     if (form.style.display === "none" || form.style.display === "") {
-                                        //         form.style.display = "block";  // Hiện form
-                                        //     } else {
-                                        //         form.style.display = "none";   // Ẩn form
-                                        //     }
-                                        // }
                                     </script>
                                 </div>
-<!--                                <div class="text-center">-->
-<!--                                    <a th:href="@{/qlkhachhang}" class="btn btn-success">Chọn khách hàng</a>-->
-<!--                                </div>-->
                                 <br/>
 
                                 <form th:action="@{/don-hang/thanh-toan}" method="post">
@@ -1206,41 +1203,51 @@
                             updateProductQuantityInBackend(button, quantity);
                         }
 
-                        // Hàm gọi AJAX để cập nhật số lượng trong backend
-                        function updateProductQuantityInBackend(button, quantity) {
-                            var idSanPhamChiTiet = button.closest('.product').querySelector('input[name="idSanPhamChiTiet"]').value;
-                            var idDonHang = button.closest('.product').querySelector('input[name="idDonHang"]').value;
-
-                            var xhr = new XMLHttpRequest();
-                            xhr.open('POST', '/don-hang/update-san-pham-quantity', true);
-                            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                            xhr.onreadystatechange = function () {
-                                if (xhr.readyState === 4) {
-                                    if (xhr.status === 200) {
-                                        // Nhận tổng tiền mới từ phản hồi
-                                        var response = xhr.responseText;
-                                        var newTotal = response.match(/tổng tiền mới: (\d+(?:\.\d+)?)/);
-                                        if (newTotal) {
-                                            // Loại bỏ ký hiệu ₫ nếu có và chuyển đổi thành số
-                                            var numericTotal = parseFloat(newTotal[1].replace(/₫/g, '').replace(/,/g, '').trim());
-
-                                            // Định dạng lại thành số với dấu phẩy cho hàng ngàn
-                                            var formattedTotal = numericTotal.toLocaleString('en-US');
-
-                                            // Cập nhật tổng tiền vào phần tử HTML
-                                            document.getElementById("tongTien").textContent = formattedTotal;
-                                        }
-                                        console.log('Cập nhật số lượng thành công');
-                                    } else {
-                                        console.error('Lỗi khi cập nhật số lượng');
-                                    }
-                                }
-                            };
-
-                            // Gửi dữ liệu dưới dạng form-urlencoded
-                            var params = 'idDonHang=' + idDonHang + '&idSanPhamChiTiet=' + idSanPhamChiTiet + '&soLuong=' + quantity;
-                            xhr.send(params);
-                        }
+                        // // Hàm gọi AJAX để cập nhật số lượng trong backend
+                        // function updateProductQuantityInBackend(button, quantity) {
+                        //     var idSanPhamChiTiet = button.closest('.product').querySelector('input[name="idSanPhamChiTiet"]').value;
+                        //     var idDonHang = button.closest('.product').querySelector('input[name="idDonHang"]').value;
+                        //
+                        //     var xhr = new XMLHttpRequest();
+                        //     xhr.open('POST', '/don-hang/update-san-pham-quantity', true);
+                        //     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        //     xhr.onreadystatechange = function () {
+                        //         if (xhr.readyState === 4) {
+                        //             if (xhr.status === 200) {
+                        //                 try{
+                        //                     // Nhận tổng tiền mới từ phản hồi
+                        //                     const response = JSON.parse(xhr.responseText);
+                        //                     //Cập nhật tổng tiền
+                        //                     document.getElementById("tongTien").textContent = response.tongTienMoi.toLocaleString('en-US');
+                        //                     //Cập nhật danh sách voucher
+                        //                     var voucherContainer = document.getElementById("voucherList");
+                        //                     voucherContainer.innerHTML = "";// Xóa danh sách voucher cũ
+                        //                     response.vouchers.
+                        //                     // var newTotal = response.match(/tổng tiền mới: (\d+(?:\.\d+)?)/);
+                        //                     // if (newTotal) {
+                        //                     //     // Loại bỏ ký hiệu ₫ nếu có và chuyển đổi thành số
+                        //                     //     var numericTotal = parseFloat(newTotal[1].replace(/₫/g, '').replace(/,/g, '').trim());
+                        //                     //
+                        //                     //     // Định dạng lại thành số với dấu phẩy cho hàng ngàn
+                        //                     //     var formattedTotal = numericTotal.toLocaleString('en-US');
+                        //                     //
+                        //                     //     // Cập nhật tổng tiền vào phần tử HTML
+                        //                     //     document.getElementById("tongTien").textContent = formattedTotal;
+                        //                     // }
+                        //                     console.log('Cập nhật số lượng thành công');
+                        //                 }catch (error){
+                        //                     console.log('Lỗi xứ lý phản hồi JSON:',error);
+                        //                 }
+                        //             } else {
+                        //                 console.error('Lỗi khi cập nhật số lượng');
+                        //             }
+                        //         }
+                        //     };
+                        //
+                        //     // Gửi dữ liệu dưới dạng form-urlencoded
+                        //     var params = 'idDonHang=' + idDonHang + '&idSanPhamChiTiet=' + idSanPhamChiTiet + '&soLuong=' + quantity;
+                        //     xhr.send(params);
+                        // }
                     </script>
                 </div>
             </div>

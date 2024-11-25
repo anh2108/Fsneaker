@@ -41,6 +41,8 @@ public class VoucherService {
     public List<Voucher> getAllVoucherByTrangThaiAndGiaTri(Integer trangThai){
         return voucherRepo.findAllVoucherByTrangThaiAndAndGiaTri(trangThai);
     }
-
+    public Voucher themVoucher(Voucher voucher){
+        return voucherRepo.save(voucher);
+    }
     //Ai code thì cOde vô đây
 }

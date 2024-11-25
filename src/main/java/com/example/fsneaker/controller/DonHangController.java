@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/don-hang")
@@ -63,8 +64,12 @@ public class DonHangController {
                 model.addAttribute("tongTien", tongTienGiamGia);//Cập nhật tổng tiền hiển thị
                 model.addAttribute("voucher", voucher); //Thêm thông tin voucher vào model
             }
+            //Lấy danh sách voucher có trạng thái và giá tri phù hợp, sau đó lọc theo tổng tiền
             List<Voucher> vouchers = voucherService.getAllVoucherByTrangThaiAndGiaTri(1);
-            model.addAttribute("vouchers", vouchers);
+            List<Voucher> filteredVouchers = vouchers.stream()
+                    .filter(voucher -> voucher.getDonToiThieu() <= donHang.getTongTien()) //Chỉ giữ các voucher có đơn tối thiểu <= tổng tiền
+                    .collect(Collectors.toList());
+            model.addAttribute("vouchers", filteredVouchers);
             List<DonHangChiTiet> dsSanPhamtrongGioHang = donHangChiTietService.getAllDonHangChiTietById(id);
             model.addAttribute("gioHangs", dsSanPhamtrongGioHang);
 //            model.addAttribute("khachHang", new KhachHang());
@@ -149,7 +154,34 @@ public class DonHangController {
             model.addAttribute("tongTien", tongTienGiamGia);
             model.addAttribute("voucher", donHang.getGiamGia());
         }
-
+        //Hiển thị danh sách sản phẩm trong giỏ hàng
+        model.addAttribute("gioHangs", donHangChiTietService.getAllDonHangChiTietById(idDonHang));
+        return "redirect:/don-hang/chi-tiet?id=" + donHang.getId();
+    }
+    @GetMapping("/them-khach-hang-le")
+    public String themKhachHangLe(@RequestParam(value = "idDonHang", required = false) Integer idDonHang, RedirectAttributes redirectAttributes, Model model){
+        KhachHang khachHang =khachHangService.getKhachHangById(30);
+        //Lây hóa đơn theo id
+        DonHang donHang = donHangService.getDonHangById(idDonHang);
+        if(donHang == null){
+            redirectAttributes.addFlashAttribute("errorMessage","Chưa chọn hóa đơn hoặc chưa có hóa đơn được tạo!");
+            return "redirect:/don-hang/hien-thi";
+        }
+        if (donHang.getKhachHang() != null) {
+            donHang.setKhachHang(khachHang);
+            donHangService.capNhatDonHang(donHang);
+            redirectAttributes.addFlashAttribute("message", "Khách hàng đã được thay thế vào hóa đơn!");
+        }else {
+            donHang.setKhachHang(khachHang);
+            donHangService.capNhatDonHang(donHang);
+            redirectAttributes.addFlashAttribute("message", "Khách hàng đã được gắn vào hóa đơn!");
+        }
+        //Nếu có hóa đơn, tiính lại tổng tiền sau giảm giá
+        if (donHang.getGiamGia() != null) {
+            double tongTienGiamGia = donHang.getTongTienGiamGia();
+            model.addAttribute("tongTien", tongTienGiamGia);
+            model.addAttribute("voucher", donHang.getGiamGia());
+        }
         //Hiển thị danh sách sản phẩm trong giỏ hàng
         model.addAttribute("gioHangs", donHangChiTietService.getAllDonHangChiTietById(idDonHang));
         return "redirect:/don-hang/chi-tiet?id=" + donHang.getId();
@@ -314,42 +346,56 @@ public class DonHangController {
         //Lấy thông tin chi tiết sản phẩm
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getSanPhamChiTietById(idSanPhamChiTiet);
         int soLuongSPCT = sanPhamChiTiet.getSoLuong();
-
+        //Kiểm tra só lượng sản phẩm trong kho
         if (soLuong > soLuongSPCT) {
             redirectAttributes.addFlashAttribute("errorMessage", "Số lượng trong kho không đủ!");
             return "redirect:/don-hang/chi-tiet?id=" + donHang.getId();
         }
 
         //Kiểm tra sản phẩm đã tồn tại trong đơn hàng chưa
-        boolean sanPhamTonTai = donHangService.kiemTraSanPhamTrongDonHang(idDonHang, idSanPhamChiTiet);
-        if (sanPhamTonTai) {
+        DonHangChiTiet sanPhamTonTai = donHangService.kiemTraSanPhamTrongDonHang(idDonHang, idSanPhamChiTiet);
+        if (sanPhamTonTai != null) {
             //Nếu đã tồn tại, trả về thông báo lỗi
-            redirectAttributes.addFlashAttribute("errorMessage", "Đã có sản phẩm trong hóa đơn");
-            return "redirect:/don-hang/chi-tiet?id=" + donHang.getId();
-        }
-        if(donHang != null){
-            double tongTienHoaDonA = donHang.getTongTien();
-            double donGia = sanPhamChiTiet.getGiaBan();
-            double thanhTien = soLuong * donGia;
-            double tongTienHoaDonZ = tongTienHoaDonA + thanhTien;
-            //Cập nhật tổng tiền hóa đơn và số lượng sản phẩm
-            donHang.setTongTien(tongTienHoaDonZ);
-            donHangService.capNhatDonHang(donHang);
-
+            int soLuongHienTai = sanPhamTonTai.getSoLuong();
+            int tongSoLuongMoi = soLuongHienTai + soLuong;
+            //Kiểm tra số lượng mới có vượt quá kho không
+            if(tongSoLuongMoi > soLuongSPCT){
+                redirectAttributes.addFlashAttribute("errorMessage","Số lượng trong kho không đủ!");
+                return "redirect:/don-hang/chi-tiet?id"+donHang.getId();
+            }
+            sanPhamTonTai.setSoLuong(tongSoLuongMoi);
+            sanPhamTonTai.setThanhTien(tongSoLuongMoi * sanPhamChiTiet.getGiaBan());
+            donHangChiTietService.updateHoaDonChiTietById(sanPhamTonTai);
+            //Cập nhật số lượng sản phẩm trong kho
             sanPhamChiTiet.setSoLuong(soLuongSPCT - soLuong);
             sanPhamChiTietService.capNhatSanPhamChiTiet(sanPhamChiTiet);
+            //Cập nhật tổng tiền hóa đơn
+            donHang.setTongTien(donHang.getTongTien() + (soLuong * sanPhamChiTiet.getGiaBan()));
+            donHangService.capNhatDonHang(donHang);
+        }else {
+            if (donHang != null) {
+                double tongTienHoaDonA = donHang.getTongTien();
+                double donGia = sanPhamChiTiet.getGiaBan();
+                double thanhTien = soLuong * donGia;
+                double tongTienHoaDonZ = tongTienHoaDonA + thanhTien;
+                //Cập nhật tổng tiền hóa đơn và số lượng sản phẩm
+                donHang.setTongTien(tongTienHoaDonZ);
+                donHangService.capNhatDonHang(donHang);
 
-            //Tạo chi tiết hóa đơn mới
-            DonHangChiTiet donHangChiTiet = new DonHangChiTiet();
-            donHangChiTiet.setDonHang(donHang);
-            donHangChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
-            donHangChiTiet.setGia(donGia);
-            donHangChiTiet.setSoLuong(soLuong);
-            donHangChiTiet.setThanhTien(thanhTien);
+                sanPhamChiTiet.setSoLuong(soLuongSPCT - soLuong);
+                sanPhamChiTietService.capNhatSanPhamChiTiet(sanPhamChiTiet);
 
-            donHangChiTietService.themDonHangChiTiet(donHangChiTiet);
+                //Tạo chi tiết hóa đơn mới
+                DonHangChiTiet donHangChiTiet = new DonHangChiTiet();
+                donHangChiTiet.setDonHang(donHang);
+                donHangChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
+                donHangChiTiet.setGia(donGia);
+                donHangChiTiet.setSoLuong(soLuong);
+                donHangChiTiet.setThanhTien(thanhTien);
+
+                donHangChiTietService.themDonHangChiTiet(donHangChiTiet);
+            }
         }
-
         //Trả về trang danh sách với dữ liệu mới
         return "redirect:/don-hang/chi-tiet?id=" + donHang.getId();
     }
@@ -380,9 +426,54 @@ public class DonHangController {
         return "redirect:/don-hang/chi-tiet?id=" + donHang.getId();
     }
 
+    @PostMapping("/cap-nhat-so-luong")
+    public String capNhatSoLuong(@RequestParam("idDonHang") int idDonHang, @RequestParam("idDonHangChiTiet") Integer idDonHangChiTiet, @RequestParam("idSanPhamChiTiet") Integer idSanPhamChiTiet, @RequestParam("soLuong") int soLuongSP, Model model){
+        // lấy thông tin sản phẩm và hóa đơn
+        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getSanPhamChiTietById(idSanPhamChiTiet);
+        DonHang donHang = donHangService.getDonHangById(idDonHang);
+        DonHangChiTiet donHangChiTiet = donHangChiTietService.getDonHangChiTietById(idDonHangChiTiet);
+
+        double tongSLBanDau = sanPhamChiTiet.getSoLuong() + donHangChiTiet.getSoLuong();
+        double tongSLDaSua = tongSLBanDau - soLuongSP;
+        double thanhTienDaSua = soLuongSP * sanPhamChiTiet.getGiaBan();
+
+        // Câập nhật lại thông tin tổng tiền hóa đơn
+        double tongTienHDBanDau = donHang.getTongTien() - donHangChiTiet.getThanhTien();
+        double tongTienHDDaSua = tongTienHDBanDau + thanhTienDaSua;
+
+        donHang.setTongTien(tongTienHDDaSua);
+        donHangService.capNhatDonHang(donHang);
+
+        // Cập nhật số lượng sản phẩm trong kho
+        sanPhamChiTiet.setSoLuong((int) tongSLDaSua);
+        sanPhamChiTietService.capNhatSanPhamChiTiet(sanPhamChiTiet);
+
+        // Cập nhật thông tin chi tiết hóa đơn
+        donHangChiTiet.setSoLuong(soLuongSP);
+        donHangChiTiet.setThanhTien(thanhTienDaSua);
+        donHangChiTietService.updateHoaDonChiTietById(donHangChiTiet);
+
+        //Cập nhật dữ liệu model cho Thymeleaf
+
+        model.addAttribute("gioHangs", donHangChiTietService.getAllDonHangChiTietById(idDonHang));
+        model.addAttribute("donHangId", donHangService.getDonHangById(idDonHang));
+        model.addAttribute("tongTien", donHang.getTongTien());
+        List<Voucher> vouchers = voucherService.getAllVoucherByTrangThaiAndGiaTri(1);
+        List<Voucher> filteredVouchers = vouchers.stream()
+                .filter(voucher -> voucher.getDonToiThieu() <= donHang.getTongTien()) //Chỉ giữ các voucher có đơn tối thiểu <= tổng tiền
+                .collect(Collectors.toList());
+        model.addAttribute("vouchers", filteredVouchers);
+        //Hiển thị một form trống để người dùng tạo hóa đơn mới
+        model.addAttribute("donHang", new DonHang());
+        // Hiển thị danh sách hóa đơn hiện có
+        model.addAttribute("donHangs",donHangService.getDonHangByTrangThai());
+        //Hiển thị danh sách sản phẩm chi tiết hiện có
+        model.addAttribute("sanPhamChiTiets",sanPhamChiTietService.getSanPhamChiTiet());
+        return "redirect:/don-hang/chi-tiet?id=" +donHang.getId();
+    }
     @PostMapping("/update-san-pham-quantity")
     @ResponseBody
-    public ResponseEntity<String> updateSanPhamQuantity(@RequestParam Integer idDonHang, @RequestParam Integer idSanPhamChiTiet, @RequestParam Integer soLuong, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<Map<String, Object>> updateSanPhamQuantity(@RequestParam Integer idDonHang, @RequestParam Integer idSanPhamChiTiet, @RequestParam Integer soLuong, RedirectAttributes redirectAttributes) {
         try {
             // Lấy thông tin sản phẩm và hóa đơn
             SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getSanPhamChiTietById(idSanPhamChiTiet);
@@ -414,10 +505,19 @@ public class DonHangController {
             donHangChiTiet.setThanhTien(thanhTienDaSua);
             donHangChiTietService.updateHoaDonChiTietById(donHangChiTiet);
 
-            return ResponseEntity.ok("Cập nhật số lượng thành công, tổng tiền mới: " + tongTienHDDaSua);
+            //Lấy lại danh sách voucher hợp lệ
+            List<Voucher> vouchers = voucherService.getAllVoucherByTrangThaiAndGiaTri(1);
+            List<Voucher> filteredVouchers = vouchers.stream()
+                    .filter(voucher -> voucher.getDonToiThieu() <= donHang.getTongTien()) //Chỉ giữ các voucher có đơn tối thiểu <= tổng tiền
+                    .collect(Collectors.toList());
+            Map<String, Object> response = new HashMap<>();
+            response.put("message","Cập nhật số lượng thành công");
+            response.put("tongTienMoi", tongTienHDDaSua);
+            response.put("vouchers",filteredVouchers);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace(); // In ra lỗi nếu có
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi cập nhật số lượng");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Lỗi khi cập nhật số lượng"));
         }
     }
 
@@ -516,7 +616,7 @@ public class DonHangController {
 
     @GetMapping("/them-san-pham-vao-hoa-don/{id}")
     public String testBanHang(@PathVariable Integer id,@RequestParam(value = "page", defaultValue = "0") int page,
-                              @RequestParam(value = "keyword", required = false) String keyword, Model model) {
+                              @RequestParam("idSanPhamChiTiet")int idSanPhamChiTiet,@RequestParam(value = "keyword", required = false) String keyword, Model model) {
         int pageSize = 10;
         Page<SanPhamChiTiet> sanPhamChiTietPage;
         if (keyword != null && !keyword.isEmpty()) {
@@ -525,6 +625,8 @@ public class DonHangController {
         } else {
             sanPhamChiTietPage = sanPhamChiTietService.findPaginated(page, pageSize);
         }
+        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getSanPhamChiTietById(idSanPhamChiTiet);
+        model.addAttribute("sanPhamChiTiet",sanPhamChiTiet);
         DonHang donHang = donHangService.getDonHangById(id);
         //Hiển thị một form trống để người dùng tạo hóa đơn mới
         model.addAttribute("donHang", donHang);
@@ -539,7 +641,7 @@ public class DonHangController {
     @PostMapping("/ap-voucher")
     public String apVoucher(@RequestParam("idVoucher") Integer idVoucher, @RequestParam(value = "idDonHang", required = false) Integer idDonHang, Model model, RedirectAttributes redirectAttributes) {
         if (idDonHang == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Hóa đơn không tồn tài!");
+            redirectAttributes.addFlashAttribute("errorMessage", "Chưa chọn hóa đơn!");
             return "redirect:/don-hang/hien-thi";
         }
         //Lấy thông tin hóa đơn
@@ -569,16 +671,18 @@ public class DonHangController {
         }
         //Áp dụng voucher và tính số tiền sau khi giảm
         double tongTienGiamGia = voucherService.applyVoucher(donHang, voucher);
-
+        int slVoucher = voucher.getSoLuong();
         //Cập nhật hóa đơn
         donHang.setGiamGia(voucher);
+        voucher.setSoLuong(slVoucher - 1);
+        voucherService.themVoucher(voucher);
         donHang.setTongTienGiamGia(tongTienGiamGia);
         donHangService.capNhatDonHang(donHang);
         redirectAttributes.addFlashAttribute("message", "Voucher đã được áp dụng thành công!");
         return "redirect:/don-hang/chi-tiet?id=" + donHang.getId();
     }
     @PostMapping("/huy-voucher/{idDonHang}")
-    public String huyVoucher(@PathVariable Integer idDonHang, RedirectAttributes redirectAttributes){
+    public String huyVoucher(@PathVariable Integer idDonHang,@RequestParam("idVoucher")Integer idVoucher ,RedirectAttributes redirectAttributes){
         DonHang donHang = donHangService.getDonHangById(idDonHang);
         if(donHang.getGiamGia() != null){
 
@@ -591,7 +695,10 @@ public class DonHangController {
             donHang.setGiamGia(null);
             donHang.setTongTienGiamGia(null);
             donHang.setTongTien(donHang.getTongTien()); // Reset tổng tiền về giá trị ban đầu
-
+            Voucher voucher = voucherService.getVoucherById(idVoucher);
+            int slVoucher = voucher.getSoLuong();
+            voucher.setSoLuong(slVoucher + 1);
+            voucherService.themVoucher(voucher);
             donHangService.capNhatDonHang(donHang); // Cập nhật hóa đơn
 
             redirectAttributes.addFlashAttribute("message", "Hủy voucher thành công!");

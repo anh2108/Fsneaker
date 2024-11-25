@@ -130,7 +130,7 @@
                                                 <label class="form-label" for="password">Mật khẩu</label>
                                                 <div class="position-relative auth-pass-inputgroup mb-3">
                                                     <input type="password" class="form-control pe-5 password-input" placeholder="Nhập mật khẩu" id="password" name="password" required>
-<!--                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>-->
+                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none" type="button" id="password-addon" onclick="togglePassword()"><i id="password-icon" class="ri-eye-fill align-middle"></i></button>
                                                 </div>
                                             </div>
 
@@ -142,6 +142,23 @@
                                             </div>
 
                                         </form>
+                                        <script>
+                                            function togglePassword() {
+                                                const passwordInput = document.getElementById("password");
+                                                const passwordIcon = document.getElementById("password-icon");
+
+                                                // Kiểm tra kiểu hiện tại của trường mật khẩu
+                                                if (passwordInput.type === "password") {
+                                                    passwordInput.type = "text";
+                                                    passwordIcon.classList.remove("ri-eye-off-line");
+                                                    passwordIcon.classList.add("ri-eye-fill align-middle"); // Hiển thị biểu tượng mắt mở
+                                                } else {
+                                                    passwordInput.type = "password";
+                                                    passwordIcon.classList.remove("ri-eye-fill align-middle");
+                                                    passwordIcon.classList.add("ri-eye-off-line"); // Hiển thị biểu tượng mắt đóng
+                                                }
+                                            }
+                                        </script>
                                     </div>
 
                                     <div class="mt-5 text-center">

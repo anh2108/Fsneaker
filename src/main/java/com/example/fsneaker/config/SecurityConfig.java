@@ -1,5 +1,7 @@
 package com.example.fsneaker.config;
 
+import com.example.fsneaker.dto.CustomAuthenticationSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,16 +15,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+    @Autowired
+    private CustomAuthenticationSuccessHandler successHandler;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/trangchuadmin").hasAnyRole("ADMIN","STAFF")
                         .requestMatchers("/trangkhachhang").hasRole("CUSTOMER")
+                        .requestMatchers("/thanh-toan").authenticated()
                         .anyRequest().permitAll())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/redirectByRole", true).permitAll())
+                        .successHandler(successHandler)
+                        .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")

@@ -1,4 +1,92 @@
 package com.example.fsneaker.controller;
 
+import com.example.fsneaker.dto.CustomUserDetails;
+import com.example.fsneaker.entity.*;
+import com.example.fsneaker.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Controller
 public class ThanhToanController {
+    @Autowired
+    private SanPhamChiTietService sanPhamChiTietService;
+    @Autowired
+    private DonHangService donHangService;
+    @Autowired
+    private GioHangService gioHangService;
+    @Autowired
+    private GioHangChiTietService gioHangChiTietService;
+    @Autowired
+    private DonHangChiTietService donHangChiTietService;
+    @Autowired
+    private VoucherService voucherService;
+    @GetMapping("/mua-ngay")
+    public String hienThiThanhToanCuaMuaNgay(Model model){
+        List<Object[]> tenSanPhamVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(1);
+        model.addAttribute("tenSanPhamVoiSanPham", tenSanPhamVoiSanPham);
+        List<Object[]> tenSanPhamPumaVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(3);
+        model.addAttribute("tenSanPhamPumaVoiSanPham", tenSanPhamPumaVoiSanPham);
+        List<Object[]> tenSanPhamAdidasVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(2);
+        model.addAttribute("tenSanPhamAdidasVoiSanPham",tenSanPhamAdidasVoiSanPham);
+        List<Object[]> tenSanPhamNewBalanceVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(4);
+        model.addAttribute("tenSanPhamNewBalanceVoiSanPham",tenSanPhamNewBalanceVoiSanPham);
+        List<Object[]> tenSanPhamAsicsVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(5);
+        model.addAttribute("tenSanPhamAsicsVoiSanPham", tenSanPhamAsicsVoiSanPham);
+        String maGioHang = "DEFAULT_CART";//Mã giỏ hàng mặc định
+        GioHang gioHang = gioHangService.getGioHangByMa(maGioHang);
+        List<GioHangChiTiet> danhSachChiTiet = gioHangChiTietService.getByGioHangId(gioHang.getId());
+        model.addAttribute("danhSachChiTiet", danhSachChiTiet);
+        int tongSoLuongTrongGioHang = gioHangChiTietService.getSoLuongTrongGioHang(gioHang.getId());
+        model.addAttribute("tongSoLuongTrongGioHang",tongSoLuongTrongGioHang);
+        //Tính tổng tiền
+        double tongTien = gioHang.getGioHangChiTietList().stream()
+                .mapToDouble(item -> item.getGia() * item.getSoLuong()).sum();
+        model.addAttribute("gioHang",gioHang);
+        model.addAttribute("tongTien",tongTien);
+        return "templatekhachhang/thanh-toan";
+    }
+    @GetMapping("/thanh-toan/{idGioHang}")
+    public String chuyenGioHangSangDonHang(@PathVariable int idGioHang,@RequestParam(value = "idKhachHang",required = false)Integer idKhachHang, Model model, Authentication authentication){
+        //kiểm tra xem người dùng đã đăng nhập chưa
+        if(authentication == null || !authentication.isAuthenticated()){
+            return "redirect:/login";
+        }
+        if(idKhachHang != null){
+            //Chuyển giỏ hàng sang đơn hàng
+            DonHang donHang = donHangService.chuyenGioHangSangDonHang(idGioHang, idKhachHang);
+            //Hiển thị thông tin đơn hàng
+            model.addAttribute("donHang",donHang);
+            GioHang gioHang = gioHangService.layGioHangTheoKhachHang(idKhachHang);
+            model.addAttribute("gioHang",gioHang);
+            List<Voucher> vouchers = voucherService.getAllVoucherByTrangThaiAndGiaTri(1);
+            List<Voucher> filteredVouchers = vouchers.stream()
+                    .filter(voucher -> voucher.getDonToiThieu() <= donHang.getTongTien()) //Chỉ giữ các voucher có đơn tối thiểu <= tổng tiền
+                    .collect(Collectors.toList());
+            model.addAttribute("vouchers", filteredVouchers);
+        }
+
+        return "templatekhachhang/thanh-toan";
+    }
+    @PostMapping("/dat-hang/{idDonHang}")
+    public String datHang(@PathVariable int idDonHang,@RequestParam(value ="idGioHang",required = false)Integer idGioHang, RedirectAttributes redirectAttributes){
+        //Cập nhật trạng thái đơn hàng thành "đang xử lý"
+        donHangService.capNhatTrangThaiDonHang(idDonHang, "Đang xử lý");
+        //Xóa các sản phẩm trong giỏ hàng
+        gioHangService.xoaSanPhamTrongGioHang(idGioHang);
+        //Thông báo đặt hàng thành công
+        redirectAttributes.addFlashAttribute("message", "Đặt hàng thành công!");
+        return "redirect:/gio-hang";
+    }
+
 }

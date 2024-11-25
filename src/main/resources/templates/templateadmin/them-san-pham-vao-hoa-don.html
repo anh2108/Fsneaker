@@ -914,7 +914,7 @@
 
                                     <div class="form-group">
                                         <label for="soLuong1">Số lượng</label>
-                                        <input type="number" class="form-control" name="soLuong" id="soLuong1" min="1" required>
+                                        <input type="number" class="form-control" name="soLuong" id="soLuong1" min="1" th:max="${sanPhamChiTiet.soLuong}" required>
                                     </div>
 
                                     <button type="submit" class="btn btn-success">Thêm sản phẩm</button>

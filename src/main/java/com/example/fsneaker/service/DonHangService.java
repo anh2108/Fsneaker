@@ -1,21 +1,20 @@
 package com.example.fsneaker.service;
 
-import com.example.fsneaker.entity.DonHang;
-import com.example.fsneaker.entity.DonHangChiTiet;
+import com.example.fsneaker.entity.*;
 import com.example.fsneaker.repositories.DonHangChiTietRepo;
 import com.example.fsneaker.repositories.DonHangRepo;
+import com.example.fsneaker.repositories.GioHangRepo;
+import com.example.fsneaker.repositories.KhachHangRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class DonHangService {
@@ -23,6 +22,10 @@ public class DonHangService {
     private DonHangRepo donHangRepo;
     @Autowired
     private DonHangChiTietRepo donHangChiTietRepo;
+    @Autowired
+    private GioHangRepo gioHangRepo;
+    @Autowired
+    private KhachHangRepo khachHangRepo;
     public List<DonHang> getDonHangByTrangThai(){
         return donHangRepo.findByTrangThai("Ðang chờ");
     }
@@ -41,8 +44,8 @@ public class DonHangService {
             return false;
         }
     }
-    public boolean kiemTraSanPhamTrongDonHang(int idDonHang, int idSanPhamChiTiet){
-        return donHangChiTietRepo.existsByDonHangIdAndSanPhamChiTietId(idDonHang, idSanPhamChiTiet);
+    public DonHangChiTiet kiemTraSanPhamTrongDonHang(int idDonHang, int idSanPhamChiTiet){
+        return donHangChiTietRepo.findByDonHangIdAndSanPhamChiTietId(idDonHang, idSanPhamChiTiet);
     }
     public List<DonHang> getDonHangs(){
         return donHangRepo.findAll();
@@ -141,6 +144,9 @@ public class DonHangService {
     public Page<Object[]> thongKeKHTheoSoLanMua(String trangThai, int page, int size){
         return donHangRepo.thongKeKHTheoSoLanMua(trangThai, PageRequest.of(page,size));
     }
+    public DonHang getByKhachHangId(Integer idKhachHang){
+        return donHangRepo.findByKhachHangId(idKhachHang);
+    }
     //Hủy đơn hàng
     public DonHang getDonHangByMa(String maDonHang){
         return donHangRepo.findByMaDonHang(maDonHang);
@@ -181,4 +187,56 @@ public class DonHangService {
             donHangChiTietRepo.save(chiTiet); //Lưu vào database
         }
     }
+    @Transactional
+    public DonHang chuyenGioHangSangDonHang(int idGioHang,int idKhachHang){
+        //Lấy thông tin giỏ hàng
+        GioHang gioHang= gioHangRepo.findById(idGioHang).orElseThrow(() -> new RuntimeException("Không tìm thấy giỏ hàng!"));
+
+        //Lấy thông tin khách hàng
+        KhachHang khachHang = khachHangRepo.findById(idKhachHang).orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng!"));
+        String format = "00000";
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String part1 = now.format(formatter);
+        String part2 = String.format("%05d", new Random().nextInt(100000));
+        //Tạo đối tượng Đơn hàng mới
+        DonHang donHang = new DonHang();
+        donHang.setMaDonHang("DH"+part1+part2);
+        donHang.setKhachHang(khachHang);
+        donHang.setNgayMua(LocalDate.now());
+        donHang.setNgayTao(LocalDate.now());
+        donHang.setTrangThai("Đang chờ");
+        donHang.setLoaiDonHang("Online");
+
+        //Chuyển sản phẩm từ giỏ hàng chi tiết sang đơn hàng chi tiết
+        List<DonHangChiTiet> donHangChiTietList = new ArrayList<>();
+        double tongTien = 0;
+
+        for(GioHangChiTiet gioHangChiTiet : gioHang.getGioHangChiTietList()){
+            DonHangChiTiet donHangChiTiet = new DonHangChiTiet();
+            donHangChiTiet.setMaDonHangChiTiet("DHCT"+part1+part2);
+            donHangChiTiet.setSanPhamChiTiet(gioHangChiTiet.getSanPhamChiTiet());
+            donHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong());
+            donHangChiTiet.setGia(gioHangChiTiet.getGia());
+            donHangChiTiet.setThanhTien(gioHangChiTiet.getSoLuong() * gioHangChiTiet.getGia());
+            donHangChiTiet.setDonHang(donHang);
+
+            tongTien += donHangChiTiet.getThanhTien();
+            donHangChiTietList.add(donHangChiTiet);
+        }
+
+        donHang.setDonHangChiTiets(donHangChiTietList);
+        donHang.setTongTien(tongTien);
+        // Lưu đơn hàng vào cơ sở dữ liệu
+        DonHang saveDonHang = donHangRepo.save(donHang);
+        donHangChiTietRepo.saveAll(donHangChiTietList);
+        //Lưu đơn hàng vào cơ sở dữ liệu
+        return saveDonHang;
+    }
+    public void capNhatTrangThaiDonHang(int idDonHang, String trangThai){
+        DonHang donHang = donHangRepo.findById(idDonHang).orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng!"));
+        donHang.setTrangThai(trangThai);
+        donHangRepo.save(donHang);
+    }
+
 }

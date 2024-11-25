@@ -55,7 +55,7 @@ body {
     font-style: normal;
     font-weight: 400;
     visibility: visible;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "hkgrotesk", sans-serif;
     color: #252525;
     letter-spacing: 1px;
 }
@@ -902,7 +902,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 .main_menu nav > ul > li ul.sub_menu {
     position: absolute;
-    min-width: 220px;
+    min-width: 250px;
     padding: 0 20px;
     background: #252525;
     box-shadow: 0 3px 11px 0 rgba(0, 0, 0, 0.1);
@@ -1404,6 +1404,23 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     color: #ffffff;
 }
 .cart_button a:hover {
+    background: #ffffff;
+    color: #09c6ab;
+}
+.cart_button button{
+    text-transform: uppercase;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+    display: block;
+    text-align: center;
+    line-height: 24px;
+    margin-bottom: 0;
+    padding: 9px 20px 6px;
+    background: #09c6ab;
+    color: #ffffff;
+}
+.cart_button button:hover{
     background: #ffffff;
     color: #09c6ab;
 }
@@ -10892,7 +10909,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 .form_group button {
     display: inline-block;
-    width: 80px;
+    width: 100px;
     background: #252525;
     border: 0;
     color: #ffffff;

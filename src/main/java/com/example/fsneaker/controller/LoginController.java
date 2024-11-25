@@ -1,11 +1,25 @@
 package com.example.fsneaker.controller;
 
+import com.example.fsneaker.entity.KhachHang;
+import com.example.fsneaker.service.GioHangService;
+import com.example.fsneaker.service.KhachHangService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class LoginController {
+    @Autowired
+    private KhachHangService khachHangService;
+    @Autowired
+    private GioHangService gioHangService;
     @GetMapping("/login")
     public String trangChu(){
         return "login";
@@ -21,7 +35,19 @@ public class LoginController {
             return "redirect:/trang-chu";
         }
         return "redirect:/login?error";
+    }@PostMapping("/login")
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request){
+        //Kiểm tra đăng nhập
+        KhachHang khachHang = khachHangService.authenticateUser(username,password);
+        if(khachHang != null){
+            //Lưu userId vào session
+            request.getSession().setAttribute("userId",khachHang.getId());
+            return "redirect:/trang-chu";
+        }else{
+            return "login";
+        }
     }
+
     @GetMapping("/dang-ky")
     public String dangKy(){
         return "dangky";

@@ -58,4 +58,20 @@ public class KhachHangService {
     public KhachHang timKiemTheoSoDienThoaiHoacEmail(String keyword){
         return khachHangRepo.findBySoDienThoaiOrEmail(keyword,keyword);
     }
+    public KhachHang getKhachHangByUserName(String username){
+        return khachHangRepo.findByEmailOrSoDienThoai(username,username).orElse(null);
+    }
+    public KhachHang authenticateUser(String username, String password){
+        //Tìm người dùng theo username
+        Optional<KhachHang> khachHangOptional = khachHangRepo.findByEmailOrSoDienThoai(username,username);
+
+        if(khachHangOptional.isPresent()){
+            KhachHang khachHang = khachHangOptional.get();
+            //Kiểm tra mật khẩu
+            if(password.equals(khachHang.getMatKhau())){
+                return khachHang;
+            }
+        }
+        return null;
+    }
 }

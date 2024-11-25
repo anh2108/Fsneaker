@@ -156,4 +156,6 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
     Page<Object[]> findByTenSanPham(@Param("idThuongHieu") Integer idThuongHieu, @Param("tenSanPham") String tenSanPham, Pageable pageable);
 
     List<SanPhamChiTiet> findBySanPhamIdAndMauSacId(int idSanPham, int idMauSac);
+
+    SanPhamChiTiet findBySanPhamIdAndKichThuocIdAndMauSacId(Integer idSanPham, Integer idKichThuoc,Integer idMauSac);
 }

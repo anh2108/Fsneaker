@@ -16,9 +16,13 @@ import java.util.Collections;
 @Setter
 @Getter
 public class CustomUserDetails implements UserDetails {
+    private Integer id;
     private String username;
     private String password;
     private String displayName;
+    private String diaChi;
+    private String sdt;
+    private String email;
     private String role;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

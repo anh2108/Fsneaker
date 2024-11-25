@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="images/shoes.png">
 
     <!-- CSS
     ========================= -->
@@ -61,98 +61,82 @@
         <div class="row">
             <div class="col-12">
                 <div class="canvas_open">
-                    <a href="javascript:void(0)"><i class="ion-navicon"></i></a>
+                    <a href="javascript:void(0)"><i class="bx bx-menu"></i></a>
                 </div>
                 <div class="offcanvas_menu_wrapper">
                     <div class="canvas_close">
-                        <a href="javascript:void(0)"><i class="ion-android-close"></i></a>
+                        <a href="javascript:void(0)"><i class="bx bx-x"></i></a>
                     </div>
                     <div class="header_right_info">
                         <ul>
-                            <li class="search_box"><a href="javascript:void(0)"><img src="images/icon/icon-search.png"
-                                                                                     alt=""></a>
+                            <li class="search_box"><a href="javascript:void(0)"><img src="images/icon/icon-search.png" alt=""></a>
                                 <div class="search_widget">
                                     <form action="#">
-                                        <input placeholder="Search entire store here ..." type="text">
+                                        <input placeholder="Tìm kiếm sản phẩm ..." type="text">
                                         <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                                     </form>
                                 </div>
                             </li>
-                            <li class="header_account"><a href="javascript:void(0)"><img
-                                    src="images/icon/icon-account.png" alt=""></a>
+                            <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="images/icon/icon-account.png" alt=""></a>
                                 <div class="dropdown_account">
+                                    <span th:text="${#authentication.principal.displayName}" style="color: white"></span>
                                     <div class="dropdown_account-list">
                                         <ul>
-                                            <li><a href="my-account.html">My Account</a></li>
-                                            <li><a href="cart.html">Shopping Cart</a></li>
-                                            <li><a href="checkout.html">Checkout</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="dropdown_account-list">
-                                        <label>Currency</label>
-                                        <ul>
-                                            <li><a href="#">Euro</a></li>
-                                            <li><a href="#">Pound Sterling</a></li>
-                                            <li><a href="#">US Dollar</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="dropdown_account-list">
-                                        <label>Language</label>
-                                        <ul>
-                                            <li><a href="#"><img src="images/icon/language.png" alt=""> English</a></li>
-                                            <li><a href="#"><img src="images/icon/language2.png" alt=""> French</a></li>
+                                            <li><a href="/thong-tin-ca-nhan">Thông tin cá nhân</a></li>
+                                            <li><a href="/gio-hang">Giỏ hàng</a></li>
+                                            <li><a href="/logout">Đăng xuất</a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </li>
-                            <li class="mini_cart_wrapper"><a href="javascript:void(0)"><img
-                                    src="images/icon/icon-cart.png" alt=""> <span class="item_count">2</span></a>
+                            <li th:if="${#authentication.name == 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><i class="bx bx-user"></i></a>
+                                <div class="dropdown_account">
+                                    <div class="dropdown_account-list">
+                                        <ul>
+                                            <li><a href="/login">Đăng nhập</a></li>
+                                            <li><a href="/dang-ky">Đăng ký</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="mini_cart_wrapper"><a href="javascript:void(0)"><img src="images/icon/icon-cart.png" alt=""> <span class="item_count" th:text="${tongSoLuongTrongGioHang}">2</span></a>
                                 <!--mini cart-->
                                 <div class="mini_cart">
                                     <div class="cart_gallery">
-                                        <div class="cart_item">
-                                            <div class="cart_img">
-                                                <a href="#"><img src="images/s-product/product.jpg" alt=""></a>
-                                            </div>
-                                            <div class="cart_info">
-                                                <a href="#">Primis In Faucibus</a>
-                                                <p>1 x <span> $65.00 </span></p>
-                                            </div>
-                                            <div class="cart_remove">
-                                                <a href="#"><i class="fa fa-times-circle"></i></a>
-                                            </div>
+                                        <div th:if="${#lists.isEmpty(danhSachChiTiet)}" style="color: white">
+                                            <td colspan="7" class="text-center">Không có sản phẩm nào trong giỏ hàng!</td>
                                         </div>
-                                        <div class="cart_item">
+                                        <div class="cart_item" th:each="item : ${danhSachChiTiet}">
                                             <div class="cart_img">
-                                                <a href="#"><img src="images/s-product/product2.jpg" alt=""></a>
+                                                <a href="#"><img src="images/product/product56.jpg" alt="" style="height: 60px"></a>
                                             </div>
                                             <div class="cart_info">
-                                                <a href="#">Letraset Sheets</a>
-                                                <p>1 x <span> $60.00 </span></p>
-                                            </div>
-                                            <div class="cart_remove">
-                                                <a href="#"><i class="fa fa-times-circle"></i></a>
+                                                <a th:href="@{/xem-chi-tiet/{id}(id=${item.sanPhamChiTiet.id})}" th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}">Primis In Faucibus</a>
+                                                <p th:text="${item.soLuong} + ' x ' + ${#numbers.formatDecimal(item.gia,0,'COMMA',0,'COMMA')}">1 </p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mini_cart_table">
                                         <div class="cart_table_border">
-                                            <div class="cart_total">
-                                                <span>Sub total:</span>
-                                                <span class="price">$125.00</span>
-                                            </div>
+                                            <!--                                                    <div class="cart_total">-->
+                                            <!--                                                        <span>Sub total:</span>-->
+                                            <!--                                                        <span class="price">$125.00</span>-->
+                                            <!--                                                    </div>-->
                                             <div class="cart_total mt-10">
-                                                <span>total:</span>
-                                                <span class="price">$125.00</span>
+                                                <span>Tổng tiền:</span>
+                                                <span class="price" th:text="${#numbers.formatDecimal(tongTien,0,'COMMA',0,'COMMA') + ' VNĐ'}">$125.00</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mini_cart_footer">
                                         <div class="cart_button">
-                                            <a href="cart.html"><i class="fa fa-shopping-cart"></i> View cart</a>
+                                            <a href="/gio-hang"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a>
                                         </div>
                                         <div class="cart_button">
-                                            <a href="checkout.html"><i class="fa fa-sign-in"></i> Checkout</a>
+                                            <form th:action="@{/thanh-toan/{idGioHang}(idGioHang=${gioHang.id})}" method="get">
+                                                <input th:if="${#authentication.name != 'anonymousUser'}" type="hidden" name="idKhachHang" th:value="${#authentication.principal.id}">
+                                                <button type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i> Thanh toán</button>
+                                            </form>
                                         </div>
 
                                     </div>
@@ -164,96 +148,34 @@
                     <div id="menu" class="text-left ">
                         <ul class="offcanvas_main_menu">
                             <li class="menu-item-has-children active">
-                                <a href="#">Home</a>
+                                <a th:href="@{/san-pham-nike}">Nike</a>
                                 <ul class="sub-menu">
-                                    <li><a href="index.html">Home 1</a></li>
-                                    <li><a href="index-2.html">Home 2</a></li>
-                                    <li><a href="index-3.html">Home 3</a></li>
-                                    <li><a href="index-4.html">Home 4</a></li>
-                                    <li><a href="index-5.html">Home 5</a></li>
-                                    <li><a href="index-6.html">Home 6</a></li>
-                                    <li><a href="index-7.html">Home 7</a></li>
-                                    <li><a href="index-8.html">Home 8</a></li>
-                                    <li><a href="index-9.html">Home 9</a></li>
-                                    <li><a href="index-10.html">Home 10</a></li>
+                                    <li class="menu-item-has-children" th:each="nike : ${tenSanPhamVoiSanPham}"><a th:href="@{/san-pham-nike(tenSanPham=${nike[1]})}" th:text="${nike[1]}">Nike Air Max</a></li>
                                 </ul>
                             </li>
-                            <li class="menu-item-has-children">
-                                <a href="#">Shop</a>
-                                <ul class="sub-menu">
-                                    <li class="menu-item-has-children">
-                                        <a href="#">Shop Layouts</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="shop.html">shop</a></li>
-                                            <li><a href="shop-fullwidth.html">Full Width</a></li>
-                                            <li><a href="shop-fullwidth-list.html">Full Width list</a></li>
-                                            <li><a href="shop-right-sidebar.html">Right Sidebar </a></li>
-                                            <li><a href="shop-right-sidebar-list.html"> Right Sidebar list</a></li>
-                                            <li><a href="shop-list.html">List View</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu-item-has-children">
-                                        <a href="#">other Pages</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="cart.html">cart</a></li>
-                                            <li><a href="wishlist.html">Wishlist</a></li>
-                                            <li><a href="checkout.html">Checkout</a></li>
-                                            <li><a href="my-account.html">my account</a></li>
-                                            <li><a href="404.html">Error 404</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu-item-has-children">
-                                        <a href="#">Product Types</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="product-details.html">product details</a></li>
-                                            <li><a href="product-sidebar.html">product sidebar</a></li>
-                                            <li><a href="product-grouped.html">product grouped</a></li>
-                                            <li><a href="variable-product.html">product variable</a></li>
-                                        </ul>
-                                    </li>
+                            <li class="menu-item-has-children active">
+                                <a href="/san-pham-adidas">Adidas</a>
+                                <ul class="sub-menu" >
+                                    <li class="menu-item-has-children" th:each="adidas : ${tenSanPhamAdidasVoiSanPham}"><a th:href="@{/san-pham-adidas(tenSanPham=${adidas[1]})}" th:text="${adidas[1]}">Adidas Ultraboost</a></li>
                                 </ul>
                             </li>
-                            <li class="menu-item-has-children">
-                                <a href="#">blog</a>
+                            <li class="menu-item-has-children active"><a href="/san-pham-asics">Asics</a>
                                 <ul class="sub-menu">
-                                    <li><a href="blog.html">blog</a></li>
-                                    <li><a href="blog-details.html">blog details</a></li>
-                                    <li><a href="blog-fullwidth.html">blog fullwidth</a></li>
-                                    <li><a href="blog-sidebar.html">blog sidebar</a></li>
-                                </ul>
-
-                            </li>
-                            <li class="menu-item-has-children">
-                                <a href="#">pages </a>
-                                <ul class="sub-menu">
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="services.html">services</a></li>
-                                    <li><a href="faq.html">Frequently Questions</a></li>
-                                    <li><a href="contact.html">contact</a></li>
-                                    <li><a href="login.html">login</a></li>
-                                    <li><a href="404.html">Error 404</a></li>
+                                    <li class="menu-item-has-children" th:each="asics : ${tenSanPhamAsicsVoiSanPham}"><a th:href="@{/san-pham-asics(tenSanPham=${asics[1]})}" th:text="${asics[1]}">Asics Gel-Kayano</a></li>
                                 </ul>
                             </li>
-                            <li class="menu-item-has-children">
-                                <a href="my-account.html">my account</a>
+                            <li class="menu-item-has-children active"><a href="/san-pham-puma">Puma</a>
+                                <ul class="sub-menu">
+                                    <li class="menu-item-has-children" th:each="puma : ${tenSanPhamPumaVoiSanPham}"><a th:href="@{/san-pham-puma(tenSanPham=${puma[1]})}" th:text="${puma[1]}">Puma RS-X</a></li>
+                                </ul>
                             </li>
-                            <li class="menu-item-has-children">
-                                <a href="about.html">about Us</a>
+                            <li class="menu-item-has-children active"><a href="/san-pham-newbalance">New Balance</a>
+                                <ul class="sub-menu">
+                                    <li class="menu-item-has-children" th:each="newbalance : ${tenSanPhamNewBalanceVoiSanPham}"><a th:href="@{/san-pham-newbalance(tenSanPham=${newbalance[1]})}" th:text="${newbalance[1]}">New Balance 990</a></li>
+                                </ul>
                             </li>
-                            <li class="menu-item-has-children">
-                                <a href="contact.html"> Contact Us</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="offcanvas_footer">
-                        <span><a href="#"><i class="fa fa-envelope-o"></i> info@yourdomain.com</a></span>
-                        <ul>
-                            <li class="facebook"><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li class="twitter"><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li class="pinterest"><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                            <li class="google-plus"><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a href="/gioi-thieu">Giới thiệu</a></li>
+                            <li><a href="/lien-he"> Liên hệ</a></li>
                         </ul>
                     </div>
                 </div>
@@ -305,8 +227,8 @@
                                                 <li th:each="newbalance : ${tenSanPhamNewBalanceVoiSanPham}"><a th:href="@{/san-pham-newbalance(tenSanPham=${newbalance[1]})}" th:text="${newbalance[1]}">New Balance 990</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="about.html">Giới thiệu</a></li>
-                                        <li><a href="contact.html"> Liên hệ</a></li>
+                                        <li><a href="/gioi-thieu">Giới thiệu</a></li>
+                                        <li><a href="/lien-he"> Liên hệ</a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -330,7 +252,7 @@
                                                 <ul>
                                                     <li><a href="/thong-tin-ca-nhan">Thông tin cá nhân</a></li>
                                                     <li><a href="/gio-hang">Giỏ hàng</a></li>
-                                                    <li><a href="/thanh-toan">Thanh Toán</a></li>
+                                                    <li><a href="/logout">Đăng xuất</a> </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -347,54 +269,44 @@
                                     </li>
                                     <li class="mini_cart_wrapper"><a href="javascript:void(0)"><img
                                             src="images/icon/icon-cart.png" alt=""> <span
-                                            class="item_count">2</span></a>
+                                            class="item_count" th:text="${tongSoLuongTrongGioHang}">2</span></a>
                                         <!--mini cart-->
                                         <div class="mini_cart">
                                             <div class="cart_gallery">
-                                                <div class="cart_item">
-                                                    <div class="cart_img">
-                                                        <a href="#"><img src="images/s-product/product.jpg" alt=""></a>
-                                                    </div>
-                                                    <div class="cart_info">
-                                                        <a href="#">Primis In Faucibus</a>
-                                                        <p>1 x <span> $65.00 </span></p>
-                                                    </div>
-                                                    <div class="cart_remove">
-                                                        <a href="#"><i class="fa fa-times-circle"></i></a>
-                                                    </div>
+                                                <div th:if="${#lists.isEmpty(danhSachChiTiet)}" style="color: white">
+                                                    <td colspan="7" class="text-center">Không có sản phẩm nào trong giỏ hàng!</td>
                                                 </div>
-                                                <div class="cart_item">
+                                                <div class="cart_item" th:each="item : ${danhSachChiTiet}">
                                                     <div class="cart_img">
-                                                        <a href="#"><img src="images/s-product/product2.jpg" alt=""></a>
+                                                        <a href="#"><img src="images/product/product56.jpg" alt="" style="height: 60px"></a>
                                                     </div>
                                                     <div class="cart_info">
-                                                        <a href="#">Letraset Sheets</a>
-                                                        <p>1 x <span> $60.00 </span></p>
-                                                    </div>
-                                                    <div class="cart_remove">
-                                                        <a href="#"><i class="fa fa-times-circle"></i></a>
+                                                        <a th:href="@{/xem-chi-tiet/{id}(id=${item.sanPhamChiTiet.id})}" th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}">Primis In Faucibus</a>
+                                                        <p th:text="${item.soLuong} + ' x ' + ${#numbers.formatDecimal(item.gia,0,'COMMA',0,'COMMA')}">1 </p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mini_cart_table">
                                                 <div class="cart_table_border">
-                                                    <div class="cart_total">
-                                                        <span>Sub total:</span>
-                                                        <span class="price">$125.00</span>
-                                                    </div>
+                                                    <!--                                                    <div class="cart_total">-->
+                                                    <!--                                                        <span>Sub total:</span>-->
+                                                    <!--                                                        <span class="price">$125.00</span>-->
+                                                    <!--                                                    </div>-->
                                                     <div class="cart_total mt-10">
-                                                        <span>total:</span>
-                                                        <span class="price">$125.00</span>
+                                                        <span>Tổng tiền:</span>
+                                                        <span class="price" th:text="${#numbers.formatDecimal(tongTien,0,'COMMA',0,'COMMA') + ' VNĐ'}">$125.00</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mini_cart_footer">
                                                 <div class="cart_button">
-                                                    <a href="cart.html"><i class="fa fa-shopping-cart"></i> View
-                                                        cart</a>
+                                                    <a href="/gio-hang"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a>
                                                 </div>
                                                 <div class="cart_button">
-                                                    <a href="checkout.html"><i class="fa fa-sign-in"></i> Checkout</a>
+                                                    <form th:action="@{/thanh-toan/{idGioHang}(idGioHang=${gioHang.id})}" method="get">
+                                                        <input th:if="${#authentication.name != 'anonymousUser'}" type="hidden" name="idKhachHang" th:value="${#authentication.principal.id}">
+                                                        <button type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i> Thanh toán</button>
+                                                    </form>
                                                 </div>
 
                                             </div>
@@ -536,15 +448,13 @@
                             <article class="single_product">
                                 <figure>
                                     <div class="product_thumb">
-                                        <a class="primary_img" href="product-details.html"><img
+                                        <a class="primary_img" href="#"><img
                                                 src="images/product/product56.jpg" alt=""></a>
-                                        <a class="secondary_img" href="product-details.html"><img
+                                        <a class="secondary_img" href="#"><img
                                                 src="images/product/product57.jpg" alt=""></a>
                                         <div class="action_links">
                                             <ul>
-                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i
-                                                        class="bx bx-cart"></i></a></li>
-                                                <li class="compare"><a href="#" title="Mua ngay"><i
+                                                <li class="compare"><a href="/mua-ngay" title="Mua ngay"><i
                                                         class="bx bx-money"></i></a></li>
 
                                                 <li class="quick_button"><a th:href="@{/xem-chi-tiet/{id}(id=${puma.id})}"
@@ -555,7 +465,7 @@
                                     </div>
                                     <div class="product_content grid_content">
                                         <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html"
+                                            <h4 class="product_name"><a th:href="@{/xem-chi-tiet/{id}(id=${puma.id})}"
                                                                         th:text="${puma.sanPham.tenSanPham}">Lorem
                                                 Ipsum</a> (<span th:text="${puma.mauSac.tenMauSac}"></span>)</h4>
                                             <div class="wishlist-btn">
@@ -584,14 +494,14 @@
                                         </div>
                                     </div>
                                     <div class="product_content list_content">
-                                        <h4 class="product_name"><a href="product-details.html"
+                                        <h4 class="product_name"><a th:href="@{/xem-chi-tiet/{id}(id=${puma.id})}"
                                                                     th:text="${puma.sanPham.tenSanPham}">Aliquam
                                             Consequat</a></h4>
                                         <div class="product_desc">
-                                            <p>Sẵn sàng nâng cấp phong cách của bạn với mẫu Puma – sự kết hợp hoàn hảo
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với mẫu <span th:text="${puma.sanPham.tenSanPham}"></span> – sự kết hợp hoàn hảo
                                                 giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng,
                                                 đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút
-                                                mọi ánh nhìn. Không chỉ là một món đồ thời trang, Puma còn được biết đến
+                                                mọi ánh nhìn. Không chỉ là một món đồ thời trang, <span th:text="${puma.sanPham.tenSanPham}"></span> còn được biết đến
                                                 với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
                                         </div>
                                         <div class="product_price_rating">
@@ -627,15 +537,13 @@
                             <article class="single_product">
                                 <figure>
                                     <div class="product_thumb">
-                                        <a class="primary_img" href="product-details.html"><img
+                                        <a class="primary_img" href="#"><img
                                                 src="images/product/product56.jpg" alt=""></a>
-                                        <a class="secondary_img" href="product-details.html"><img
+                                        <a class="secondary_img" href="#"><img
                                                 src="images/product/product57.jpg" alt=""></a>
                                         <div class="action_links">
                                             <ul>
-                                                <li class="add_to_cart"><a href="cart.html" title="Thêm vào giỏ"><i
-                                                        class="bx bx-cart"></i></a></li>
-                                                <li class="compare"><a href="#" title="Mua ngay"><i
+                                                <li class="compare"><a href="/mua-ngay" title="Mua ngay"><i
                                                         class="bx bx-money"></i></a></li>
 
                                                 <li class="quick_button"><a th:href="@{/xem-chi-tiet/{id}(id=${puma[4]})}"
@@ -645,7 +553,7 @@
                                     </div>
                                     <div class="product_content grid_content">
                                         <div class="product_content-header">
-                                            <h4 class="product_name"><a href="product-details.html"
+                                            <h4 class="product_name"><a th:href="@{/xem-chi-tiet/{id}(id=${puma[4]})}"
                                                                         th:text="${puma[0]}">Lorem Ipsum</a></h4>
                                             <div class="wishlist-btn">
                                                 <a href="#"><i class="bx bx-heart"></i></a>
@@ -673,12 +581,12 @@
                                         </div>
                                     </div>
                                     <div class="product_content list_content">
-                                        <h4 class="product_name"><a href="product-details.html" th:text="${puma[0]}">Aliquam Consequat</a>(<span th:text="${puma[2]}"></span>)</h4>
+                                        <h4 class="product_name"><a th:href="@{/xem-chi-tiet/{id}(id=${puma[4]})}" th:text="${puma[0]}">Aliquam Consequat</a>(<span th:text="${puma[2]}"></span>)</h4>
                                         <div class="product_desc">
-                                            <p>Sẵn sàng nâng cấp phong cách của bạn với mẫu Puma – sự kết hợp hoàn hảo
+                                            <p>Sẵn sàng nâng cấp phong cách của bạn với mẫu <span th:text="${puma[0]}"></span> – sự kết hợp hoàn hảo
                                                 giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng,
                                                 đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút
-                                                mọi ánh nhìn. Không chỉ là một món đồ thời trang, Puma còn được biết đến
+                                                mọi ánh nhìn. Không chỉ là một món đồ thời trang, <span th:text="${puma[0]}"></span> còn được biết đến
                                                 với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>
                                         </div>
                                         <div class="product_price_rating">
@@ -755,16 +663,16 @@
                         <div class="col-lg-7 col-md-7 col-sm-7">
                             <div class="widgets_container contact_us">
                                 <div class="footer_logo">
-                                    <a href="index.html"><h1 style="color: white">FSneaker</h1></a>
+                                    <a href="/trang-chu"><h1 style="color: white">FSneaker</h1></a>
                                 </div>
                                 <div class="footer_desc">
                                     <!--                                    <p>We are a team of designers and developers that create high quality HTML Template, Woocommerce, Shopify Theme.</p>-->
                                 </div>
 
                                 <p><span>Địa chỉ:</span> Trịnh Văn Bô, Nam Từ Liêm, Hà Nội</p>
-                                <p><span>Email:</span> <a target="_blank" href="https://hasthemes.com/contact-us/">FSneakerShop@gmail.com</a>
+                                <p><span>Email:</span> <a target="_blank" href="#">FSneakerShop@gmail.com</a>
                                 </p>
-                                <p><span>Hotline:</span> <a href="tel:+1250367864587">+1 250 3678 64587</a></p>
+                                <p><span>Hotline:</span> <a href="#">+1 250 3678 64587</a></p>
                             </div>
                         </div>
                         <div class="col-lg-5 col-md-5 col-sm-5">
@@ -839,7 +747,7 @@
                     <div class="footer_bottom_container">
                         <div class="footer_link">
                             <ul>
-                                <li><a href="contact.html">Contact Us</a></li>
+                                <li><a href="#">Contact Us</a></li>
                                 <li><a href="#">Site Map</a></li>
                                 <li><a href="#">Specials</a></li>
                                 <li><a href="#">Returns</a></li>
