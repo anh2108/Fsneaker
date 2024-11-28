@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 
@@ -19,6 +20,8 @@ public interface KhachHangRepo extends JpaRepository<KhachHang, Integer> {
     Page<KhachHang> searchByKhachHang(@Param("keyword") String keyword, Pageable pageable);
 
     Page<KhachHang> findAll(Pageable pageable);
+    Optional<KhachHang> findByEmailOrSoDienThoai(String email, String soDienThoai);
+    Optional<KhachHang> findById(Integer id);
 
     //Chỗ là code của trườởng nhóm code cấm đụng vào
     KhachHang findBySoDienThoaiOrEmail(String soDienThoai,String email);
