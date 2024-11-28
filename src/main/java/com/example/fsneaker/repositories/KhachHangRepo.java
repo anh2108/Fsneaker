@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 
@@ -23,6 +22,8 @@ public interface KhachHangRepo extends JpaRepository<KhachHang, Integer> {
 
     //Chỗ là code của trườởng nhóm code cấm đụng vào
     KhachHang findBySoDienThoaiOrEmail(String soDienThoai,String email);
-    Optional<KhachHang> findByEmailOrSoDienThoai(String email, String soDienThoai);
-    Optional<KhachHang> findById(Integer id);
+
+    KhachHang findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }

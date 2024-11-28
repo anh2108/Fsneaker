@@ -109,28 +109,66 @@
                                     </div>
 
                                     <div class="mt-4">
-                                        <form class="needs-validation" action="">
+                                        <form  th:action="@{/dangky}"  th:object="${khachHang}" method="post"  >
 
                                             <div class="mb-3">
                                                 <label for="" class="form-label">Email <span class="text-danger">*</span></label>
-                                                <input type="email" class="form-control" id=" " placeholder="Email" required>
+                                                <input type="email" class="form-control" id=" email" name="email" placeholder="Email" th:field="*{email}"  >
+                                                <span th:if="${errors != null and errors.containsKey('email')}">
+                                                <small style="color: red" th:text="${errors['email']}"></small>
+                                                </span>
+                                            </div>
+
+
+                                            <div class="mb-3">
+                                                <label for="" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="tenKhachHang"  id="ten" placeholder="Họ và tên" th:field="*{tenKhachHang}"  >
+                                                <span th:if="${errors != null and errors.containsKey('tenKhachHang')}">
+                                                <small style="color: red" th:text="${errors['tenKhachHang']}"></small>
+                                                </span>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="" placeholder="Số điện thoại" required>
+                                                <input type="text" class="form-control" id=""  name="soDienThoai" placeholder="Số điện thoại" th:field="*{soDienThoai}"  >
+                                                <span th:if="${errors != null and errors.containsKey('soDienThoai')}">
+                                                <small style="color: red" th:text="${errors['soDienThoai']}"></small>
+                                                </span>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Địa chỉ <span class="text-danger">*</span> </label>
-                                                <input type="text" class="form-control" placeholder="Địa chỉ" required>
+                                                <input type="text" class="form-control" name="diaChi" placeholder="Địa chỉ" th:field="*{diaChi}" >
+                                                <span th:if="${errors != null and errors.containsKey('diaChi')}">
+                                                <small style="color: red" th:text="${errors['diaChi']}"></small>
+                                                </span>
 
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label" for="">Mật khẩu</label>
+                                                <label class="form-label" for="">Mật khẩu  <span class="text-danger">*</span></label>
                                                 <div class="position-relative auth-pass-inputgroup">
-                                                    <input type="password" class="form-control pe-5 password-input" placeholder="Mật khẩu" id="  " aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                                    <input type="password" class="form-control pe-5 password-input" name="matKhau"  th:field="*{matKhau}"  placeholder="Mật khẩu" id="  " aria-describedby="passwordInput"   >
+
 <!--                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>-->
+                                                    <span th:if="${errors != null and errors.containsKey('matKhau')}">
+                                                <small style="color: red" th:text="${errors['matKhau']}"></small>
+                                                </span>
                                                 </div>
+
                                             </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" for="">Nhập lại mật khẩu  <span class="text-danger">*</span></label>
+                                                <div class="position-relative auth-pass-inputgroup">
+                                                    <input type="password" class="form-control pe-5 password-input" name="matKhauXacNhan"    placeholder="Nhập lại mật khẩu" id="   "  aria-describedby="passwordInput"  >
+
+                                                    <!--                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>-->
+
+                                                </div>
+                                                <!-- Hiển thị lỗi nếu mật khẩu xác nhận không khớp -->
+                                                <span th:if="${matKhauXacNhanError != null}">
+                                                <small style="color: red" th:text="${matKhauXacNhanError}"></small>
+                                                </span>
+
+                                            </div>
+
                                             <div class="mt-4">
                                                 <button class="btn btn-success w-100" type="submit">Đăng ký</button>
                                             </div>
