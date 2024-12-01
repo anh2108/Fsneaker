@@ -18,4 +18,7 @@ public class NhanVienService {
     public Page<NhanVien> searchNhanVien(String keyword, Pageable pageable) {
         return nhanVienRepo.findByKeyword(keyword, pageable);
     }
+    public NhanVien getByIdNhanVien(Integer idNhanVien){
+        return nhanVienRepo.findById(idNhanVien).orElse(null);
+    }
 }

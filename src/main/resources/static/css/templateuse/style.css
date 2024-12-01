@@ -10968,9 +10968,9 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     color: #252525;
 }
 #checkout_coupon button {
-    width: 130px;
-    background: #252525;
-    color: #ffffff;
+    /*width: 130px;*/
+    /*background: #252525;*/
+    /*color: #ffffff;*/
     font-weight: 500;
     text-transform: uppercase;
     font-size: 13px;
@@ -10988,9 +10988,9 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
         margin-top: 20px;
     }
 }
-#checkout_coupon button:hover {
-    background: #09c6ab;
-}
+/*#checkout_coupon button:hover {*/
+/*    background: #09c6ab;*/
+/*}*/
 
 .mb-20 {
     margin-bottom: 20px;

@@ -34,6 +34,7 @@ public interface DonHangChiTietRepo extends JpaRepository<DonHangChiTiet, Intege
     @Query("SELECT dhct.sanPhamChiTiet.sanPham.tenSanPham, dhct.sanPhamChiTiet.giaBan, dhct.sanPhamChiTiet.mauSac.tenMauSac, SUM(dhct.soLuong), dhct.sanPhamChiTiet.id FROM DonHangChiTiet dhct WHERE dhct.sanPhamChiTiet.sanPham.thuongHieu.id = :idThuongHieu GROUP BY dhct.sanPhamChiTiet.sanPham.tenSanPham, dhct.sanPhamChiTiet.giaBan, dhct.sanPhamChiTiet.mauSac.tenMauSac, dhct.sanPhamChiTiet.id ORDER BY SUM(dhct.soLuong) DESC")
     Page<Object[]> findNikeByPopularity(@Param("idThuongHieu")Integer idThuongHieu, Pageable pageable);
 
+    void deleteDonHangChiTietByDonHangId(Integer idDonHang);
     //Từ chỗ này đi ai code của ai thì note lại tên tránh nhầm lẫn
 }
 

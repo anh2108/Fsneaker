@@ -158,4 +158,9 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
     List<SanPhamChiTiet> findBySanPhamIdAndMauSacId(int idSanPham, int idMauSac);
 
     SanPhamChiTiet findBySanPhamIdAndKichThuocIdAndMauSacId(Integer idSanPham, Integer idKichThuoc,Integer idMauSac);
+
+    @Query("SELECT MIN(spct.id), spct.sanPham.tenSanPham, spct.mauSac.tenMauSac FROM SanPhamChiTiet spct WHERE LOWER(spct.sanPham.tenSanPham) LIKE LOWER(CONCAT('%', :keyword , '%')) " +
+            "OR LOWER(spct.mauSac.tenMauSac) LIKE LOWER(CONCAT('%' , :keyword, '%'))" +
+            "OR LOWER(spct.kichThuoc.tenKichThuoc) LIKE LOWER(CONCAT('%', :keyword, '%')) GROUP BY spct.sanPham.tenSanPham, spct.mauSac.tenMauSac")
+    List<Object[]> searchProducts(@Param("keyword")String keyword);
 }

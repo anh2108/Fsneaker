@@ -37,7 +37,8 @@ public class DonHangController {
     private VoucherService voucherService;
     @Autowired
     private EmailService emailService;
-
+    @Autowired
+    private NhanVienService nhanVienService;
     @GetMapping("/chi-tiet")
     public String loadDataGioHang(@RequestParam(value = "keyword", required = false) String keyword, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "id", required = false) Integer id, @SessionAttribute(value = "khachHang", required = false) KhachHang khachHang, Model model) {
         int pageSizeM = 10;
@@ -288,12 +289,16 @@ public class DonHangController {
         return "redirect:/don-hang/chi-tiet?id=" +donHang.getId();
     }
     @PostMapping("/tao")
-    public String taoHoaDon(@ModelAttribute DonHang donHang, @RequestParam(value = "idKhachHang", required = false) Integer idKhachHang, RedirectAttributes redirectAttributes, Model model) {
+    public String taoHoaDon(@RequestParam(value = "idNhanVien",required = false)Integer idNhanVien,@ModelAttribute DonHang donHang, @RequestParam(value = "idKhachHang", required = false) Integer idKhachHang, RedirectAttributes redirectAttributes, Model model) {
         // Kiểm tra số lượng hóa đơn "Đang chờ"
         List<DonHang> hoaDonChoList = donHangService.getDonHangByTrangThai();
         if (hoaDonChoList.size() >= 5) {
             redirectAttributes.addFlashAttribute("errorMessage", "Chỉ tạo nhiều nhất 5 hóa đơn!");
             return "redirect:/don-hang/hien-thi";
+        }
+        if(idNhanVien != null){
+            NhanVien nhanVien = nhanVienService.getByIdNhanVien(idNhanVien);
+            donHang.setNhanVien(nhanVien);
         }
         LocalDate ngayTaoLocalDate = LocalDate.now();
         String maDonHang = donHangService.taoMaDonHang();
@@ -301,17 +306,14 @@ public class DonHangController {
         donHang.setNgayTao(ngayTaoLocalDate);
         donHang.setMaDonHang(maDonHang);
         donHang.setTrangThai(trangThai);
-
+        donHang.setKhachHang(null);
+        donHang.setLoaiDonHang("Bán hàng tại quầy");
         // Khách hàng không bắt buộc khi tạo đơn hàng, chỉ gán nếu khachHangId không null
-        if (idKhachHang != null) {
-            KhachHang khachHang = khachHangService.getKhachHangById(idKhachHang);
-            donHang.setKhachHang(khachHang); // Thiết lập khách hàng nếu có
-        }
         Boolean themThanhCong = donHangService.themHoaDon(donHang);
         if (themThanhCong) {
-            redirectAttributes.addFlashAttribute("message", "Thêm hóa đơn thành cồng!");
+            redirectAttributes.addFlashAttribute("message", "Thêm hóa đơn thành công!");
         } else {
-            redirectAttributes.addFlashAttribute("message", "Thêm hóa đơn thất bại!");
+            redirectAttributes.addFlashAttribute("errorMessage", "Thêm hóa đơn thất bại!");
         }
         redirectAttributes.addFlashAttribute("donHangs", donHangService.getDonHangByTrangThai());
 

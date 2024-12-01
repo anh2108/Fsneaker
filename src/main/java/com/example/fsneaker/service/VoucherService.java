@@ -14,7 +14,7 @@ public class VoucherService {
     @Autowired
     private VoucherRepo voucherRepo;
     public Voucher getVoucherById(int id){
-        return voucherRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Mã voucher không hợp lệ" + id));
+        return voucherRepo.findById(id).orElse(null);
     }
     public Voucher getByIdVoucher(int idVoucher){
         return  voucherRepo.findById(idVoucher).orElseThrow(() -> new IllegalArgumentException("Mã voucher không hợp lệ: " + idVoucher));

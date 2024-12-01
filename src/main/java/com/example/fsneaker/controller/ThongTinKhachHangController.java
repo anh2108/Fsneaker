@@ -3,40 +3,35 @@ package com.example.fsneaker.controller;
 import com.example.fsneaker.entity.GioHang;
 import com.example.fsneaker.entity.GioHangChiTiet;
 import com.example.fsneaker.entity.KhachHang;
-import com.example.fsneaker.entity.SanPhamChiTiet;
-import com.example.fsneaker.service.*;
-import jakarta.servlet.http.Cookie;
+import com.example.fsneaker.service.GioHangChiTietService;
+import com.example.fsneaker.service.GioHangService;
+import com.example.fsneaker.service.KhachHangService;
+import com.example.fsneaker.service.SanPhamChiTietService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Controller
-public class TrangChuController {
-    @Autowired
-    private DonHangChiTietService donHangChiTietService;
+public class ThongTinKhachHangController {
     @Autowired
     private SanPhamChiTietService sanPhamChiTietService;
     @Autowired
-    private GioHangService gioHangService;
-    @Autowired
     private GioHangChiTietService gioHangChiTietService;
     @Autowired
+    private GioHangService  gioHangService;
+    @Autowired
     private KhachHangService khachHangService;
-    @GetMapping("/trang-chu")
-    public String hienThiTrangChu( HttpServletRequest request, Model model){
+    @GetMapping("/thong-tin-ca-nhan")
+    public String thongTinCaNhan(HttpServletRequest request,Model model){
         List<Object[]> tenSanPhamVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(1);
         model.addAttribute("tenSanPhamVoiSanPham", tenSanPhamVoiSanPham);
         List<Object[]> tenSanPhamPumaVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(3);
@@ -47,19 +42,9 @@ public class TrangChuController {
         model.addAttribute("tenSanPhamNewBalanceVoiSanPham",tenSanPhamNewBalanceVoiSanPham);
         List<Object[]> tenSanPhamAsicsVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(5);
         model.addAttribute("tenSanPhamAsicsVoiSanPham", tenSanPhamAsicsVoiSanPham);
-        List<Object[]> sanPhamBanChayNike = donHangChiTietService.getTopSellingProductsByBrand(1, 10); // Lấy 10 sản phẩm bán chạy nhất
-        model.addAttribute("sanPhamBanChayNike",sanPhamBanChayNike);
-        List<Object[]> sanPhamBanChayAdidas = donHangChiTietService.getTopSellingProductsByBrand(2,10);
-        model.addAttribute("sanPhamBanChayAdidas",sanPhamBanChayAdidas);
-        List<Object[]> sanPhamBanChayAsics = donHangChiTietService.getTopSellingProductsByBrand(5, 10); // Lấy 10 sản phẩm bán chạy nhất
-        model.addAttribute("sanPhamBanChayAsics",sanPhamBanChayAsics);
-        List<Object[]> sanPhamBanChayPuma = donHangChiTietService.getTopSellingProductsByBrand( 3,10); // Lấy 10 sản phẩm bán chạy nhất
-        model.addAttribute("sanPhamBanChayPuma",sanPhamBanChayPuma);
-        List<Object[]> sanPhamBanChayNewBalance= donHangChiTietService.getTopSellingProductsByBrand(4,10); // Lấy 10 sản phẩm bán chạy nhất
-        model.addAttribute("sanPhamBanChayNewBalance",sanPhamBanChayNewBalance);
+
         String sessionId;
         GioHang gioHang;
-
         // Kiểm tra nếu người dùng chưa đăng nhập
         if (request.getSession().getAttribute("userId") == null) {
             // Lấy hoặc tạo sessionId
@@ -83,7 +68,7 @@ public class TrangChuController {
             int userId = (int) request.getSession().getAttribute("userId");
             gioHang = gioHangService.getGioHangByUserId(userId);
             KhachHang khachHang = khachHangService.getKhachHangById(userId);
-
+            model.addAttribute("khachHang",khachHang);
             // Nếu giỏ hàng chưa có, tạo giỏ hàng mới và gắn với khách hàng
             if (gioHang == null) {
                 gioHang = new GioHang();
@@ -111,17 +96,20 @@ public class TrangChuController {
         double tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
         model.addAttribute("gioHang", gioHang);
         model.addAttribute("tongTien", tongTien);
-
-        return "trangchu";
+        return "templatekhachhang/thong-tin-khach-hang";
     }
-    @GetMapping("/searchProduct")
-    public String searchProduct(@RequestParam(value="keyword",required = false,defaultValue = "")String keyword,Model model){
-        List<Object[]> products = sanPhamChiTietService.searchProducts(keyword);
-        model.addAttribute("products",products);
-        if (keyword.length() > 50) {
-            keyword = keyword.substring(0, 50); // Giới hạn độ dài
-        }
-        keyword = keyword.replaceAll("[^a-zA-Z0-9 ]", ""); // Loại bỏ ký tự đặc biệt
-        return "templatekhachhang/searchResults :: resultsList";
+    @PostMapping("/doi-thong-tin")
+    public String doiThongTin(@ModelAttribute("khachHang") KhachHang khachHang, HttpServletRequest request, RedirectAttributes redirectAttributes){
+        int userId = (int) request.getSession().getAttribute("userId");
+        KhachHang khachHangCu = khachHangService.getKhachHangById(userId);
+        khachHangCu.setTenKhachHang(khachHang.getTenKhachHang());
+        khachHangCu.setEmail(khachHang.getEmail());
+        khachHangCu.setSoDienThoai(khachHang.getSoDienThoai());
+        khachHangCu.setNgaySinh(khachHang.getNgaySinh());
+        khachHangCu.setDiaChi(khachHang.getDiaChi());
+        khachHangCu.setGioiTinh(khachHang.getGioiTinh());
+        khachHangService.themKH(khachHangCu);
+        redirectAttributes.addFlashAttribute("message", "Đổi thông tin thành công!");
+        return "redirect:/thong-tin-ca-nhan";
     }
 }

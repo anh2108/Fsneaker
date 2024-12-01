@@ -62,4 +62,6 @@ public interface DonHangRepo extends JpaRepository<DonHang, Integer> {
     //Tính tổng số sản phẩm đã bán trong khoảng thời gian
     @Query("SELECT SUM(chiTiet.soLuong) FROM DonHang d JOIN d.donHangChiTiets chiTiet WHERE d.ngayMua BETWEEN :startDate AND :endDate")
     Long tinhTongSanPhamDaBan(@Param("startDate")LocalDate startDate, @Param("endDate")LocalDate endDate);
+    @Query("SELECT dh FROM DonHang  dh WHERE dh.khachHang.id = :idKhachHang AND dh.trangThai = :trangThai AND dh.loaiDonHang = :loaiDonHang")
+    DonHang findByKhachHangAndTrangThaiAndLoaiDonHang(@Param("idKhachHang") Integer idKhachHang,@Param("trangThai") String trangThai,@Param("loaiDonHang") String loaiDonHang);
 }

@@ -74,11 +74,32 @@
                             <li class="search_box"><a href="javascript:void(0)"><img src="images/icon/icon-search.png" alt=""></a>
                                 <div class="search_widget">
                                     <form action="#">
-                                        <input placeholder="Tìm kiếm sản phẩm ..." type="text">
-                                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                        <input id="searchInput1" placeholder="Tìm kiếm ..." type="text">
+                                        <ul id="suggestions1" style="text-align: start; display: none; list-style: none; padding: 0;background-color: #FFFFFF">
+
+                                        </ul>
                                     </form>
                                 </div>
                             </li>
+                            <script>
+                                const searchInput1 = document.getElementById('searchInput1');
+                                const suggestions1 = document.getElementById('suggestions1');
+                                searchInput.addEventListener('input', () => {
+                                    const keyword = searchInput1.value;
+
+                                    if (keyword.length > 2) {
+                                        fetch(`/searchProduct?keyword=${keyword}`)
+                                            .then(response => response.text())
+                                            .then(html => {
+                                                suggestions1.innerHTML = html;
+                                                suggestions1.style.display = 'block';
+                                            })
+                                            .catch(error => console.error('Error fetching suggestions:', error));
+                                    } else {
+                                        suggestions1.style.display = 'none';
+                                    }
+                                });
+                            </script>
                             <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="images/icon/icon-account.png" alt=""></a>
                                 <div class="dropdown_account">
                                     <span th:text="${#authentication.principal.displayName}" style="color: white"></span>
@@ -240,11 +261,32 @@
                                     <li class="search_box"><a href="javascript:void(0)"><img src="images/icon/icon-search.png" alt=""></a>
                                         <div class="search_widget">
                                             <form action="#">
-                                                <input placeholder="Tìm kiếm ..." type="text">
-                                                <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                                <input id="searchInput" placeholder="Tìm kiếm ..." type="text">
+                                                <ul id="suggestions" style="text-align: start; display: none; list-style: none; padding: 0;background-color: #FFFFFF">
+
+                                                </ul>
                                             </form>
                                         </div>
                                     </li>
+                                    <script>
+                                        const searchInput = document.getElementById('searchInput');
+                                        const suggestions = document.getElementById('suggestions');
+                                        searchInput.addEventListener('input', () => {
+                                            const keyword = searchInput.value;
+
+                                            if (keyword.length > 2) {
+                                                fetch(`/searchProduct?keyword=${keyword}`)
+                                                    .then(response => response.text())
+                                                    .then(html => {
+                                                        suggestions.innerHTML = html;
+                                                        suggestions.style.display = 'block';
+                                                    })
+                                                    .catch(error => console.error('Error fetching suggestions:', error));
+                                            } else {
+                                                suggestions.style.display = 'none';
+                                            }
+                                        });
+                                    </script>
                                     <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="images/icon/icon-account.png" alt=""></a>
                                         <div class="dropdown_account">
                                             <span th:text="${#authentication.principal.displayName}" style="color: white"></span>
