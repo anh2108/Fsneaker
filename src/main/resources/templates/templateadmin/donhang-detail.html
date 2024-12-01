@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default" >
 <head>
     <meta charset="UTF-8">
-    <title>Đơn hàng</title>
+    <title>Quản lý đơn hàng</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="shortcut icon" href="../images/favicon.ico">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <!-- Thêm Line Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
     <!-- Thêm Material Design Icons CDN -->
@@ -35,6 +33,42 @@
     <link href="../css/app.min.css" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
     <link href="../css/custom.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .step {
+            text-align: center;
+            position: relative;
+            flex: 1;
+        }
+
+        .step .circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 auto;
+            line-height: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .step.completed .circle {
+            background-color: #0d6efd; /* Màu xanh cho hoàn thành */
+        }
+
+        .step-line {
+            height: 2px;
+            background-color: #ddd;
+            flex: 1;
+        }
+
+        .step-line.completed {
+            background-color: #0d6efd; /* Màu xanh cho hoàn thành */
+        }
+    </style>
 </head>
 <body>
 <!-- Begin page -->
@@ -662,7 +696,7 @@
                         <img src="images/logo-sm.png" alt="" height="22">
                     </span>
                 <span class="logo-lg">
-                        <h1 class="mt-3" style="color: #abb9e8">FSneaker</h1>
+                       <h1 class="mt-3" style="color: #abb9e8">FSneaker</h1>
                     </span>
             </a>
             <!-- Light Logo-->
@@ -705,9 +739,11 @@
         <!--        </div>-->
         <div id="scrollbar">
             <div class="container-fluid">
+
+
                 <div id="two-column-menu">
                 </div>
-                <ul class="navbar-nav" id="navbar-nav" data-simplebar="init">
+                <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
@@ -730,7 +766,7 @@
                         <div class="collapse menu-dropdown" id="sidebarApps">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false">
+                                    <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
                                         Quản lý thuộc tính
                                     </a>
                                     <div class="collapse menu-dropdown" id="sidebarCalendar">
@@ -742,6 +778,7 @@
                                                 <a href="/qlmausac" class="nav-link" data-key="t-month-grid"> Màu sắc </a>
                                             </li>
                                             <li class="nav-item">
+
                                                 <a href="/qlthuonghieu" class="nav-link" > Thương hiệu </a>
                                             </li>
                                             <li class="nav-item">
@@ -751,7 +788,7 @@
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/qlsanpham" class="nav-link" > Quản lý sản phẩm </a>
+                                    <a href="/qlsanpham" class="nav-link" data-key="t-sanpham">Quản lý sản phẩm</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/qlvoucher" class="nav-link" data-key="t-voucher"> Quản lý voucher </a>
@@ -765,12 +802,13 @@
 
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="/don-hang/hien-thi">
-                            <i class="ri-store-line"></i> <span data-key="t-layouts">Bán hàng</span>
+                            <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Bán hàng</span>
                         </a>
+
                     </li> <!-- end Dashboard Menu -->
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="nav-link menu-link" href="/donhangadmin">
-                            <i class="ri-file-text-line"></i> <span data-key="t-layouts">Đơn hàng</span>
+                            <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Đơn hàng</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -834,615 +872,245 @@
 
         <div class="page-content">
             <div class="container-fluid">
-                <!--Code tại đây -->
                 <div class="card">
-                    <div class="card-header">
-                        <h1 class="card-title mb-0">Quản lý đơn hàng</h1>
-                    </div>
-                    <div class="card-body">
-                        <div class="container mt-4">
-                            <!-- Tabs -->
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a th:href="@{/donhangadmin(tab='tatca')}" >
-                                    <button class="nav-link" id="tatca-tab" data-bs-toggle="tab" data-bs-target="#tatca" type="button"  role="tab" aria-controls="tatca" aria-selected="true" >
-                                        Tất cả
-                                    </button>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a th:href="@{/donhangadmin(tab='choxacnhan')}" >
-                                    <button class="nav-link" id="choxacnhan-tab" data-bs-toggle="tab" data-bs-target="#choxacnhan" type="button" role="tab" aria-controls="choxacnhan" aria-selected="false">
-                                        Chờ xác nhận
-                                    </button>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a th:href="@{/donhangadmin(tab='chogiao')}" >
-                                    <button class="nav-link" id="chogiao-tab" data-bs-toggle="tab" data-bs-target="#chogiao" type="button" role="tab" aria-controls="chogiao" aria-selected="false">
-                                        Chờ giao
-                                    </button>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a th:href="@{/donhangadmin(tab='danggiao')}" >
-                                        <button class="nav-link" id="danggiao-tab" data-bs-toggle="tab" data-bs-target="#danggiao" type="button" role="tab" aria-controls="danggiao" aria-selected="false">
-                                            Đang giao
-                                        </button>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a th:href="@{/donhangadmin(tab='hoanthanh')}" >
-                                    <button class="nav-link" id="hoanthanh-tab" data-bs-toggle="tab" data-bs-target="#hoanthanh" type="button" role="tab" aria-controls="hoanthanh" aria-selected="false">
-                                        Hoàn thành
-                                    </button>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a th:href="@{/donhangadmin(tab='dahuy')}" >
-                                    <button class="nav-link" id="dahuy-tab" data-bs-toggle="tab" data-bs-target="#dahuy" type="button" role="tab" aria-controls="dahuy" aria-selected="false">
-                                        Đã hủy
-                                    </button>
-                                    </a>
-                                </li>
-
-                            </ul>
-
-                            <!-- Tab Content -->
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="tatca" role="tabpanel" aria-labelledby="tatca-tab">
-                                    <!-- Nội dung của tab "Tất cả" -->
-                                    <br>
-                                    <div class="serchDonHang">
-                                        <form th:action="@{/donhangadmin}" method="get" class="form-inline mb-3">
-                                            <input type="hidden" name="tab" th:value="${param.tab}" />
-                                            <div class="d-flex justify-content-end align-items-end gap-3">
-                                                <div class="flex-grow-1">
-                                                    <label class="form-label">Tìm kiếm</label>
-                                                    <input type="text" name="keyword" class="form-control"
-                                                           th:value="${param.keyword}"
-                                                           placeholder="Nhập mã hoặc tên"/>
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày bắt đầu</label>
-                                                    <input type="date" name="startDate" th:value="${param.startDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày kết thúc</label>
-                                                    <input type="date" name="endDate" th:value="${param.endDate}" class="form-control">
-                                                </div>
-<!--                                                <div >-->
-<!--                                                    <label class="form-label">Trạng thái</label>-->
-<!--                                                    <select name="trangThai" class="form-control">-->
-<!--                                                        <option th:selected="${param.trangThai == null}" value="">Tất cả</option>-->
-<!--                                                        <option th:selected="${param.trangThai == 'Chờ xác nhận'}" value="Chờ xác nhận">Chờ xác nhận</option>-->
-<!--                                                        <option th:selected="${param.trangThai == 'Chờ giao'}" value="Chờ giao">Chờ giao</option>-->
-<!--                                                        <option th:selected="${param.trangThai == 'Đang giao'}" value="Đang giao">Đang giao</option>-->
-<!--                                                        <option th:selected="${param.trangThai == 'Đã thanh toán'}" value="Đã thanh toán">Hoàn thành</option>-->
-<!--                                                        <option th:selected="${param.trangThai == 'Đã hủy'}" value="Đã hủy">Đã huỷ</option>-->
-<!--                                                    </select>-->
-<!--                                                </div>-->
-                                                <div>
-                                                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <br>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Mã</th>
-                                            <th>Khách hàng</th>
-                                            <th>SDT</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Loại đơn hàng</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="i, stat : ${data}">
-                                            <td th:text="${stat.index + 1}"></td>
-                                            <td th:text="${i.maDonHang}"></td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc tenKhachHang là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.tenKhachHang == null ? 'Khách hàng lẻ' : i.khachHang.tenKhachHang}"></span>
-                                            </td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
-                                            </td>
-                                            <td th:text="${i.tongTien}"></td>
-                                            <td th:text="${i.loaiDonHang}"></td>
-                                            <td th:text="${i.ngayTao}"></td>
-                                            <td th:text="${i.trangThai}"></td>
-                                            <td><a th:href="@{/donhangadmin-detail/{id}(id=${i.id})}" class="link-primary"><i
-                                                    class="ri-edit-line"></i></a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <th:block th:if="${data.totalPages > 1}">
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center">
-                                                <!-- Previous button -->
-                                                <li class="page-item" th:classappend="${!data.hasPrevious()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${data.number - 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Previous</a>
-                                                </li>
-                                                <!-- Next button -->
-                                                <li class="page-item" th:classappend="${!data.hasNext()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${data.number + 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </th:block>
+                    <h4 style="padding: 10px" class="text-muted mb-3" >Danh sách hóa đơn / Hóa đơn <span class="text-primary" th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.maDonHang != null ? dataDHCT[0].donHang.maDonHang : '...'}"></span></h4>
+                    <div class="container mt-5">
+                        <div class="d-flex justify-content-center align-items-center position-relative">
+                            <!-- Hiển thị trạng thái hiện tại -->
+                            <div th:each="step, iterStat : ${dataLSDH}">
+                                <div class="step text-center"
+                                     th:if="${iterStat.last}">
+                                    <!-- Vòng tròn biểu thị trạng thái -->
+                                    <div class="circle mx-auto" th:text="${iterStat.index + 1}"></div>
+                                    <p class="mb-0" th:text="${step.trangThaiMoi}"></p>
+                                    <small th:text="${step.ngaySua}"></small>
                                 </div>
-                                <div class="tab-pane fade" id="choxacnhan" role="tabpanel" aria-labelledby="choxacnhan-tab">
-                                    <!-- Nội dung tab "Chờ xác nhận" -->
-                                    <br>
-                                    <div class="serchDonHang">
-                                        <form th:action="@{/donhangadmin}" method="get" class="form-inline mb-3">
-                                            <input type="hidden" name="tab" th:value="${param.tab}" />
-                                            <div class="d-flex justify-content-end align-items-end gap-3">
-                                                <div class="flex-grow-1">
-                                                    <label class="form-label">Tìm kiếm</label>
-                                                    <input type="text" name="keyword" class="form-control"
-                                                           th:value="${param.keyword}"
-                                                           placeholder="Nhập mã hoặc tên"/>
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày bắt đầu</label>
-                                                    <input type="date" name="startDate" th:value="${param.startDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày kết thúc</label>
-                                                    <input type="date" name="endDate" th:value="${param.endDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <br>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Mã</th>
-                                            <th>Khách hàng</th>
-                                            <th>SDT</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Loại đơn hàng</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="i, stat : ${choXacNhan}">
-                                            <td th:text="${stat.index + 1}"></td>
-                                            <td th:text="${i.maDonHang}"></td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc tenKhachHang là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.tenKhachHang == null ? 'Khách hàng lẻ' : i.khachHang.tenKhachHang}"></span>
-                                            </td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
-                                            </td>
-                                            <td th:text="${i.tongTien}"></td>
-                                            <td th:text="${i.loaiDonHang}"></td>
-                                            <td th:text="${i.ngayTao}"></td>
-                                            <td th:text="${i.trangThai}"></td>
-                                            <td><a th:href="@{/donhangadmin-detail/{id}(id=${i.id})}" class="link-primary"><i
-                                                    class="ri-edit-line"></i></a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <th:block th:if="${choXacNhan.totalPages > 1}">
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center">
-                                                <!-- Previous button -->
-                                                <li class="page-item" th:classappend="${!choXacNhan.hasPrevious()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${choXacNhan.number - 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Previous</a>
-                                                </li>
-                                                <!-- Next button -->
-                                                <li class="page-item" th:classappend="${!choXacNhan.hasNext()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${choXacNhan.number + 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </th:block>
-                                </div>
-                                <div class="tab-pane fade" id="chogiao" role="tabpanel" aria-labelledby="chogiao-tab">
-                                    <!-- Nội dung tab "Chờ giao" -->
-                                    <br>
-                                    <div class="serchDonHang">
-                                        <form th:action="@{/donhangadmin}" method="get" class="form-inline mb-3">
-                                            <input type="hidden" name="tab" th:value="${param.tab}" />
-                                            <div class="d-flex justify-content-end align-items-end gap-3">
-                                                <div class="flex-grow-1">
-                                                    <label class="form-label">Tìm kiếm</label>
-                                                    <input type="text" name="keyword" class="form-control"
-                                                           th:value="${param.keyword}"
-                                                           placeholder="Nhập mã hoặc tên"/>
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày bắt đầu</label>
-                                                    <input type="date" name="startDate" th:value="${param.startDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày kết thúc</label>
-                                                    <input type="date" name="endDate" th:value="${param.endDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <br>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Mã</th>
-                                            <th>Khách hàng</th>
-                                            <th>SDT</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Loại đơn hàng</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="i, stat : ${choGiao}">
-                                            <td th:text="${stat.index + 1}"></td>
-                                            <td th:text="${i.maDonHang}"></td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc tenKhachHang là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.tenKhachHang == null ? 'Khách hàng lẻ' : i.khachHang.tenKhachHang}"></span>
-                                            </td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
-                                            </td>
-                                            <td th:text="${i.tongTien}"></td>
-                                            <td th:text="${i.loaiDonHang}"></td>
-                                            <td th:text="${i.ngayTao}"></td>
-                                            <td th:text="${i.trangThai}"></td>
-                                            <td><a th:href="@{/donhangadmin-detail/{id}(id=${i.id})}" class="link-primary"><i
-                                                    class="ri-edit-line"></i></a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <th:block th:if="${choGiao.totalPages > 1}">
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center">
-                                                <!-- Previous button -->
-                                                <li class="page-item" th:classappend="${!choGiao.hasPrevious()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${choGiao.number - 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Previous</a>
-                                                </li>
-                                                <!-- Next button -->
-                                                <li class="page-item" th:classappend="${!choGiao.hasNext()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${choGiao.number + 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </th:block>
-                                </div>
-                                <div class="tab-pane fade" id="danggiao" role="tabpanel" aria-labelledby="danggiao-tab">
-                                    <!-- Nội dung tab "Dang giao" -->
-                                    <br>
-                                    <div class="serchDonHang">
-                                        <form th:action="@{/donhangadmin}" method="get" class="form-inline mb-3">
-                                            <input type="hidden" name="tab" th:value="${param.tab}" />
-                                            <div class="d-flex justify-content-end align-items-end gap-3">
-                                                <div class="flex-grow-1">
-                                                    <label class="form-label">Tìm kiếm</label>
-                                                    <input type="text" name="keyword" class="form-control"
-                                                           th:value="${param.keyword}"
-                                                           placeholder="Nhập mã hoặc tên"/>
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày bắt đầu</label>
-                                                    <input type="date" name="startDate" th:value="${param.startDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày kết thúc</label>
-                                                    <input type="date" name="endDate" th:value="${param.endDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <br>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Mã</th>
-                                            <th>Khách hàng</th>
-                                            <th>SDT</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Loại đơn hàng</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="i, stat : ${dangGiao}">
-                                            <td th:text="${stat.index + 1}"></td>
-                                            <td th:text="${i.maDonHang}"></td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc tenKhachHang là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.tenKhachHang == null ? 'Khách hàng lẻ' : i.khachHang.tenKhachHang}"></span>
-                                            </td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
-                                            </td>
-                                            <td th:text="${i.tongTien}"></td>
-                                            <td th:text="${i.loaiDonHang}"></td>
-                                            <td th:text="${i.ngayTao}"></td>
-                                            <td th:text="${i.trangThai}"></td>
-                                            <td><a th:href="@{/donhangadmin-detail/{id}(id=${i.id})}" class="link-primary"><i
-                                                    class="ri-edit-line"></i></a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <th:block th:if="${dangGiao.totalPages > 1}">
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center">
-                                                <!-- Previous button -->
-                                                <li class="page-item" th:classappend="${!dangGiao.hasPrevious()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${dangGiao.number - 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Previous</a>
-                                                </li>
-                                                <!-- Next button -->
-                                                <li class="page-item" th:classappend="${!dangGiao.hasNext()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${dangGiao.number + 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </th:block>
-                                </div>
-                                <div class="tab-pane fade" id="hoanthanh" role="tabpanel" aria-labelledby="hoanthanh-tab">
-                                    <!-- Nội dung tab "Hoàn thành" -->
-                                    <br>
-                                    <div class="serchDonHang">
-                                        <form th:action="@{/donhangadmin}" method="get" class="form-inline mb-3">
-                                            <input type="hidden" name="tab" th:value="${param.tab}" />
-                                            <div class="d-flex justify-content-end align-items-end gap-3">
-                                                <div class="flex-grow-1">
-                                                    <label class="form-label">Tìm kiếm</label>
-                                                    <input type="text" name="keyword" class="form-control"
-                                                           th:value="${param.keyword}"
-                                                           placeholder="Nhập mã hoặc tên"/>
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày bắt đầu</label>
-                                                    <input type="date" name="startDate" th:value="${param.startDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày kết thúc</label>
-                                                    <input type="date" name="endDate" th:value="${param.endDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <br>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Mã</th>
-                                            <th>Khách hàng</th>
-                                            <th>SDT</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Loại đơn hàng</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="i, stat : ${hoanThanh}">
-                                            <td th:text="${stat.index + 1}"></td>
-                                            <td th:text="${i.maDonHang}"></td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc tenKhachHang là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.tenKhachHang == null ? 'Khách hàng lẻ' : i.khachHang.tenKhachHang}"></span>
-                                            </td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
-                                            </td>
-                                            <td th:text="${i.tongTien}"></td>
-                                            <td th:text="${i.loaiDonHang}"></td>
-                                            <td th:text="${i.ngayTao}"></td>
-                                            <td th:text="${i.trangThai}"></td>
-                                            <td><a th:href="@{/donhangadmin-detail/{id}(id=${i.id})}" class="link-primary"><i
-                                                    class="ri-edit-line"></i></a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <th:block th:if="${hoanThanh.totalPages > 1}">
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center">
-                                                <!-- Previous button -->
-                                                <li class="page-item" th:classappend="${!hoanThanh.hasPrevious()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${hoanThanh.number - 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Previous</a>
-                                                </li>
-                                                <!-- Next button -->
-                                                <li class="page-item" th:classappend="${!hoanThanh.hasNext()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${hoanThanh.number + 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </th:block>
-                                </div>
-                                <div class="tab-pane fade" id="dahuy" role="tabpanel" aria-labelledby="dahuy-tab">
-                                    <!-- Nội dung tab "Đã hủy" -->
-                                    <br>
-                                    <div class="serchDonHang">
-                                        <form th:action="@{/donhangadmin}" method="get" class="form-inline mb-3">
-                                            <input type="hidden" name="tab" th:value="${param.tab}" />
-                                            <div class="d-flex justify-content-end align-items-end gap-3">
-                                                <div class="flex-grow-1">
-                                                    <label class="form-label">Tìm kiếm</label>
-                                                    <input type="text" name="keyword" class="form-control"
-                                                           th:value="${param.keyword}"
-                                                           placeholder="Nhập mã hoặc tên"/>
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày bắt đầu</label>
-                                                    <input type="date" name="startDate" th:value="${param.startDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <label class="form-label">Ngày kết thúc</label>
-                                                    <input type="date" name="endDate" th:value="${param.endDate}" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <br>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Mã</th>
-                                            <th>Khách hàng</th>
-                                            <th>SDT</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Loại đơn hàng</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="i, stat : ${daHuy}">
-                                            <td th:text="${stat.index + 1}"></td>
-                                            <td th:text="${i.maDonHang}"></td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc tenKhachHang là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.tenKhachHang == null ? 'Khách hàng lẻ' : i.khachHang.tenKhachHang}"></span>
-                                            </td>
-                                            <td>
-                                                <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
-                                                <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
-                                            </td>
-                                            <td th:text="${i.tongTien}"></td>
-                                            <td th:text="${i.loaiDonHang}"></td>
-                                            <td th:text="${i.ngayTao}"></td>
-                                            <td th:text="${i.trangThai}"></td>
-                                            <td><a th:href="@{/donhangadmin-detail/{id}(id=${i.id})}" class="link-primary"><i
-                                                    class="ri-edit-line"></i></a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <th:block th:if="${daHuy.totalPages > 1}">
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center">
-                                                <!-- Previous button -->
-                                                <li class="page-item" th:classappend="${!daHuy.hasPrevious()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${daHuy.number - 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Previous</a>
-                                                </li>
-                                                <!-- Next button -->
-                                                <li class="page-item" th:classappend="${!daHuy.hasNext()} ? 'disabled'">
-                                                    <a class="page-link"
-                                                       th:href="@{/donhangadmin(tab=${param.tab}, page=${daHuy.number + 1}, keyword=${param.keyword}, startDate=${param.startDate},endDate=${param.endDate})}">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </th:block>
-                                </div>
-
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <!-- container-fluid -->
-        </div>
-        <!-- End Page-content -->
+                        <br><br>
+                        <div class="col">
+                            <div class="d-flex justify-content-between align-items-center" th:if="${dataDHCT != null and dataDHCT.size() > 0}">
+                                <div class="d-flex">
+                                    <!-- Nút Xác nhận -->
+                                    <form th:action="@{/donhangadmin-detail/{orderId}/confirm(orderId=${dataDHCT[0].donHang.id})}" method="post" onsubmit="return confirmAction('Bạn có chắc chắn muốn xác nhận đơn hàng này?')">
+                                        <button class="btn btn-primary" type="submit" th:if="${dataDHCT[0].donHang.trangThai == 'Đang chờ' || dataDHCT[0].donHang.trangThai == 'Đang xử lý' || dataDHCT[0].donHang.trangThai == 'Chờ xác nhận'}">Xác nhận</button>
+                                    </form>
 
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <script>document.write(new Date().getFullYear())</script> © Velzon.
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="text-sm-end d-none d-sm-block">
-                            Design & Develop by Themesbrand
+                                    <!-- Nút Vận chuyển -->
+                                    <form th:action="@{/donhangadmin-detail/{orderId}/ship(orderId=${dataDHCT[0].donHang.id})}" method="post" onsubmit="return confirmAction('Bạn có chắc chắn muốn vận chuyển đơn hàng này?')">
+                                        <button class="btn btn-primary" type="submit" th:if="${dataDHCT[0].donHang.trangThai == 'Chờ giao'}">Vận chuyển</button>
+                                    </form>
+
+                                    <!-- Nút Thanh toán -->
+                                    <form th:action="@{/donhangadmin-detail/{orderId}/pay(orderId=${dataDHCT[0].donHang.id})}" method="post" onsubmit="return confirmAction('Bạn có chắc chắn muốn thanh toán đơn hàng này?')">
+                                        <button class="btn btn-primary" type="submit" th:if="${dataDHCT[0].donHang.trangThai == 'Đang giao'}">Thanh toán</button>
+                                    </form>
+
+                                    <!-- Nút Hủy -->
+                                    <form th:action="@{/donhangadmin-detail/{orderId}/huy(orderId=${dataDHCT[0].donHang.id})}" method="post" onsubmit="return confirmAction('Bạn có chắc chắn muốn hủy đơn hàng này?')">
+                                        <button class="btn btn-danger" type="submit" th:if="${dataDHCT[0].donHang.trangThai == 'Đang chờ' || dataDHCT[0].donHang.trangThai == 'Đang giao' || dataDHCT[0].donHang.trangThai == 'Chờ giao' || dataDHCT[0].donHang.trangThai == 'Đang xử lý' || dataDHCT[0].donHang.trangThai == 'Chờ xác nhận'}">Huỷ</button>
+                                    </form>
+                                </div>
+                                <div>
+                                    <!-- Nút Chi tiết -->
+                                    <button class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#historyModal">
+                                        Chi tiết
+                                    </button>
+
+                                    <!-- Modal Lịch Sử -->
+                                    <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="historyModalLabel">Lịch Sử Đơn Hàng</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!-- Hiển thị danh sách lịch sử -->
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Mã đơn hàng</th>
+                                                            <th>Trạng thái cũ</th>
+                                                            <th>Trạng thái mới</th>
+                                                            <th>Ngày sửa</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr th:each="lsdh, stat : ${dataLSDH}">
+                                                            <td th:text="${stat.index + 1}"></td>
+                                                            <td th:text="${lsdh.donHang.maDonHang}"></td>
+                                                            <td th:text="${lsdh.trangThaiCu}"></td>
+                                                            <td th:text="${lsdh.trangThaiMoi}"></td>
+                                                            <td th:text="${lsdh.ngaySua}"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <div th:if="${#lists.isEmpty(dataLSDH)}">
+                                                        <p>Không có lịch sử đơn hàng nào!</p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p th:if="${dataDHCT == null or dataDHCT.size() == 0}">
+                                Không có dữ liệu chi tiết đơn hàng.
+                            </p>
                         </div>
+
+                    </div>
+
+                    <div class="container mt-4">
+                        <!-- Thông tin đơn hàng -->
+                        <hr>
+                        <div class="row mb-4">
+                            <h5 class="text-danger">THÔNG TIN ĐƠN HÀNG</h5>
+                            <br><br><br>
+                            <div class="col">
+                                <p>Trạng thái:
+                                    <span class="text-danger"
+                                          th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.trangThai != null ? dataDHCT[0].donHang.trangThai : '...'}">
+                                    </span>
+                                </p>
+                                <p>Mã đơn hàng:
+                                    <span class="text-danger"
+                                          th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.maDonHang != null ? dataDHCT[0].donHang.maDonHang : '...'}">
+                                    </span>
+                                </p>
+                                <p>Loại đơn hàng:
+                                    <span class="text-danger"
+                                          th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.loaiDonHang != null ? dataDHCT[0].donHang.loaiDonHang : '...'}">
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p>Phí vận chuyển:
+                                    <span class="text-danger">
+                                    </span>
+                                </p>
+                                <p>Tổng tiền:
+                                    <span class="text-danger"
+                                          th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.tongTien != null ? dataDHCT[0].donHang.tongTien : '...'}">
+                                    </span>
+                                </p>
+                                <p>Phải thanh toán:
+                                    <span class="text-danger"
+                                          th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.tongTien != null ? dataDHCT[0].donHang.tongTien : '...'}">
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <!-- Thông tin khách hàng -->
+                        <div class="row mb-4">
+                            <h5 class="text-danger">THÔNG TIN KHÁCH HÀNG</h5>
+                            <br><br><br>
+                            <div class="col">
+                                <p>Tên khách hàng:
+                                    <span class="text-danger" th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.tenKhachHang != null ? dataDHCT[0].donHang.khachHang.tenKhachHang : 'Khách hàng lẻ'}"></span>
+                                </p>
+                                <p>Số điện thoại:
+                                    <span class="text-danger" th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.soDienThoai != null ? dataDHCT[0].donHang.khachHang.soDienThoai : '...'}"></span>
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p>Email:
+                                    <span class="text-danger" th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.email != null ? dataDHCT[0].donHang.khachHang.email : '...'}"></span>
+                                </p>
+                                <p>Địa chỉ:
+                                    <span class="text-danger" th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.diaChi != null ? dataDHCT[0].donHang.khachHang.diaChi : '...'}"></span>
+                                </p>
+                                <p class="btn btn-warning mt-3">Thay đổi thông tin</p>
+                            </div>
+                        </div>
+
+                        <!-- Sản phẩm -->
+                        <br>
+                        <hr>
+                        <h5 class="text-danger">THÔNG TIN SẢN PHẨM</h5>
+                        <br>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Ảnh</th>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Đơn giá</th>
+                                <th>thanh tien</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="i, stat : ${dataDHCT}">
+                                <td th:text="${stat.index + 1}"></td>
+                                <td th:text="${i.sanPhamChiTiet.imanges}"></td>
+
+                                <td th:text="${i.sanPhamChiTiet.SanPham.tenSanPham}"></td>
+                                <td th:text="${i.soLuong}"></td>
+                                <td th:text="${i.gia}"></td>
+                                <td th:text="${i.thanhTien}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <script>document.write(new Date().getFullYear())</script> © Velzon.
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end d-none d-sm-block">
+                        Design & Develop by Themesbrand
                     </div>
                 </div>
             </div>
-        </footer>
-    </div>
-    <!-- end main content-->
+        </div>
+    </footer>
+</div>
+<!-- end main content-->
 
 </div>
 <!-- END layout-wrapper -->
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const params = new URLSearchParams(window.location.search);
-        let tab = params.get('tab');
-
-        // Nếu `tab` không có giá trị hoặc là chuỗi rỗng, đặt mặc định là 'tatca'
-        if (!tab || tab.trim() === '') {
-            tab = 'tatca';
-        }
-
-        // Kích hoạt tab tương ứng
-        document.querySelectorAll('.nav-link').forEach(tabElement => {
-            const target = tabElement.getAttribute('data-bs-target');
-            if (target === `#${tab}`) {
-                tabElement.classList.add('active');
-            } else {
-                tabElement.classList.remove('active');
-            }
-        });
-
-        // Hiển thị nội dung tab tương ứng
-        document.querySelectorAll('.tab-pane').forEach(tabPane => {
-            if (tabPane.id === tab) {
-                tabPane.classList.add('show', 'active');
-            } else {
-                tabPane.classList.remove('show', 'active');
-            }
-        });
-    });
+    function changeStatus(id) {
+        fetch(`/donhang/change-status?id=${id}`, {
+            method: 'POST',
+        })
+            .then(response => response.text())
+            .then(data => {
+                alert(`Trạng thái mới: ${data}`);
+                location.reload(); // Tải lại trang để cập nhật giao diện
+            })
+            .catch(error => console.error('Error:', error));
+    }
 </script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+    /**
+     * Hiển thị hộp thoại xác nhận.
+     * @param {string} message - Nội dung thông báo.
+     * @returns {boolean} - Trả về `true` nếu người dùng chọn "OK", ngược lại `false`.
+     */
+    function confirmAction(message) {
+        return confirm(message);
+    }
+</script>
 <script src="../js/bootstrap.bundle.min.js"></script>
 <script src="../js/simplebar.min.js"></script>
 <script src="../js/waves.min.js"></script>
@@ -1465,7 +1133,6 @@
 
 <!-- App js -->
 <script src="../js/app.js"></script>
-
 </body>
 
 </html>

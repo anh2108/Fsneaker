@@ -2,6 +2,7 @@ package com.example.fsneaker.repositories;
 
 import com.example.fsneaker.entity.DonHang;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -62,4 +63,20 @@ public interface DonHangRepo extends JpaRepository<DonHang, Integer> {
     //Tính tổng số sản phẩm đã bán trong khoảng thời gian
     @Query("SELECT SUM(chiTiet.soLuong) FROM DonHang d JOIN d.donHangChiTiets chiTiet WHERE d.ngayMua BETWEEN :startDate AND :endDate")
     Long tinhTongSanPhamDaBan(@Param("startDate")LocalDate startDate, @Param("endDate")LocalDate endDate);
+
+
+    /////////
+    @Query("select o from DonHang o where (?1 is null or (o.maDonHang like ?1))" +
+            " and (?2 is null or o.ngayTao >=?2) " +
+            " and (?3 is null or o.ngayTao <=?3) " +
+            " order by o.id desc ")
+    public Page<DonHang> searchPageHoaDon(String keyword, LocalDate startDate, LocalDate endDate, PageRequest p);
+
+    @Query("select o from DonHang o where (?1 is null or (o.maDonHang like ?1))" +
+            " and (?2 is null or o.ngayTao >=?2) " +
+            " and (?3 is null or o.ngayTao <=?3) " +
+            " and (?4 is null or o.trangThai = ?4) " +
+            " order by o.id desc ")
+    public Page<DonHang> searchPageHoaDonfindStatus(String keyword, LocalDate startDate, LocalDate endDate,String status, PageRequest p);
+
 }

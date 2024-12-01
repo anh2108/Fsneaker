@@ -35,5 +35,8 @@ public interface DonHangChiTietRepo extends JpaRepository<DonHangChiTiet, Intege
     Page<Object[]> findNikeByPopularity(@Param("idThuongHieu")Integer idThuongHieu, Pageable pageable);
 
     //Từ chỗ này đi ai code của ai thì note lại tên tránh nhầm lẫn
+    //+
+    @Query("select o from DonHangChiTiet o where o.donHang.id = ?1 ")
+    List<DonHangChiTiet> donHangDetail(Integer idDonHang);
 }
 
