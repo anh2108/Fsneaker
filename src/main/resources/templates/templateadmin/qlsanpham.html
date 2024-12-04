@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en"
+      data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-image="none" data-preloader="disable"
+      data-theme="default" data-theme-colors="default">
 <head>
     <meta charset="UTF-8">
     <title>Quản lý sản phẩm</title>
@@ -672,27 +674,45 @@
                             </div>
                         </div>
                     </div>
-                    <div class="dropdown ms-sm-3 header-item topbar-user" th:if="${#authentication.name != 'anonymousUser'}">
-                        <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="dropdown ms-sm-3 header-item topbar-user"
+                         th:if="${#authentication.name != 'anonymousUser'}">
+                        <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
                             <img class="rounded-circle header-profile-user" src="images/users/avatar-1.jpg"
                                  alt="Header Avatar">
                             <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" th:text="${#authentication.principal.displayName}"></span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text" th:text="${#authentication.principal.role == 'ROLE_ADMIN' ? 'Admin' : 'Nhân viên'}">Trưởng nhóm</span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"
+                                      th:text="${#authentication.principal.displayName}"></span>
+                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text"
+                                      th:text="${#authentication.principal.role == 'ROLE_ADMIN' ? 'Admin' : 'Nhân viên'}">Trưởng nhóm</span>
                             </span>
                         </span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end" th:if="${#authentication.name != 'anonymousUser'}">
                             <!-- item-->
-                            <h6 class="dropdown-header" >Xin chào <span th:text="${#authentication.principal.displayName}"></span></h6>
-                            <a class="dropdown-item" href="/thongtinadmin"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Thông tin cá nhân</span></a>
-                            <a class="dropdown-item" href="/tinnhanadmin"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Tin nhắn</span></a>
-                            <a class="dropdown-item" href="/trogiupadmin"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Trợ giúp</span></a>
+                            <h6 class="dropdown-header">Xin chào <span
+                                    th:text="${#authentication.principal.displayName}"></span></h6>
+                            <a class="dropdown-item" href="/thongtinadmin"><i
+                                    class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle">Thông tin cá nhân</span></a>
+                            <a class="dropdown-item" href="/tinnhanadmin"><i
+                                    class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle">Tin nhắn</span></a>
+                            <a class="dropdown-item" href="/trogiupadmin"><i
+                                    class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle">Trợ giúp</span></a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/caidatadmin"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Cài đặt</span></a>
-                            <a class="dropdown-item" href="/khoamanhinhadmin"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Khóa màn hình</span></a>
-                            <a class="dropdown-item" href="/logout"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Đăng xuất</span></a>
+                            <a class="dropdown-item" href="/caidatadmin"><span
+                                    class="badge bg-success-subtle text-success mt-1 float-end">New</span><i
+                                    class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle">Cài đặt</span></a>
+                            <a class="dropdown-item" href="/khoamanhinhadmin"><i
+                                    class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle">Khóa màn hình</span></a>
+                            <a class="dropdown-item" href="/logout"><i
+                                    class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle" data-key="t-logout">Đăng xuất</span></a>
                         </div>
                     </div>
                 </div>
@@ -802,7 +822,8 @@
                         </div>
                     </li> <!-- end Dashboard Menu -->
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                        <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
+                        <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
+                           aria-expanded="false" aria-controls="sidebarApps">
                             <i class="ri-apps-2-line"></i> <span data-key="t-apps">Quản lý</span>
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarApps">
@@ -1047,7 +1068,7 @@
                                                         <label class="form-label">Trạng thái</label>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="radio"
-                                                                   name="trangThai" value="0">
+                                                                   name="trangThai" value="0"checked>
                                                             <label class="form-check-label">Hoạt động</label>
                                                         </div>
                                                         <div class="form-check">
@@ -1218,18 +1239,23 @@
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination justify-content-center">
                                             <!-- Nút Previous -->
-                                            <li class="page-item" th:classappend="${!listSanPham.hasPrevious()} ? 'disabled'">
+                                            <li class="page-item"
+                                                th:classappend="${!listSanPham.hasPrevious()} ? 'disabled'">
                                                 <a class="page-link"
                                                    th:href="@{/qlsanpham(page=${listSanPham.number - 1}, serchSanPham=${param.serchSanPham}, idThuongHieu=${param.idThuongHieu}, idXuatXu=${param.idXuatXu})}">Previous</a>
                                             </li>
                                             <!-- Các số trang -->
                                             <th:block th:each="i : ${#numbers.sequence(0, listSanPham.totalPages - 1)}">
-                                                <li class="page-item" th:classappend="${i == listSanPham.number} ? 'active'">
-                                                    <a class="page-link" th:href="@{/qlsanpham(page=${i}, serchSanPham=${param.serchSanPham}, idThuongHieu=${param.idThuongHieu}, idXuatXu=${param.idXuatXu})}" th:text="${i + 1}"></a>
+                                                <li class="page-item"
+                                                    th:classappend="${i == listSanPham.number} ? 'active'">
+                                                    <a class="page-link"
+                                                       th:href="@{/qlsanpham(page=${i}, serchSanPham=${param.serchSanPham}, idThuongHieu=${param.idThuongHieu}, idXuatXu=${param.idXuatXu})}"
+                                                       th:text="${i + 1}"></a>
                                                 </li>
                                             </th:block>
                                             <!-- Nút Next -->
-                                            <li class="page-item" th:classappend="${!listSanPham.hasNext()} ? 'disabled'">
+                                            <li class="page-item"
+                                                th:classappend="${!listSanPham.hasNext()} ? 'disabled'">
                                                 <a class="page-link"
                                                    th:href="@{/qlsanpham(page=${listSanPham.number + 1}, serchSanPham=${param.serchSanPham}, idThuongHieu=${param.idThuongHieu}, idXuatXu=${param.idXuatXu})}">Next</a>
                                             </li>
@@ -1253,8 +1279,10 @@
                                     <form action="/qlsanphamchitiet" method="get">
                                         <div class="row g-2">
                                             <div class="col-md-10">
-                                                <label  class="form-label">Tìm kiếm</label>
-                                                <input type="text" class="form-control" name="searchSanPhamChiTiet" th:value="${searchSanPhamChiTiet}" placeholder="Nhập mã sản phẩm chi tiết để tìm kiếm">
+                                                <label class="form-label">Tìm kiếm</label>
+                                                <input type="text" class="form-control" name="searchSanPhamChiTiet"
+                                                       th:value="${searchSanPhamChiTiet}"
+                                                       placeholder="Nhập mã sản phẩm chi tiết để tìm kiếm">
                                             </div>
                                             <div class="col-md-2 d-flex align-items-end">
                                                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
@@ -1328,7 +1356,7 @@
                                                             <label class="form-label">Mã sản phẩm chi tiết</label>
                                                             <input type="text" class="form-control"
                                                                    name="maSanPhamChiTiet"/>
-                                                            <div id="maSanPhamChiTietError" class="error"></div>
+                                                            <div id="maSanPhamChiTietError" style="color: #ff0000" class="error"></div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label class="form-label">Số lượng</label>
@@ -1343,15 +1371,14 @@
                                                             <label class="form-label">Giá bán</label>
                                                             <input type="number" class="form-control" name="giaBan"
                                                                    value="0"/>
-                                                            <div id="giaBanError" class="error"></div>
+                                                            <div id="giaBanError"  style="color: #ff0000" class="error"></div>
 
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label class="form-label">Giá bán sau khi giảm</label>
                                                             <input type="number" class="form-control"
-                                                                   name="giaBanGiamGia" value="0"/>
-                                                            <div id="giaBanGiamGiaError" class="error"></div>
-
+                                                                   name="giaBanGiamGia" value="0" readonly/>
+                                                            <div id="giaBanGiamGiaError"  style="color: #ff0000" class="error"></div>
                                                         </div>
                                                     </div>
 
@@ -1359,7 +1386,7 @@
                                                     <div class="row mb-3">
                                                         <div class="col-md-6">
                                                             <label class="form-label">Ngày sản xuất</label>
-                                                            <input type="date" class="form-control" name="ngaySanXuat"/>
+                                                            <input type="date" class="form-control"  style="color: #ff0000" name="ngaySanXuat"/>
 
                                                         </div>
 
@@ -1420,7 +1447,7 @@
                                                     <!-- hình ảnhh -->
                                                     <div class="mb-3">
                                                         <label class="form-label">Hình ảnh</label>
-                                                        <input type="file" id="image" name="image" /><br/>
+                                                        <input type="file" id="image" name="image"/><br/>
                                                     </div>
 
                                                     <div class="modal-footer">
@@ -1445,6 +1472,7 @@
                                         <th>Màu sắc</th>
                                         <th>Số lượng</th>
                                         <th>Giá bán</th>
+                                        <th>Giá bán sau giảm</th>
                                         <th>Trạng thái</th>
                                         <th>Ngày sản xuất</th>
                                         <th>Images</th>
@@ -1460,6 +1488,7 @@
                                         <td>[[${spct.mauSac.tenMauSac}]]</td>
                                         <td>[[${spct.soLuong}]]</td>
                                         <td>[[${spct.giaBan}]]</td>
+                                        <td>[[${spct.giaBanGiamGia}]]</td>
                                         <td th:switch="${spct.trangThai}">
                                             <span th:case="0">Còn hàng</span>
                                             <span th:case="1">Hết hàng</span>
@@ -1469,8 +1498,8 @@
                                             <span th:case="5">Ngừng kinh doanh</span>
                                         </td>
                                         <td th:text="${#dates.format(spct.ngaySanXuat, 'dd/MM/yyyy')}"></td>
-                                        <td> <img th:src="@{'/images/' + ${spct.imanges}}" width="100" height="100"/></td>
-<!--                                        <td>[[${spct.imanges}]]</td>-->
+                                        <td><img th:src="@{'/repository/' + ${spct.imanges}}" width="100"
+                                                 height="100"/></td>
                                         <td>
                                             <button type="button" class="link-primary" data-bs-toggle="modal"
                                                     th:data-bs-target="'#editModal-' + ${spct.id}">
@@ -1490,7 +1519,8 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <form id="productDetailEditForm"
-                                                                  th:action="@{/qlsanphamchitiet/update}" method="post" enctype="multipart/form-data">
+                                                                  th:action="@{/qlsanphamchitiet/update}" method="post"
+                                                                  enctype="multipart/form-data">
                                                                 <input type="hidden" th:value="${spct.id}" name="id"/>
                                                                 <div class="row mb-3">
                                                                     <div class="col-md-6">
@@ -1605,18 +1635,12 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="mb-3">
-                                                                    <label class="form-label">Hình ảnh</label>
-                                                                    <input type="file" class="form-control"
-                                                                           name="fileEdit" id="fileEdit"
-                                                                           accept="image/*"
-                                                                           onchange="previewImage(event)">
-                                                                    <!-- Ảnh xem trước -->
-                                                                    <img id="previewImage" src="#"
-                                                                         alt="Hình ảnh xem trước" class="mt-2"
-                                                                         style="display:none; width: 100%; max-height: 200px; object-fit: cover;">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Hình ảnh</label>
+                                                                        <input type="file" id="imagee" name="image" th:src="@{'/repository/' + ${spct.imanges}}"/><br/>
+                                                                    </div>
 
-                                                                </div>
+
                                                                 <div class="modal-footer">
                                                                     <button type="submit" class="btn btn-primary">Lưu
                                                                         thay đổi
@@ -1638,20 +1662,24 @@
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination justify-content-center">
                                             <!-- Previous Button -->
-                                            <li class="page-item" th:classappend="${!listSanPhamChiTiet.hasPrevious()} ? 'disabled'">
+                                            <li class="page-item"
+                                                th:classappend="${!listSanPhamChiTiet.hasPrevious()} ? 'disabled'">
                                                 <a class="page-link"
                                                    th:href="@{/qlsanphamchitiet(page=${listSanPhamChiTiet.number - 1}, searchSanPhamChiTiet=${param.searchSanPhamChiTiet}, idSanPham=${param.idSanPham}, idMauSac=${param.idMauSac}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}">Previous</a>
                                             </li>
                                             <!-- Page Numbers -->
-                                            <th:block th:each="i : ${#numbers.sequence(0, listSanPhamChiTiet.totalPages - 1)}">
-                                                <li class="page-item" th:classappend="${i == listSanPhamChiTiet.number} ? 'active'">
+                                            <th:block
+                                                    th:each="i : ${#numbers.sequence(0, listSanPhamChiTiet.totalPages - 1)}">
+                                                <li class="page-item"
+                                                    th:classappend="${i == listSanPhamChiTiet.number} ? 'active'">
                                                     <a class="page-link"
                                                        th:href="@{/qlsanphamchitiet(page=${i}, searchSanPhamChiTiet=${param.searchSanPhamChiTiet}, idSanPham=${param.idSanPham}, idMauSac=${param.idMauSac}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}"
                                                        th:text="${i + 1}"></a>
                                                 </li>
                                             </th:block>
                                             <!-- Next Button -->
-                                            <li class="page-item" th:classappend="${!listSanPhamChiTiet.hasNext()} ? 'disabled'">
+                                            <li class="page-item"
+                                                th:classappend="${!listSanPhamChiTiet.hasNext()} ? 'disabled'">
                                                 <a class="page-link"
                                                    th:href="@{/qlsanphamchitiet(page=${listSanPhamChiTiet.number + 1}, searchSanPhamChiTiet=${param.searchSanPhamChiTiet}, idSanPham=${param.idSanPham}, idMauSac=${param.idMauSac}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}">Next</a>
                                             </li>
@@ -1782,34 +1810,35 @@
             });
         });
 
-            formData.append('isAjax', 1);
+        formData.append('isAjax', 1);
 
 
-            $.ajax({
-                url: '/qlsanphamchitiet/store',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    alert('Sản phẩm chi tiết đã được thêm thành công!');
-                    $('#addModal2').modal('hide');
-                    location.reload();
+        $.ajax({
+            url: '/qlsanphamchitiet/store',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                alert('Sản phẩm chi tiết đã được thêm thành công!');
+                $('#addModal2').modal('hide');
+                location.reload();
+                // window.location.href("http://localhost:8080/qlsanphamchitiet")
+               // console.log("ababbab")
 
-                },
-                error: function (xhr) {
-                    console.log("Có lỗi xảy ra khi gửi yêu cầu AJAX.");
-                    if (xhr.responseJSON && xhr.responseJSON.errors) {
-                        var errors = xhr.responseJSON.errors;
-                        $.each(errors, function (field, message) {
-                            $('#' + field + 'Error').text(message);
-                        });
-                    } else {
-                        alert('Có lỗi xảy ra. Mã lỗi: ' + xhr.status + ', Chi tiết: ' + xhr.statusText);
-                    }
+            },
+            error: function (xhr) {
+                console.log("Có lỗi xảy ra khi gửi yêu cầu AJAX.");
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    var errors = xhr.responseJSON.errors;
+                    $.each(errors, function (field, message) {
+                        $('#' + field + 'Error').text(message);
+                    });
+                } else {
+                    alert('Có lỗi xảy ra. Mã lỗi: ' + xhr.status + ', Chi tiết: ' + xhr.statusText);
                 }
-            });
-
+            }
+        });
 
 
         $('#productDetailEditForm').on('submit', function (e) {

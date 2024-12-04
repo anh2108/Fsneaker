@@ -3,6 +3,9 @@ package com.example.fsneaker.controller;
 import com.example.fsneaker.entity.MauSac;
 import com.example.fsneaker.repositories.MauSacRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +20,12 @@ public class MauSacController {
     private MauSacRepo mauSacRepo;
 
     @GetMapping("/qlmausac")
-    public String index(Model model){
-        List<MauSac > ms = mauSacRepo.findAll();
+    public String index(Model model,
+                        @RequestParam(name = "page", defaultValue = "0") Integer pageNo,
+                        @RequestParam(name = "limit", defaultValue = "5") Integer pageSize
+                        ){
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        Page<MauSac> ms = mauSacRepo.findAll(pageable);
         model.addAttribute("ms",ms);
         return "templateadmin/qlmausac.html";
     }
