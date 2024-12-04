@@ -34,39 +34,29 @@
     <!-- custom Css-->
     <link href="../css/custom.min.css" rel="stylesheet" type="text/css" />
     <style>
-        .step {
-            text-align: center;
-            position: relative;
-            flex: 1;
-        }
-
-        .step .circle {
-            width: 30px;
-            height: 30px;
+        .circle {
+            width: 80px; /* Tăng kích thước hình tròn */
+            height: 80px; /* Tăng kích thước hình tròn */
             border-radius: 50%;
-            background-color: #ddd;
-            margin: 0 auto;
-            line-height: 30px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden; /* Ẩn phần hình ảnh thừa nếu lớn hơn hình tròn */
+            margin-bottom: 10px;
         }
 
-        .step.completed .circle {
-            background-color: #0d6efd; /* Màu xanh cho hoàn thành */
+        .circle-img {
+            width: 50%; /* Kích thước hình ảnh bên trong */
+            height: 50%; /* Căn chỉnh hình ảnh bên trong */
+            object-fit: cover; /* Căn chỉnh hình ảnh để không bị méo */
         }
 
-        .step-line {
-            height: 2px;
-            background-color: #ddd;
-            flex: 1;
+        .bg-success {
+            background-color: #7bb6ea !important; /* Màu xanh */
         }
 
-        .step-line.completed {
-            background-color: #0d6efd; /* Màu xanh cho hoàn thành */
+        .bg-danger {
+            background-color: #e5818b !important; /* Màu đỏ */
         }
     </style>
 </head>
@@ -876,17 +866,54 @@
                     <h4 style="padding: 10px" class="text-muted mb-3" >Danh sách hóa đơn / Hóa đơn <span class="text-primary" th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.maDonHang != null ? dataDHCT[0].donHang.maDonHang : '...'}"></span></h4>
                     <div class="container mt-5">
                         <div class="d-flex justify-content-center align-items-center position-relative">
-                            <!-- Hiển thị trạng thái hiện tại -->
-                            <div th:each="step, iterStat : ${dataLSDH}">
-                                <div class="step text-center"
-                                     th:if="${iterStat.last}">
-                                    <!-- Vòng tròn biểu thị trạng thái -->
-                                    <div class="circle mx-auto" th:text="${iterStat.index + 1}"></div>
-                                    <p class="mb-0" th:text="${step.trangThaiMoi}"></p>
-                                    <small th:text="${step.ngaySua}"></small>
+                            <!-- Trường hợp 1: dataLSDH rỗng hoặc null -->
+                            <div th:if="${dataLSDH == null or dataLSDH.isEmpty()}">
+                                <!-- Nếu loại đơn hàng là 'Bán hàng tại quầy' -->
+                                <div th:if="${dataDHCT != null and !dataDHCT.isEmpty() and dataDHCT[0].donHang != null and dataDHCT[0].donHang.loaiDonHang == 'Bán hàng tại quầy' and dataDHCT[0].donHang.trangThai == 'Đã thanh toán'}" class="step text-center">
+                                    <div class="circle mx-auto bg-success text-white">
+                                        <img src="/images/iconsucess.png" alt="Hoàn thành" class="circle-img">
+                                    </div>
+                                    <p class="mb-0 fw-bold fs-6 text-success">Hoàn thành</p>
+                                    <small th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.ngayTao != null ? dataDHCT[0].donHang.ngayTao : 'Chưa có thông tin'}"></small>
+                                </div>
+
+<!--                                 Nếu loại đơn hàng là 'Bán hàng tại quầy'  và đã huỷ-->
+                                <div th:if="${dataDHCT != null and !dataDHCT.isEmpty() and dataDHCT[0].donHang != null and dataDHCT[0].donHang.loaiDonHang == 'Bán hàng tại quầy' and dataDHCT[0].donHang.trangThai == 'Đã hủy'}" class="step text-center">
+                                    <div class="circle mx-auto bg-danger text-white">
+                                        <img src="/images/ionhuy.png" alt="Hoàn thành" class="circle-img">
+                                    </div>
+                                    <p class="mb-0 fw-bold fs-6 text-danger">Đã huỷ</p>
+                                    <small th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.ngayTao != null ? dataDHCT[0].donHang.ngayTao : 'Chưa có thông tin'}">Giao dịch tại quầy</small>
+                                </div>
+
+                                <!-- Nếu không phải 'Bán hàng tại quầy', hiển thị 'Chờ xác nhận' -->
+                                <div th:if="${dataDHCT == null or dataDHCT.isEmpty() or dataDHCT[0].donHang == null or dataDHCT[0].donHang.loaiDonHang != 'Bán hàng tại quầy'}" class="step text-center">
+                                    <div class="circle mx-auto bg-success text-white">
+                                        <img src="/images/icon!.png" alt="Chờ xác nhận" class="circle-img">
+                                    </div>
+                                    <p class="mb-0 fw-bold fs-6 text-success">Chờ xác nhận</p>
+                                    <small th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.ngayTao != null ? dataDHCT[0].donHang.ngayTao : 'Chưa có thông tin'}">Chưa có thông tin</small>
+                                </div>
+                            </div>
+
+                            <!-- Trường hợp 2: dataLSDH không rỗng -->
+                            <div th:if="${dataLSDH != null and !dataLSDH.isEmpty()}" th:each="step, iterStat : ${dataLSDH}">
+                                <!-- Hiển thị trạng thái cuối cùng trong dataLSDH -->
+                                <div class="step text-center" th:if="${iterStat.last}">
+                                    <div class="circle mx-auto"
+                                         th:classappend="${step.trangThaiMoi == 'Đã hủy'} ? 'bg-danger text-white' : 'bg-success text-white'">
+                                        <img th:src="${step.trangThaiMoi == 'Đã hủy' ? '/images/ionhuy.png' : (step.trangThaiMoi == 'Đã thanh toán' ? '/images/iconsucess.png' : '/images/icon!.png')}"
+                                             alt="Trạng thái" class="circle-img">
+                                    </div>
+                                    <p class="mb-0 fw-bold fs-6"
+                                       th:text="${#strings.isEmpty(step.trangThaiMoi) ? 'Chờ xác nhận' : step.trangThaiMoi}"
+                                       th:classappend="${step.trangThaiMoi == 'Đã hủy'} ? 'text-danger' : 'text-success'">
+                                    </p>
+                                    <small th:text="${#strings.isEmpty(step.ngaySua) ? 'Chưa có thông tin' : step.ngaySua }"></small>
                                 </div>
                             </div>
                         </div>
+
                         <br><br>
                         <div class="col">
                             <div class="d-flex justify-content-between align-items-center" th:if="${dataDHCT != null and dataDHCT.size() > 0}">
@@ -908,12 +935,12 @@
 
                                     <!-- Nút Hủy -->
                                     <form th:action="@{/donhangadmin-detail/{orderId}/huy(orderId=${dataDHCT[0].donHang.id})}" method="post" onsubmit="return confirmAction('Bạn có chắc chắn muốn hủy đơn hàng này?')">
-                                        <button class="btn btn-danger" type="submit" th:if="${dataDHCT[0].donHang.trangThai == 'Đang chờ' || dataDHCT[0].donHang.trangThai == 'Đang giao' || dataDHCT[0].donHang.trangThai == 'Chờ giao' || dataDHCT[0].donHang.trangThai == 'Đang xử lý' || dataDHCT[0].donHang.trangThai == 'Chờ xác nhận'}">Huỷ</button>
+                                        <button style="margin-left: 50px" class="btn btn-danger" type="submit" th:if="${dataDHCT[0].donHang.trangThai == 'Đang chờ' || dataDHCT[0].donHang.trangThai == 'Đang giao' || dataDHCT[0].donHang.trangThai == 'Chờ giao' || dataDHCT[0].donHang.trangThai == 'Đang xử lý' || dataDHCT[0].donHang.trangThai == 'Chờ xác nhận'}">Huỷ</button>
                                     </form>
                                 </div>
                                 <div>
                                     <!-- Nút Chi tiết -->
-                                    <button class="btn btn-primary" data-bs-toggle="modal"
+                                    <button class="btn btn-warning" data-bs-toggle="modal"
                                             data-bs-target="#historyModal">
                                         Chi tiết
                                     </button>
@@ -1011,30 +1038,85 @@
                         <!-- Thông tin khách hàng -->
                         <div class="row mb-4">
                             <h5 class="text-danger">THÔNG TIN KHÁCH HÀNG</h5>
-                            <br><br><br>
+                            <div class="d-flex justify-content-end">
+                                <button  th:if="${dataDHCT[0].donHang.trangThai == 'Chờ xác nhận'}" class="btn btn-warning mt-3" data-bs-toggle="modal" data-bs-target="#editCustomerModal">Thay đổi thông tin</button>
+                            </div>
+                            <br><br>
                             <div class="col">
                                 <p>Tên khách hàng:
-                                    <span class="text-danger" th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.tenKhachHang != null ? dataDHCT[0].donHang.khachHang.tenKhachHang : 'Khách hàng lẻ'}"></span>
+                                    <span class="text-danger"
+                                          th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.tenKhachHang != null ? dataDHCT[0].donHang.khachHang.tenKhachHang : 'Khách hàng lẻ'}"></span>
                                 </p>
                                 <p>Số điện thoại:
-                                    <span class="text-danger" th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.soDienThoai != null ? dataDHCT[0].donHang.khachHang.soDienThoai : '...'}"></span>
+                                    <span class="text-danger"
+                                          th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.soDienThoai != null ? dataDHCT[0].donHang.khachHang.soDienThoai : '...'}"></span>
                                 </p>
                             </div>
                             <div class="col">
                                 <p>Email:
-                                    <span class="text-danger" th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.email != null ? dataDHCT[0].donHang.khachHang.email : '...'}"></span>
+                                    <span class="text-danger"
+                                          th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.email != null ? dataDHCT[0].donHang.khachHang.email : '...'}"></span>
                                 </p>
                                 <p>Địa chỉ:
-                                    <span class="text-danger" th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.diaChi != null ? dataDHCT[0].donHang.khachHang.diaChi : '...'}"></span>
+                                    <span class="text-danger"
+                                          th:text="${dataDHCT != null && dataDHCT.size() > 0 && dataDHCT[0].donHang != null && dataDHCT[0].donHang.khachHang != null && dataDHCT[0].donHang.khachHang.diaChi != null ? dataDHCT[0].donHang.khachHang.diaChi : '...'}"></span>
                                 </p>
-                                <p class="btn btn-warning mt-3">Thay đổi thông tin</p>
+                            </div>
+                        </div><div class="col">
+                        <!-- Nút bật Modal -->
+
+                    </div>
+
+                        <!-- Modal Sua khach hàng-->
+                        <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form th:if="${dataDHCT != null and dataDHCT.size() > 0 and dataDHCT[0].donHang != null and dataDHCT[0].donHang.khachHang != null}" th:action="@{'/update-customer/' + ${dataDHCT[0].donHang.khachHang.id}}" method="post">
+                                        <input type="hidden" name="idDonHang" th:value="${dataDHCT[0].donHang.id}">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-danger" id="editCustomerModalLabel">Thay đổi thông tin khách hàng</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="tenKhachHang" class="form-label">Tên khách hàng</label>
+                                                <input type="text" class="form-control" id="tenKhachHang" name="tenKhachHang"
+                                                       th:value="${dataDHCT[0].donHang.khachHang.tenKhachHang}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="soDienThoai" class="form-label">Số điện thoại</label>
+                                                <input type="text" class="form-control" id="soDienThoai" name="soDienThoai"
+                                                       th:value="${dataDHCT[0].donHang.khachHang.soDienThoai}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email"
+                                                       th:value="${dataDHCT[0].donHang.khachHang.email}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="diaChi" class="form-label">Địa chỉ</label>
+                                                <input type="text" class="form-control" id="diaChi" name="diaChi"
+                                                       th:value="${dataDHCT[0].donHang.khachHang.diaChi}">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Sản phẩm -->
                         <br>
                         <hr>
-                        <h5 class="text-danger">THÔNG TIN SẢN PHẨM</h5>
+                        <div class="col">
+                            <h5 class="text-danger">THÔNG TIN SẢN PHẨM</h5>
+                            <div class="d-flex justify-content-end">
+                                <button th:if="${dataDHCT[0].donHang.trangThai == 'Chờ xác nhận'}"  class="btn btn-warning mt-3">Thêm sản phẩm</button>
+                            </div>
+                        </div>
                         <br>
                         <table class="table">
                             <thead>
@@ -1110,6 +1192,12 @@
     function confirmAction(message) {
         return confirm(message);
     }
+</script>
+<script >
+    document.getElementById('editCustomerModal').addEventListener('hidden.bs.modal', function () {
+        const form = this.querySelector('form');
+        form.reset(); // Reset form về trạng thái ban đầu
+    });
 </script>
 <script src="../js/bootstrap.bundle.min.js"></script>
 <script src="../js/simplebar.min.js"></script>

@@ -2,9 +2,11 @@ package com.example.fsneaker.controller;
 
 import com.example.fsneaker.entity.DonHang;
 import com.example.fsneaker.entity.DonHangChiTiet;
+import com.example.fsneaker.entity.KhachHang;
 import com.example.fsneaker.entity.LichSuDonHang;
 import com.example.fsneaker.repositories.DonHangChiTietRepo;
 import com.example.fsneaker.repositories.DonHangRepo;
+import com.example.fsneaker.repositories.KhachHangRepo;
 import com.example.fsneaker.repositories.LichSuDonHangRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +35,8 @@ public class HoaDonController {
     @Autowired
     LichSuDonHangRepo lichSuDonHangRepo;
 
+    @Autowired
+    KhachHangRepo khachHangRepo;
     @GetMapping("/donhangadmin")
     public String donHang(
             Model model,
@@ -187,4 +192,28 @@ public class HoaDonController {
 //        return "templateadmin/donhang-detail";
 //    }
 
+    @PostMapping("/update-customer/{idKhachHang}")
+    public String updateCustomer(
+            @PathVariable("idKhachHang") Integer idKhachHang,
+            @RequestParam("idDonHang") Integer idDonHang,
+            @RequestParam("tenKhachHang") String tenKhachHang,
+            @RequestParam("soDienThoai") String soDienThoai,
+            @RequestParam("email") String email,
+            @RequestParam("diaChi") String diaChi) {
+        // Tìm khách hàng hiện tại trong cơ sở dữ liệu
+        KhachHang existingCustomer = khachHangRepo.findById(idKhachHang)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy khách hàng với ID: " + idKhachHang));
+
+        // Cập nhật thông tin khách hàng
+        existingCustomer.setTenKhachHang(tenKhachHang);
+        existingCustomer.setSoDienThoai(soDienThoai);
+        existingCustomer.setEmail(email);
+        existingCustomer.setDiaChi(diaChi);
+
+        // Lưu thay đổi
+        khachHangRepo.save(existingCustomer);
+
+        // Điều hướng về trang chi tiết đơn hàng
+        return "redirect:/donhangadmin-detail/" + idDonHang;
+    }
 }
