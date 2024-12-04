@@ -126,4 +126,8 @@ public class SanPhamChiTietService {
     public SanPhamChiTiet getBySanPhamIdAndKichThuocIdAndMauSacId(Integer idSanPham, Integer idKichThuoc, Integer idMauSac) {
         return sanPhamChiTietRepo.findBySanPhamIdAndKichThuocIdAndMauSacId(idSanPham,idKichThuoc,idMauSac);
     }
+
+    public List<Object[]> searchProducts(String keyword){
+        return sanPhamChiTietRepo.searchProducts(keyword);
+    }
 }

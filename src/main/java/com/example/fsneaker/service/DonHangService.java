@@ -1,10 +1,7 @@
 package com.example.fsneaker.service;
 
 import com.example.fsneaker.entity.*;
-import com.example.fsneaker.repositories.DonHangChiTietRepo;
-import com.example.fsneaker.repositories.DonHangRepo;
-import com.example.fsneaker.repositories.GioHangRepo;
-import com.example.fsneaker.repositories.KhachHangRepo;
+import com.example.fsneaker.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +23,12 @@ public class DonHangService {
     private GioHangRepo gioHangRepo;
     @Autowired
     private KhachHangRepo khachHangRepo;
+    @Autowired
+    private GioHangChiTietRepo gioHangChiTietRepo;
+    @Autowired
+    private SanPhamChiTietRepo sanPhamChiTietRepo;
+    @Autowired
+    private VoucherRepo voucherRepo;
     public List<DonHang> getDonHangByTrangThai(){
         return donHangRepo.findByTrangThai("Ðang chờ");
     }
@@ -238,5 +241,80 @@ public class DonHangService {
         donHang.setTrangThai(trangThai);
         donHangRepo.save(donHang);
     }
+    public DonHang getDonHangByKhachHangAndTrangThaiAndLoaiDonHang(int idKhachHang){
+        return donHangRepo.findByKhachHangAndTrangThaiAndLoaiDonHang(idKhachHang,"Đang chờ","Online");
+    }
+    @Transactional
+    public void capNhatDonHangTuGioHang(DonHang donHang, GioHang gioHang){
+        //Bước 1: lấy danh sách sản phẩm chi tiết từ giỏ hàng
+        List<GioHangChiTiet> gioHangChiTietList = gioHangChiTietRepo.findByGioHangId(gioHang.getId());
 
+        //Nếu giỏ hàng trống, không làm gì
+        if(gioHangChiTietList.isEmpty()){
+            throw new IllegalStateException("Giỏ hàng trống. Không thể cập nhật đơn hàng!");
+        }
+        //Bước 2: Xóa chi tiết cũ trong đơn hàng
+        donHangChiTietRepo.deleteDonHangChiTietByDonHangId(donHang.getId());
+
+        //Bước 3: Thêm chi tiết mới từ giỏ hàng vào đơn hàng
+        double tongTienMoi = 0;
+        for(GioHangChiTiet gioHangChiTiet : gioHangChiTietList){
+            SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepo.findById(gioHangChiTiet.getSanPhamChiTiet().getId());
+
+            if(sanPhamChiTiet == null){
+                throw new IllegalStateException("Sản phẩm chi tiết không tồn tại: "+gioHangChiTiet.getSanPhamChiTiet().getId());
+
+            }
+            //Tính thành tiền cho mỗi sản phẩm
+            double thanhTien = sanPhamChiTiet.getGiaBan() * gioHangChiTiet.getSoLuong();
+
+            //Cập nhật tổng tiền
+            tongTienMoi += thanhTien;
+            //Tạo chi tiết đơn hàng
+            DonHangChiTiet donHangChiTiet = new DonHangChiTiet();
+            donHangChiTiet.setDonHang(donHang);
+            donHangChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
+            donHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong());
+            donHangChiTiet.setGia(sanPhamChiTiet.getGiaBan());
+            donHangChiTiet.setThanhTien(thanhTien);
+
+            //Lưu chi tiết đơn hàng
+            donHangChiTietRepo.save(donHangChiTiet);
+        }
+        //Bước 4: Cập nhật tổng tiền vào đơn hàng
+        donHang.setTongTien(tongTienMoi);
+
+        //Bước 5: Tính lại tổng tiền sau khi giảm giá nếu có voucher
+        if(donHang.getGiamGia() != null){
+            double tongTienGiamGia = tinhTongTienGiamGia(donHang);
+            donHang.setTongTienGiamGia(tongTienGiamGia);
+        }
+        //Bước 6: Lưu lại đơn hàng
+        donHangRepo.save(donHang);
+    }
+    public double tinhTongTienGiamGia(DonHang donHang){
+        if(donHang == null){
+            throw new IllegalArgumentException("Đơn hàng không được null!");
+        }
+        //Lấy tổng tiên trước khi giảm gia
+        double tongTien = donHang.getTongTien();
+        //Kiểm tra xem đơn hàng có voucher giảm giá không
+        Voucher voucher = voucherRepo.findById(donHang.getGiamGia().getId()).orElse(null);
+        if(voucher ==  null){
+            return tongTien;//Không có voucher, trả về tổng tiền ban đầu
+        }
+        // Áp dụng giảm giá
+        double tongTienGiamGia;
+        if(voucher.getLoaiVoucher().equalsIgnoreCase("Giảm giá %")){
+            //Giảm giá phăn trăm
+            tongTienGiamGia = tongTien - (tongTien  * voucher.getGiaTri()/100);
+        }else if(voucher.getLoaiVoucher().equalsIgnoreCase("Giảm giá số tiền")){
+            //Giảm giá theo số tiền cố định
+            tongTienGiamGia = tongTien - voucher.getGiaTri();
+        }else{
+            throw new IllegalArgumentException("Loại giảm giá không hợp lệ: "+ voucher.getLoaiVoucher());
+        }
+        //Đảm bảo tổng tiền không âm
+        return Math.max(tongTienGiamGia,0);
+    }
 }

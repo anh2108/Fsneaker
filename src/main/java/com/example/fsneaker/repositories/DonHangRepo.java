@@ -64,15 +64,17 @@ public interface DonHangRepo extends JpaRepository<DonHang, Integer> {
     @Query("SELECT SUM(chiTiet.soLuong) FROM DonHang d JOIN d.donHangChiTiets chiTiet WHERE d.ngayMua BETWEEN :startDate AND :endDate")
     Long tinhTongSanPhamDaBan(@Param("startDate")LocalDate startDate, @Param("endDate")LocalDate endDate);
 
+    @Query("SELECT dh FROM DonHang  dh WHERE dh.khachHang.id = :idKhachHang AND dh.trangThai = :trangThai AND dh.loaiDonHang = :loaiDonHang")
+    DonHang findByKhachHangAndTrangThaiAndLoaiDonHang(@Param("idKhachHang") Integer idKhachHang,@Param("trangThai") String trangThai,@Param("loaiDonHang") String loaiDonHang);
 
     /////////
-    @Query("select o from DonHang o where (?1 is null or (o.maDonHang like ?1))" +
+    @Query("select o from DonHang o where (?1 is null or (o.maDonHang like ?1 or o.khachHang.tenKhachHang like ?1 or o.khachHang.soDienThoai like ?1))" +
             " and (?2 is null or o.ngayTao >=?2) " +
             " and (?3 is null or o.ngayTao <=?3) " +
             " order by o.id desc ")
     public Page<DonHang> searchPageHoaDon(String keyword, LocalDate startDate, LocalDate endDate, PageRequest p);
 
-    @Query("select o from DonHang o where (?1 is null or (o.maDonHang like ?1))" +
+    @Query("select o from DonHang o where (?1 is null or (o.maDonHang like ?1 or o.khachHang.tenKhachHang like ?1 or o.khachHang.soDienThoai like ?1))" +
             " and (?2 is null or o.ngayTao >=?2) " +
             " and (?3 is null or o.ngayTao <=?3) " +
             " and (?4 is null or o.trangThai = ?4) " +

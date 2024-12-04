@@ -18,8 +18,8 @@ public class GioHangChiTietService {
     public void deleteGioHangChiTiet(GioHangChiTiet gioHangChiTiet){
         gioHangChiTietRepo.delete(gioHangChiTiet);
     }
-    public GioHangChiTiet getByGioHangIdAndSanPhamIdAndKichThuocIdAndMauSacId( Integer idSanPham, Integer idKichThuoc, Integer idMauSac){
-        return  gioHangChiTietRepo.findByGioHangIdAndSanPhamIdAndKichThuocIdAndMauSacId(idSanPham,idKichThuoc,idMauSac);
+    public GioHangChiTiet getByGioHangIdAndSanPhamIdAndKichThuocIdAndMauSacId(Integer idGioHang, Integer idSanPham, Integer idKichThuoc, Integer idMauSac){
+        return  gioHangChiTietRepo.findByGioHangIdAndSanPhamIdAndKichThuocIdAndMauSacId(idGioHang,idSanPham,idKichThuoc,idMauSac);
     }
     public List<GioHangChiTiet> getByGioHangId(Integer idGioHang){
         return gioHangChiTietRepo.findByGioHangId(idGioHang);

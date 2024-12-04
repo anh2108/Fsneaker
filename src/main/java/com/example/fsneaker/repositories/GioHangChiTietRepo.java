@@ -10,8 +10,9 @@ import java.util.List;
 
 @Repository
 public interface GioHangChiTietRepo extends JpaRepository<GioHangChiTiet, Integer> {
-    @Query("SELECT g FROM GioHangChiTiet g WHERE g.sanPhamChiTiet.sanPham.id = :idSanPham AND g.sanPhamChiTiet.kichThuoc.id = :idKichThuoc AND g.sanPhamChiTiet.mauSac.id = :idMauSac")
-    GioHangChiTiet findByGioHangIdAndSanPhamIdAndKichThuocIdAndMauSacId(@Param("idSanPham")Integer idSanPham,
+    @Query("SELECT g FROM GioHangChiTiet g WHERE g.gioHang.id = :idGioHang AND g.sanPhamChiTiet.sanPham.id = :idSanPham AND g.sanPhamChiTiet.kichThuoc.id = :idKichThuoc AND g.sanPhamChiTiet.mauSac.id = :idMauSac")
+    GioHangChiTiet findByGioHangIdAndSanPhamIdAndKichThuocIdAndMauSacId(@Param("idGioHang") Integer idGioHang,
+                                                                        @Param("idSanPham")Integer idSanPham,
                                                                         @Param("idKichThuoc")Integer idKichThuoc,
                                                                         @Param("idMauSac") Integer idMauSac);
     List<GioHangChiTiet> findByGioHangId(Integer idGioHang);
@@ -21,4 +22,6 @@ public interface GioHangChiTietRepo extends JpaRepository<GioHangChiTiet, Intege
     GioHangChiTiet findByGioHangIdAndSanPhamChiTietId(Integer idGioHang, Integer idSanPhamChiTiet);
     @Query("SELECT SUM(ghct.soLuong * ghct.gia) FROM GioHangChiTiet ghct WHERE ghct.gioHang.id = :gioHangId")
     Double sumGiaByGioHangId(@Param("gioHangId")Integer gioHangId);
+
+    void deleteGioHangChiTietByGioHangId(Integer idGioHang);
 }

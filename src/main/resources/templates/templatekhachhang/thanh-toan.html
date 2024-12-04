@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Trang chủ</title>
+    <title>Thanh toán</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -71,18 +71,39 @@
                             <li class="search_box"><a href="javascript:void(0)"><img src="images/icon/icon-search.png" alt=""></a>
                                 <div class="search_widget">
                                     <form action="#">
-                                        <input placeholder="Tìm kiếm sản phẩm ..." type="text">
-                                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                        <input id="searchInput1" placeholder="Tìm kiếm ..." type="text">
+                                        <ul id="suggestions1" style="text-align: start; display: none; list-style: none; padding: 0;background-color: #FFFFFF">
+
+                                        </ul>
                                     </form>
                                 </div>
                             </li>
-                            <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="images/icon/icon-account.png" alt=""></a>
+                            <script>
+                                const searchInput1 = document.getElementById('searchInput1');
+                                const suggestions1 = document.getElementById('suggestions1');
+                                searchInput1.addEventListener('input', () => {
+                                    const keyword = searchInput1.value;
+
+                                    if (keyword.length > 2) {
+                                        fetch(`/searchProduct?keyword=${keyword}`)
+                                            .then(response => response.text())
+                                            .then(html => {
+                                                suggestions1.innerHTML = html;
+                                                suggestions1.style.display = 'block';
+                                            })
+                                            .catch(error => console.error('Error fetching suggestions:', error));
+                                    } else {
+                                        suggestions1.style.display = 'none';
+                                    }
+                                });
+                            </script>
+                            <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="../images/icon/icon-account.png" alt=""></a>
                                 <div class="dropdown_account">
                                     <span th:text="${#authentication.principal.displayName}" style="color: white"></span>
                                     <div class="dropdown_account-list">
                                         <ul>
                                             <li><a href="/thong-tin-ca-nhan">Thông tin cá nhân</a></li>
-                                            <li><a href="/gio-hang">Giỏ hàng</a></li>
+                                            <li><a href="/lich-su-mua-hang">Lịch sử mua hàng</a></li>
                                             <li><a href="/logout">Đăng xuất</a></li>
                                         </ul>
                                     </div>
@@ -98,22 +119,22 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="mini_cart_wrapper"><a href="javascript:void(0)"><img src="images/icon/icon-cart.png" alt=""> <span class="item_count"  th:text="${tongSoLuongTrongGioHang}">2</span></a>
+                            <li class="mini_cart_wrapper"><a href="javascript:void(0)"><img src="../images/icon/icon-cart.png" alt=""> <span class="item_count"  th:text="${demTongSoLuongTrongGioHang}">2</span></a>
                                 <!--mini cart-->
                                 <div class="mini_cart">
                                     <div class="cart_gallery">
                                         <div th:if="${#lists.isEmpty(danhSachChiTiet)}" style="color: white">
                                             <td colspan="7" class="text-center">Không có sản phẩm nào trong giỏ hàng!</td>
                                         </div>
-<!--                                        <div class="cart_item" th:each="item : ${gioHang.getGioHangChiTietList()}">-->
-<!--                                            <div class="cart_img">-->
-<!--                                                <a href="#"><img src="images/product/product56.jpg" alt="" style="height: 60px"></a>-->
-<!--                                            </div>-->
-<!--                                            <div class="cart_info">-->
-<!--                                                <a href="#" th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}">Primis In Faucibus</a>-->
-<!--                                                <p th:text="${item.soLuong} + ' x ' + ${#numbers.formatDecimal(item.gia,0,'COMMA',0,'COMMA')}">1 </p>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
+                                        <div class="cart_item" th:each="item : ${danhSachChiTiet}">
+                                            <div class="cart_img">
+                                                <a href="#"><img src="images/product/product56.jpg" alt="" style="height: 60px"></a>
+                                            </div>
+                                            <div class="cart_info">
+                                                <a th:href="@{/xem-chi-tiet/{id}(id=${item.sanPhamChiTiet.id})}" th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}">Primis In Faucibus</a>
+                                                <p th:text="${item.soLuong} + ' x ' + ${#numbers.formatDecimal(item.gia,0,'COMMA',0,'COMMA')}">1 </p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="mini_cart_table">
                                         <div class="cart_table_border">
@@ -238,19 +259,40 @@
                                     <li class="search_box"><a href="javascript:void(0)"><img src="images/icon/icon-search.png" alt=""></a>
                                         <div class="search_widget">
                                             <form action="#">
-                                                <input placeholder="Tìm kiếm ..." type="text">
-                                                <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                                <input id="searchInput" placeholder="Tìm kiếm ..." type="text">
+                                                <ul id="suggestions" style="text-align: start; display: none; list-style: none; padding: 0;background-color: #FFFFFF">
+
+                                                </ul>
                                             </form>
                                         </div>
                                     </li>
-                                    <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="images/icon/icon-account.png" alt=""></a>
+                                    <script>
+                                        const searchInput = document.getElementById('searchInput');
+                                        const suggestions = document.getElementById('suggestions');
+                                        searchInput.addEventListener('input', () => {
+                                            const keyword = searchInput.value;
+
+                                            if (keyword.length > 2) {
+                                                fetch(`/searchProduct?keyword=${keyword}`)
+                                                    .then(response => response.text())
+                                                    .then(html => {
+                                                        suggestions.innerHTML = html;
+                                                        suggestions.style.display = 'block';
+                                                    })
+                                                    .catch(error => console.error('Error fetching suggestions:', error));
+                                            } else {
+                                                suggestions.style.display = 'none';
+                                            }
+                                        });
+                                    </script>
+                                    <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="../images/icon/icon-account.png" alt=""></a>
                                         <div class="dropdown_account">
                                             <span th:text="${#authentication.principal.displayName}" style="color: white"></span>
 <!--                                            <input type="hidden" name="idKhachHang" th:value="${#authentication.principal.id}">-->
                                             <div class="dropdown_account-list">
                                                 <ul>
                                                     <li><a href="/thong-tin-ca-nhan">Thông tin cá nhân</a></li>
-                                                    <li><a href="/gio-hang">Giỏ hàng</a></li>
+                                                    <li><a href="/lich-su-mua-hang">Lịch sử mua hàng</a></li>
                                                     <li><a href="/logout">Đăng xuất</a></li>
                                                 </ul>
                                             </div>
@@ -266,22 +308,22 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li class="mini_cart_wrapper"><a href="javascript:void(0)"><img src="images/icon/icon-cart.png" alt=""> <span class="item_count"  th:text="${tongSoLuongTrongGioHang}">2</span></a>
+                                    <li class="mini_cart_wrapper"><a href="javascript:void(0)"><img src="../images/icon/icon-cart.png" alt=""> <span class="item_count"  th:text="${demTongSoLuongTrongGioHang}">2</span></a>
                                         <!--mini cart-->
                                         <div class="mini_cart">
                                             <div class="cart_gallery">
                                                 <div th:if="${#lists.isEmpty(danhSachChiTiet)}" style="color: white">
                                                     <td colspan="7" class="text-center">Không có sản phẩm nào trong giỏ hàng!</td>
                                                 </div>
-<!--                                                <div class="cart_item" th:each="item : ${gioHang.getGioHangChiTietList()}">-->
-<!--                                                    <div class="cart_img">-->
-<!--                                                        <a href="#"><img src="images/product/product56.jpg" alt="" style="height: 60px"></a>-->
-<!--                                                    </div>-->
-<!--                                                    <div class="cart_info">-->
-<!--                                                        <a href="#" th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}">Primis In Faucibus</a>-->
-<!--                                                        <p th:text="${item.soLuong} + ' x ' + ${#numbers.formatDecimal(item.gia,0,'COMMA',0,'COMMA')}">1 </p>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
+                                                <div class="cart_item" th:each="item : ${danhSachChiTiet}">
+                                                    <div class="cart_img">
+                                                        <a href="#"><img src="images/product/product56.jpg" alt="" style="height: 60px"></a>
+                                                    </div>
+                                                    <div class="cart_info">
+                                                        <a th:href="@{/xem-chi-tiet/{id}(id=${item.sanPhamChiTiet.id})}" th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}">Primis In Faucibus</a>
+                                                        <p th:text="${item.soLuong} + ' x ' + ${#numbers.formatDecimal(item.gia,0,'COMMA',0,'COMMA')}">1 </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="mini_cart_table">
                                                 <div class="cart_table_border">
@@ -321,7 +363,27 @@
     </div>
 </header>
 <!--header area end-->
-
+<!-- Modal thông báo -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    <!-- Toast for Success -->
+    <div th:if="${message}" id="toastSuccess" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <p th:text="${message}">Thông báo thành công!</p>
+            </div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+    <!-- Toast for Error -->
+    <div th:if="${errorMessage}" id="toastError" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <p th:text="${errorMessage}">Thông báo lỗi!</p>
+            </div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
 <!--Checkout page section-->
 <div class="Checkout_section mt-60">
     <div class="container">
@@ -334,6 +396,7 @@
                         <a class="Returning" href="#" data-bs-toggle="collapse" data-bs-target="#checkout_login" aria-expanded="true">Ấn vào đây để đăng nhập</a>
 
                     </h3>
+
                     <div id="checkout_login" class="collapse" data-parent="#accordion">
                         <div class="checkout_info">
                             <p>Nếu bạn đã mua sắm với chúng tôi trước đây, vui lòng đăng nhập ở bên dưới. Nếu bạn là khách hàng mới, vui lòng chuyến đến phần Thanh toán</p>
@@ -359,13 +422,13 @@
                         <i class="fa fa-file-o" aria-hidden="true"></i>
                         Khách hàng áp dụng voucher tại đây
                         <a class="Returning" href="#" data-bs-toggle="collapse" data-bs-target="#checkout_coupon" aria-expanded="true">Ấn vào đẩy đế nhập mã Voucher</a>
-
                     </h3>
                     <div id="checkout_coupon" class="collapse" data-parent="#accordion">
                         <div class="checkout_info coupon_info">
-                            <form th:action="@{/don-hang/ap-voucher}" method="post">
+                            <form th:action="@{/thanh-toan/ap-voucher}" method="post" style="display: inline">
                                 <input type="hidden" name="idDonHang"  th:value="${donHang.id}"/>
-                                <label>Chọn voucher</label>
+                                <input th:if="${#authentication.name != 'anonymousUser'}" type="hidden" name="idKhachHang" th:value="${#authentication.principal.id}">
+                                <label class="form-label">Chọn voucher</label>
                                 <select name="idVoucher" class="form-control">
                                     <option value="0">Chọn voucher</option>
                                     <option th:each="voucher : ${vouchers}" th:value="${voucher.id}" th:text="${voucher.maVoucher + ' - '+  #numbers.formatDecimal(voucher.giaTri,0,'COMMA',0,'COMMA') + (voucher.loaiVoucher.equals('Giảm giá %') ? ' %' : ' VND')}"></option>
@@ -385,19 +448,19 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6">
                     <form action="#">
-                        <h3>Chi tiết thanh toán</h3>
+                        <h3>Thông tin khách hàng</h3>
                         <div class="row">
 
                             <div class="col-12 mb-20">
-                                <label>Tên khách hàng</label>
+                                <label>Tên khách hàng <span>*</span></label>
                                 <input type="text" th:value="${#authentication.principal.displayName}">
                             </div>
                             <div class="col-12 mb-20">
-                                <label>Địa chỉ<span>*</span></label>
+                                <label>Địa chỉ <span>*</span></label>
                                 <input type="text" th:value="${#authentication.principal.diaChi}">
                             </div>
                             <div class="col-lg-6 mb-20">
-                                <label> Số điện thoại<span>*</span></label>
+                                <label> Số điện thoại <span>*</span></label>
                                 <input type="text" th:value="${#authentication.principal.sdt}">
 
                             </div>
@@ -405,7 +468,7 @@
                                 <label> Email <span>*</span></label>
                                 <input type="text" th:value="${#authentication.principal.email}">
                             </div>
-                            <div class="col-12 mb-20">
+                            <div class="col-12 mb-20" th:if="${#authentication.name == 'anonymousUser'}">
                                 <input id="account" type="checkbox" data-bs-target="createp_account" />
                                 <label for="account" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">Tạo tài khoản?</label>
 
@@ -495,13 +558,20 @@
                                 <thead>
                                 <tr>
                                     <th>Sản phẩm</th>
+                                    <th>Số lượng & giá tiền</th>
                                     <th>Thành tiền</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="item : ${donHang.getDonHangChiTiets()}">
-                                    <td th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}"> Handbag  fringilla <strong th:text="${item.soLuong}"> × 2</strong></td>
-                                    <td th:text="${#numbers.formatDecimal(item.gia,0,'COMMA',0,'COMMA')}"> $165.00</td>
+                                    <td><a th:href="@{/xem-chi-tiet/{id}(id=${item.sanPhamChiTiet.id})}" th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}">Handbag fringilla</a>
+                                        <ul class="list-inline text-muted">
+                                            <li class="list-inline-item">Màu sắc: <span class="fw-medium" th:text="${item.sanPhamChiTiet.mauSac.tenMauSac}">Tên màu sắc</span></li>
+                                            <li class="list-inline-item">Kích thước: <span class="fw-medium" th:text="${item.sanPhamChiTiet.kichThuoc.tenKichThuoc}">Tên kích thước</span> </li>
+                                        </ul>
+                                    </td>
+                                    <td th:text="${#numbers.formatDecimal(item.gia,0,'COMMA',0,'COMMA') + ' x ' + item.soLuong}"> $165.00</td>
+                                    <td th:text="${#numbers.formatDecimal(item.soLuong*item.gia,0,'COMMA',0,'COMMA')}"></td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
@@ -515,7 +585,7 @@
 <!--                                </tr>-->
                                 <tr class="order_total">
                                     <th>Tổng tiền</th>
-                                    <td> <strong th:text="${donHang.tongTien}">$220.00</strong></td>
+                                    <td colspan="2"> <strong th:text="${#numbers.formatDecimal(tongTien,0,'COMMA',0,'COMMA')} + ' VND'">$220.00</strong></td>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -543,7 +613,7 @@
 <!--                            </div>-->
                     <form th:action="@{/dat-hang/{idDonHang}(idDonHang=${donHang.id})}" method="post">
                             <div class="order_button">
-                                <input type="text" name="idGioHang" th:value="${gioHang.id}">
+                                <input type="hidden" name="idGioHang" th:value="${gioHang.id}">
                                 <button type="submit">Đặt hàng</button>
                             </div>
                     </form>
@@ -664,7 +734,28 @@
     </div>
 </footer>
 <!--footer area end-->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastSuccessElement = document.getElementById('toastSuccess');
+        const toastErrorElement = document.getElementById('toastError');
 
+        if (toastSuccessElement) {
+            const toastSuccess = new bootstrap.Toast(toastSuccessElement, {
+                autohide: true,
+                delay: 5000 // 5 seconds
+            });
+            toastSuccess.show();
+        }
+
+        if (toastErrorElement) {
+            const toastError = new bootstrap.Toast(toastErrorElement, {
+                autohide: true,
+                delay: 5000 // 5 seconds
+            });
+            toastError.show();
+        }
+    });
+</script>
 <!-- JS
 ============================================ -->
 <!--jquery min js-->

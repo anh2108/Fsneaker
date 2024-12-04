@@ -86,7 +86,9 @@ public class GioHangService {
            return gioHangMoi;
         });
     }
+    @Transactional
     public void delete(GioHang gioHang){
+        gioHangChiTietRepo.deleteGioHangChiTietByGioHangId(gioHang.getId());
         gioHangRepo.delete(gioHang);
     }
     public void xoaSanPhamTrongGioHang(int idGioHang){
