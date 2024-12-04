@@ -36,13 +36,16 @@ public class SanPham {
     @Column(name = "NgayTao")
     private Date ngayTao;
 
+
     @ManyToOne
     @JoinColumn(name = "IdThuongHieu", referencedColumnName = "Id")
     private ThuongHieu thuongHieu;
 
+
     @ManyToOne
     @JoinColumn(name = "IdXuatXu", referencedColumnName = "Id")
     private XuatXu xuatXu;
+
 
     @ManyToOne
     @JoinColumn(name = "IdKhuyenMai", referencedColumnName = "Id")
