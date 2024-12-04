@@ -4,6 +4,9 @@ import com.example.fsneaker.entity.ThuongHieu;
 import com.example.fsneaker.entity.XuatXu;
 import com.example.fsneaker.repositories.ThuongHieuRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +23,15 @@ public class ThuongHieuController {
     private ThuongHieuRepo thuongHieuRepo;
 
     @GetMapping("/qlthuonghieu")
-    public String index( Model model){
-        List<ThuongHieu> thuongHieuList = thuongHieuRepo.findAll();
+    public String index( Model model,
+                         @RequestParam(name = "page", defaultValue = "0")Integer pageNo,
+                         @RequestParam(name = "limit", defaultValue = "5")Integer pageSize,
+                         Pageable pageable){
+
+
+        Page<ThuongHieu> thuongHieuList = thuongHieuRepo.findAll(pageable);
+
+//        List<ThuongHieu> thuongHieuList = thuongHieuRepo.findAll();
         model.addAttribute("thieu", thuongHieuList);
         return "/templateadmin/qlthuonghieu.html";
 

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer> {
@@ -63,6 +64,14 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
             "where spct.giaBan between :minPrice and :maxPrice")
     public Page<SanPhamChiTiet> searchByPrice(Double minPrice, Double maxPrice,Pageable pageable);
 
+
+    //lấy ra giá trị giảm giá
+
+    @Query("select DISTINCT   km.giaTri from SanPhamChiTiet spct " +
+            "join spct.sanPham sp " +
+            "join sp.khuyenMai km " +
+            "where sp.id = :id ")
+    public BigDecimal giaTri(Integer id);
 
     //Chỗ này là của trưởng nhóm code cấm đụng
     @Query("SELECT spct FROM SanPhamChiTiet spct WHERE spct.sanPham.tenSanPham LIKE %:keyword% OR " +
