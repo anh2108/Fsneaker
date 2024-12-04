@@ -36,17 +36,17 @@ public class SanPham {
     @Column(name = "NgayTao")
     private Date ngayTao;
 
-    @NotNull(message = "Chọn thương hiệu!")
+
     @ManyToOne
     @JoinColumn(name = "IdThuongHieu", referencedColumnName = "Id")
     private ThuongHieu thuongHieu;
 
-    @NotNull(message = "Chọn xuất xứ!")
+
     @ManyToOne
     @JoinColumn(name = "IdXuatXu", referencedColumnName = "Id")
     private XuatXu xuatXu;
 
-    @NotNull(message = "Chọn khuyến mãi!")
+
     @ManyToOne
     @JoinColumn(name = "IdKhuyenMai", referencedColumnName = "Id")
     private KhuyenMai khuyenMai;
