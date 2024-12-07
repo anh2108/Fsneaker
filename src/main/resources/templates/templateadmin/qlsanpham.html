@@ -1375,22 +1375,15 @@
 
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <label class="form-label">Giá bán sau khi giảm</label>
-                                                            <input type="number" class="form-control"
-                                                                   name="giaBanGiamGia" value="0" readonly/>
-                                                            <div id="giaBanGiamGiaError"  style="color: #ff0000" class="error"></div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-6">
                                                             <label class="form-label">Ngày sản xuất</label>
                                                             <input type="date" class="form-control"  style="color: #ff0000" name="ngaySanXuat"/>
 
                                                         </div>
 
-                                                        <div class="col-md-6">
+                                                    </div>
+
+
+                                                    <div class="row mb-3">
                                                             <label class="form-label">Sản phẩm</label>
                                                             <select class="form-control" name="sanPhamId">
                                                                 <option value="" disabled selected>Chọn sản phẩm
@@ -1400,7 +1393,6 @@
                                                                     Sản phẩm
                                                                 </option>
                                                             </select>
-                                                        </div>
                                                     </div>
 
                                                     <div class="row mb-3">
@@ -1549,24 +1541,16 @@
                                                                         <div id="giaBanError1"
                                                                              class="error text-danger"></div>
                                                                     </div>
-                                                                    <div class="col-md-6">
-                                                                        <label class="form-label">Giá bán sau
-                                                                            giảm</label>
-                                                                        <input type="text" class="form-control"
-                                                                               th:value="${spct.giaBanGiamGia}"
-                                                                               name="giaBanGiamGia">
-                                                                        <div id="giaBanGiamGiaError1"
-                                                                             class="error text-danger"></div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mb-3">
+
                                                                     <div class="col-md-6">
                                                                         <label class="form-label">Ngày sản xuất</label>
                                                                         <input type="date" class="form-control"
                                                                                th:value="${spct.ngaySanXuat}"
                                                                                name="ngaySanXuat">
                                                                     </div>
-                                                                    <div class="col-md-6">
+
+                                                                </div>
+                                                                <div class="row mb-3">
                                                                         <label class="form-label">Sản phẩm</label>
                                                                         <select class="form-select" name="sanPhamId">
                                                                             <option value="0" th:text="'Chọn sản phẩm'"
@@ -1580,7 +1564,6 @@
                                                                                     th:selected="${  spct.sanPham.id == sp.id}">
                                                                             </option>
                                                                         </select>
-                                                                    </div>
                                                                 </div>
                                                                 <div class="row mb-3">
                                                                     <div class="col-md-6">

@@ -110,17 +110,17 @@ public class SanPhamChiTietController {
 
         // Lấy giá trị phiếu giảm giá
         BigDecimal giaTriGiamGia = sanPhamChiTietRepo.giaTri(sanPhamId);
-        BigDecimal giaBan = BigDecimal.valueOf(sanPhamChiTiet.getGiaBan());
+
         // Tính giá bán sau giảm
         if (giaTriGiamGia != null && giaTriGiamGia.compareTo(BigDecimal.valueOf(100)) <= 0) {
             BigDecimal phanTramGiamGia = giaTriGiamGia.divide(BigDecimal.valueOf(100));
-            BigDecimal giaBanSauGiam = giaBan.multiply(BigDecimal.ONE.subtract(phanTramGiamGia));
-            sanPhamChiTiet.setGiaBanGiamGia(giaBanSauGiam.doubleValue());
+            BigDecimal giaBanGiamGia = sanPhamChiTiet.getGiaBan().multiply(BigDecimal.ONE.subtract(phanTramGiamGia));
+            sanPhamChiTiet.setGiaBanGiamGia(giaBanGiamGia);
         } else if (giaTriGiamGia != null && giaTriGiamGia.compareTo(BigDecimal.valueOf(100)) > 0) {
-            BigDecimal giaBanSauGiam = giaBan.subtract(giaTriGiamGia);
-            sanPhamChiTiet.setGiaBanGiamGia(giaBanSauGiam.doubleValue());
+            BigDecimal giabanGiamGia = giaTriGiamGia.subtract(giaTriGiamGia);
+            sanPhamChiTiet.setGiaBanGiamGia(giabanGiamGia);
         } else {
-            sanPhamChiTiet.setGiaBanGiamGia(0.0);
+            sanPhamChiTiet.setGiaBanGiamGia(BigDecimal.ZERO);
         }
 
         // Tiến hành lưu trữ sản phẩm chi tiết với các kích thước và màu sắc được chọn
@@ -262,20 +262,19 @@ public class SanPhamChiTietController {
             sanPhamChiTiet.setImanges(imageName);
         }
 
-        // Cập nhật giá bán sau giảm
+        // Lấy giá trị phiếu giảm giá
         BigDecimal giaTriGiamGia = sanPhamChiTietRepo.giaTri(sanPhamId);
-        BigDecimal giaBan = BigDecimal.valueOf(sanPhamChiTiet.getGiaBan());
-        if (giaTriGiamGia != null) {
-            if (giaTriGiamGia.compareTo(BigDecimal.valueOf(100)) <= 0) {
-                BigDecimal phanTramGiamGia = giaTriGiamGia.divide(BigDecimal.valueOf(100));
-                BigDecimal giaBanSauGiam = giaBan.multiply(BigDecimal.ONE.subtract(phanTramGiamGia));
-                sanPhamChiTiet.setGiaBanGiamGia(giaBanSauGiam.doubleValue());
-            } else {
-                BigDecimal giaBanSauGiam = giaBan.subtract(giaTriGiamGia);
-                sanPhamChiTiet.setGiaBanGiamGia(giaBanSauGiam.doubleValue());
-            }
+
+        // Tính giá bán sau giảm
+        if (giaTriGiamGia != null && giaTriGiamGia.compareTo(BigDecimal.valueOf(100)) <= 0) {
+            BigDecimal phanTramGiamGia = giaTriGiamGia.divide(BigDecimal.valueOf(100));
+            BigDecimal giaBanGiamGia = sanPhamChiTiet.getGiaBan().multiply(BigDecimal.ONE.subtract(phanTramGiamGia));
+            sanPhamChiTiet.setGiaBanGiamGia(giaBanGiamGia);
+        } else if (giaTriGiamGia != null && giaTriGiamGia.compareTo(BigDecimal.valueOf(100)) > 0) {
+            BigDecimal giabanGiamGia = giaTriGiamGia.subtract(giaTriGiamGia);
+            sanPhamChiTiet.setGiaBanGiamGia(giabanGiamGia);
         } else {
-            sanPhamChiTiet.setGiaBanGiamGia(0.0);
+            sanPhamChiTiet.setGiaBanGiamGia(BigDecimal.ZERO);
         }
 
         // Cập nhật số lượng và giá bán
