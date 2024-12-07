@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 @Getter
@@ -63,9 +64,9 @@ public class  SanPhamChiTiet {
 
 
     @Column(name = "GiaBan")
-    private double giaBan;
+    private BigDecimal giaBan;
 
 
     @Column(name = "GiaBanGiamGia")
-    private Double giaBanGiamGia;
+    private BigDecimal giaBanGiamGia;
 }
