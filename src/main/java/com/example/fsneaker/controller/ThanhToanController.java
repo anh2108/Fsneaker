@@ -51,8 +51,9 @@ public class ThanhToanController {
         int tongSoLuongTrongGioHang = gioHangChiTietService.getSoLuongTrongGioHang(gioHang.getId());
         model.addAttribute("tongSoLuongTrongGioHang",tongSoLuongTrongGioHang);
         //Tính tổng tiền
-        double tongTien = gioHang.getGioHangChiTietList().stream()
-                .mapToDouble(item -> item.getGia() * item.getSoLuong()).sum();
+        BigDecimal tongTien = gioHang.getGioHangChiTietList().stream()
+                .map(item -> item.getGia().multiply(BigDecimal.valueOf(item.getSoLuong()))) // Phép nhân giá và số lượng
+                .reduce(BigDecimal.ZERO, BigDecimal::add); // Cộng dồn tổng
         model.addAttribute("gioHang",gioHang);
         model.addAttribute("tongTien",tongTien);
         return "templatekhachhang/thanh-toan";
@@ -88,21 +89,34 @@ public class ThanhToanController {
                 donHangService.capNhatDonHangTuGioHang(donHang,gioHang);
             }
             //Tính lại tổng tiền và áp dụng voucher nếu có
-            boolean hasVoucher = donHang.getGiamGia() != null;
+            Voucher voucher = donHang.getGiamGia();
 
-            if(hasVoucher){
-                donHang.setTongTienGiamGia(donHangService.tinhTongTienGiamGia(donHang));
-                model.addAttribute("tongTien",donHang.getTongTienGiamGia());
-            }else{
-                model.addAttribute("tongTien",donHang.getTongTien());
+            if (voucher != null) {
+                BigDecimal tongTien = donHangService.tinhTongTienGiamGia(donHang);
+
+                if (tongTien.compareTo(voucher.getDonToiThieu()) <0) {
+                    // Hủy voucher nếu không còn phù hợp
+                    donHang.setGiamGia(null);
+                    donHang.setTongTienGiamGia(null);
+
+                    // Cập nhật lại số lượng voucher
+                    voucher.setSoLuong(voucher.getSoLuong() + 1);
+                    voucherService.themVoucher(voucher);
+                    model.addAttribute("message","Tổng tiền không đủ điều kiện để áp voucher này. Đã hủy voucher!");
+                } else {
+                    donHang.setTongTienGiamGia(donHangService.tinhTongTienGiamGia(donHang));
+                }
             }
+            BigDecimal phiShip =BigDecimal.valueOf(25000);
+            model.addAttribute("phiShip",phiShip);
+            model.addAttribute("tongTien", donHang.getTongTienGiamGia() != null ? donHang.getTongTienGiamGia() : donHang.getTongTien());
             //Hiển thị thông tin đơn hàng
             model.addAttribute("donHang",donHang);
             //Lọc voucher phù hợp với tổng tiền mới
             List<Voucher> vouchers = voucherService.getAllVoucherByTrangThaiAndGiaTri(1);
             DonHang finalDonHang = donHang;
             List<Voucher> filteredVouchers = vouchers.stream()
-                    .filter(voucher -> voucher.getDonToiThieu() <= finalDonHang.getTongTien()) //Chỉ giữ các voucher có đơn tối thiểu <= tổng tiền
+                    .filter(voucher1 -> voucher1.getDonToiThieu().compareTo(finalDonHang.getTongTien()) <= 0) // Chỉ giữ các voucher có đơn tối thiểu <= tổng tiền
                     .collect(Collectors.toList());
             model.addAttribute("vouchers", filteredVouchers);
             List<GioHangChiTiet> danhSachChiTiet = gioHangChiTietService.getByGioHangId(gioHang.getId());
@@ -114,14 +128,15 @@ public class ThanhToanController {
         return "templatekhachhang/thanh-toan";
     }
     @PostMapping("/dat-hang/{idDonHang}")
-    public String datHang(@PathVariable int idDonHang,@RequestParam(value ="idGioHang",required = false)Integer idGioHang, RedirectAttributes redirectAttributes){
+    public String datHang(@PathVariable int idDonHang,@RequestParam(value = "idKhachHang",required = false) Integer idKhachHang,@RequestParam(value ="idGioHang",required = false)Integer idGioHang, RedirectAttributes redirectAttributes){
+        GioHang gioHang = gioHangService.getGioHangByUserId(idKhachHang);
         //Cập nhật trạng thái đơn hàng thành "đang xử lý"
         donHangService.capNhatTrangThaiDonHang(idDonHang, "Chờ xác nhận");
         //Xóa các sản phẩm trong giỏ hàng
         gioHangService.xoaSanPhamTrongGioHang(idGioHang);
         //Thông báo đặt hàng thành công
         redirectAttributes.addFlashAttribute("message", "Đặt hàng thành công!");
-        return "redirect:/gio-hang";
+        return "redirect:/thanh-toan/"+gioHang.getId() +"?idKhachHang=" + idKhachHang;
     }
     @PostMapping("/thanh-toan/ap-voucher")
     public String apDungVoucher(@RequestParam(value="idKhachHang",required = false)Integer idKhachHang,@RequestParam(value="idDonHang",required = false) Integer idDonHang, @RequestParam(value="idVoucher",required = false) Integer idVoucher, Model model,RedirectAttributes redirectAttributes){
@@ -147,7 +162,7 @@ public class ThanhToanController {
             return "redirect:/thanh-toan/"+gioHang.getId()+"?idKhachHang="+idKhachHang;
         }
         //Áp dụng voucher và tính tiên sau khi giảm
-        double tongTienGiamGia =voucherService.applyVoucher(donHang, voucher);
+        BigDecimal tongTienGiamGia =voucherService.applyVoucher(donHang, voucher);
         int slVoucher = voucher.getSoLuong();
         //Cập nhật hóa đơn
         donHang.setGiamGia(voucher);
@@ -157,6 +172,36 @@ public class ThanhToanController {
         donHangService.capNhatDonHang(donHang);
         redirectAttributes.addFlashAttribute("message","Voucher đã được áp dụng thành công!");
         return "redirect:/thanh-toan/"+gioHang.getId() +"?idKhachHang="+idKhachHang;
+    }
+    @PostMapping("/thanh-toan/huy-voucher")
+    public String huyVoucherKhachHang(@RequestParam(value = "idKhachHang",required = false)Integer idKhachHang,@RequestParam(value = "idDonHang",required = false)Integer idDonHang,Model model, RedirectAttributes redirectAttributes){
+        //Kiểm tra và lấy thông tin giỏ hàng
+        GioHang gioHang = gioHangService.getGioHangByUserId(idKhachHang);
+        if(idDonHang == null){
+            redirectAttributes.addFlashAttribute("errorMessage","Đơn hàng không tồn tại!");
+            return "redirect:/thanh-toan/"+gioHang.getId() + "?idKhachHang=" + idKhachHang;
+        }
+        DonHang donHang = donHangService.getDonHangById(idDonHang);
+        if(donHang == null){
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy đơn hàng!");
+            return "redirect:/thanh-toan/"+gioHang.getId() + "?idKhachHang=" + idKhachHang;
+        }
+        //Kiểm tra voucher đã áp dụng
+        Voucher voucher = donHang.getGiamGia();
+        if(voucher == null){
+            redirectAttributes.addFlashAttribute("errorMessage","Đơn hàng chưa áp dụng voucher!");
+            return "redirect:/thanh-toan/"+gioHang.getId() +"?idKhachHang="+idKhachHang;
+        }
+        //Gỡ bỏ voucher khỏi đơn hàng
+        donHang.setGiamGia(null);
+        donHang.setTongTienGiamGia(null); //Reset tổng tiền giảm giá
+        donHangService.capNhatDonHang(donHang);
+
+        //Cập nhất số lượng voucher
+        voucher.setSoLuong(voucher.getSoLuong() + 1);
+        voucherService.themVoucher(voucher);
+        redirectAttributes.addFlashAttribute("message","Voucher đã được hủy thành công!");
+        return "redirect:/thanh-toan/"+gioHang.getId() + "?idKhachHang=" + idKhachHang;
     }
 
     public GioHang capNhatGioHangTheoKhachHang(Integer idKhachHang){

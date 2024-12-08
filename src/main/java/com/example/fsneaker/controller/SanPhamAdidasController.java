@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -120,8 +121,9 @@ public class SanPhamAdidasController {
         model.addAttribute("danhSachChiTiet", danhSachChiTiet);
         int tongSoLuongTrongGioHang = gioHangChiTietService.getSoLuongTrongGioHang(gioHang.getId());
         model.addAttribute("tongSoLuongTrongGioHang",tongSoLuongTrongGioHang);
-        double tongTien = gioHang.getGioHangChiTietList().stream()
-                .mapToDouble(item -> item.getGia() * item.getSoLuong()).sum();
+        BigDecimal tongTien = gioHang.getGioHangChiTietList().stream()
+                .map(item -> item.getGia().multiply(BigDecimal.valueOf(item.getSoLuong()))) // Phép nhân giá và số lượng
+                .reduce(BigDecimal.ZERO, BigDecimal::add); // Cộng dồn tổng
         model.addAttribute("gioHang",gioHang);
         model.addAttribute("tongTien",tongTien);
         return "templatekhachhang/san-pham-adidas";

@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -61,11 +62,11 @@ public class DonHangService {
         String part2 = String.format("%05d", new Random().nextInt(100000));
         return "HD" + part1 + part2;
     }
-    public double tinhTongThuNhap(){
+    public BigDecimal tinhTongThuNhap() {
         List<DonHang> donHangs = donHangRepo.findByTrangThai("Đã thanh toán");
         return donHangs.stream()
-                .mapToDouble(donHang -> donHang.getGiamGia() != null ? donHang.getTongTienGiamGia() : donHang.getTongTien())
-                .sum();
+                .map(donHang -> donHang.getGiamGia() != null ? donHang.getTongTienGiamGia() : donHang.getTongTien())
+                .reduce(BigDecimal.ZERO, BigDecimal::add); // Cộng dồn tổng tiền
     }
     public Long tongDonHang(){
         return donHangRepo.countByTrangThaiEquals("Đã thanh toán");
@@ -107,11 +108,11 @@ public class DonHangService {
     }
     //Lấy tổng thu nhập theo ngày trong tháng hiện tại
     public List<Object[]> getThuNhapTheoThang(){
-        return donHangRepo.findThuNhapTheoThang();
+        return donHangRepo.findThuNhapTheoThang("Đã thanh toán");
     }
     //Lấy số đơn hàng theo ngày trong tháng hiện tại
     public List<Object[]> getDonHangTheoThang(){
-        return donHangRepo.findDonHangTheoThang();
+        return donHangRepo.findDonHangTheoThang("Đã thanh toán");
     }
     //Lấy tổng thu nhập theo tháng trong năm hiện tại
     public List<Object[]> getThuNhapTheoNam(){
@@ -162,11 +163,13 @@ public class DonHangService {
             return false;
         }
     }
-    public Double tinhTongThuNhapTheoThoiGian(LocalDate startDate, LocalDate endDate,String trangThai){
-        Double tongThuNhap = donHangRepo.tinhTongThuNhap(startDate,endDate);
+    public BigDecimal tinhTongThuNhapTheoThoiGian(LocalDate startDate, LocalDate endDate, String trangThai){
+        BigDecimal tongThuNhap = donHangRepo.tinhTongThuNhap("Đã thanh toán",startDate, endDate);
+
         if(tongThuNhap == null || !"Đã thanh toán".equals(trangThai)){
-            return 0.0;
+            return BigDecimal.ZERO;
         }
+
         return tongThuNhap;
     }
     public Long tinhTongKhachHangTheoThoiGian(LocalDate startDate, LocalDate endDate){
@@ -182,14 +185,14 @@ public class DonHangService {
         }
         return tongSanPham;
     }
-    public void updateSanPhamQuantity(Integer idDonHang, Integer idSanPhamChiTiet, Integer soLuong){
-        DonHangChiTiet chiTiet = donHangChiTietRepo.findByDonHangIdAndSanPhamChiTietId(idDonHang,idSanPhamChiTiet);
-        if(chiTiet != null){
-            chiTiet.setSoLuong(soLuong); //Cập nhật số lượng
-            chiTiet.setThanhTien(soLuong * chiTiet.getGia());
-            donHangChiTietRepo.save(chiTiet); //Lưu vào database
-        }
-    }
+//    public void updateSanPhamQuantity(Integer idDonHang, Integer idSanPhamChiTiet, Integer soLuong){
+//        DonHangChiTiet chiTiet = donHangChiTietRepo.findByDonHangIdAndSanPhamChiTietId(idDonHang,idSanPhamChiTiet);
+//        if(chiTiet != null){
+//            chiTiet.setSoLuong(soLuong); //Cập nhật số lượng
+//            chiTiet.setThanhTien(soLuong * chiTiet.getGia());
+//            donHangChiTietRepo.save(chiTiet); //Lưu vào database
+//        }
+//    }
     @Transactional
     public DonHang chuyenGioHangSangDonHang(int idGioHang,int idKhachHang){
         //Lấy thông tin giỏ hàng
@@ -208,12 +211,12 @@ public class DonHangService {
         donHang.setKhachHang(khachHang);
         donHang.setNgayMua(LocalDate.now());
         donHang.setNgayTao(LocalDate.now());
-        donHang.setTrangThai("Đang chờ");
+        donHang.setTrangThai("Đang xử lý");
         donHang.setLoaiDonHang("Online");
 
         //Chuyển sản phẩm từ giỏ hàng chi tiết sang đơn hàng chi tiết
         List<DonHangChiTiet> donHangChiTietList = new ArrayList<>();
-        double tongTien = 0;
+        BigDecimal tongTien = BigDecimal.ZERO;
 
         for(GioHangChiTiet gioHangChiTiet : gioHang.getGioHangChiTietList()){
             DonHangChiTiet donHangChiTiet = new DonHangChiTiet();
@@ -221,10 +224,11 @@ public class DonHangService {
             donHangChiTiet.setSanPhamChiTiet(gioHangChiTiet.getSanPhamChiTiet());
             donHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong());
             donHangChiTiet.setGia(gioHangChiTiet.getGia());
-            donHangChiTiet.setThanhTien(gioHangChiTiet.getSoLuong() * gioHangChiTiet.getGia());
+            BigDecimal thanhTien = BigDecimal.valueOf(gioHangChiTiet.getSoLuong()).multiply(gioHangChiTiet.getGia());
+            donHangChiTiet.setThanhTien(thanhTien);
+            //Cộng đòn tổng tiền bằng BigDecimal
+            tongTien = tongTien.add(thanhTien);
             donHangChiTiet.setDonHang(donHang);
-
-            tongTien += donHangChiTiet.getThanhTien();
             donHangChiTietList.add(donHangChiTiet);
         }
 
@@ -242,7 +246,7 @@ public class DonHangService {
         donHangRepo.save(donHang);
     }
     public DonHang getDonHangByKhachHangAndTrangThaiAndLoaiDonHang(int idKhachHang){
-        return donHangRepo.findByKhachHangAndTrangThaiAndLoaiDonHang(idKhachHang,"Đang chờ","Online");
+        return donHangRepo.findByKhachHangAndTrangThaiAndLoaiDonHang(idKhachHang,"Đang xử lý","Online");
     }
     @Transactional
     public void capNhatDonHangTuGioHang(DonHang donHang, GioHang gioHang){
@@ -257,19 +261,20 @@ public class DonHangService {
         donHangChiTietRepo.deleteDonHangChiTietByDonHangId(donHang.getId());
 
         //Bước 3: Thêm chi tiết mới từ giỏ hàng vào đơn hàng
-        double tongTienMoi = 0;
+        BigDecimal tongTienMoi = BigDecimal.ZERO;
         for(GioHangChiTiet gioHangChiTiet : gioHangChiTietList){
             SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepo.findById(gioHangChiTiet.getSanPhamChiTiet().getId());
 
             if(sanPhamChiTiet == null){
                 throw new IllegalStateException("Sản phẩm chi tiết không tồn tại: "+gioHangChiTiet.getSanPhamChiTiet().getId());
-
             }
             //Tính thành tiền cho mỗi sản phẩm
-            double thanhTien = sanPhamChiTiet.getGiaBan() * gioHangChiTiet.getSoLuong();
+            BigDecimal giaBan = sanPhamChiTiet.getGiaBan();
+            BigDecimal soLuong = BigDecimal.valueOf(gioHangChiTiet.getSoLuong());
+            BigDecimal thanhTien = giaBan.multiply(soLuong);
 
             //Cập nhật tổng tiền
-            tongTienMoi += thanhTien;
+            tongTienMoi = tongTienMoi.add(thanhTien);
             //Tạo chi tiết đơn hàng
             DonHangChiTiet donHangChiTiet = new DonHangChiTiet();
             donHangChiTiet.setDonHang(donHang);
@@ -286,35 +291,37 @@ public class DonHangService {
 
         //Bước 5: Tính lại tổng tiền sau khi giảm giá nếu có voucher
         if(donHang.getGiamGia() != null){
-            double tongTienGiamGia = tinhTongTienGiamGia(donHang);
+            BigDecimal tongTienGiamGia = tinhTongTienGiamGia(donHang);
             donHang.setTongTienGiamGia(tongTienGiamGia);
         }
         //Bước 6: Lưu lại đơn hàng
         donHangRepo.save(donHang);
     }
-    public double tinhTongTienGiamGia(DonHang donHang){
+    public BigDecimal tinhTongTienGiamGia(DonHang donHang){
         if(donHang == null){
             throw new IllegalArgumentException("Đơn hàng không được null!");
         }
         //Lấy tổng tiên trước khi giảm gia
-        double tongTien = donHang.getTongTien();
+        BigDecimal tongTien = donHang.getTongTien();
         //Kiểm tra xem đơn hàng có voucher giảm giá không
         Voucher voucher = voucherRepo.findById(donHang.getGiamGia().getId()).orElse(null);
         if(voucher ==  null){
             return tongTien;//Không có voucher, trả về tổng tiền ban đầu
         }
         // Áp dụng giảm giá
-        double tongTienGiamGia;
+        BigDecimal tongTienGiamGia;
         if(voucher.getLoaiVoucher().equalsIgnoreCase("Giảm giá %")){
             //Giảm giá phăn trăm
-            tongTienGiamGia = tongTien - (tongTien  * voucher.getGiaTri()/100);
+            BigDecimal giaTriGiamGia = voucher.getGiaTri();
+            tongTienGiamGia = tongTien.subtract(tongTien.multiply(giaTriGiamGia).divide(BigDecimal.valueOf(100)));
         }else if(voucher.getLoaiVoucher().equalsIgnoreCase("Giảm giá số tiền")){
             //Giảm giá theo số tiền cố định
-            tongTienGiamGia = tongTien - voucher.getGiaTri();
+            BigDecimal giaTriVoucher = voucher.getGiaTri();
+            tongTienGiamGia = tongTien.subtract(giaTriVoucher);
         }else{
             throw new IllegalArgumentException("Loại giảm giá không hợp lệ: "+ voucher.getLoaiVoucher());
         }
         //Đảm bảo tổng tiền không âm
-        return Math.max(tongTienGiamGia,0);
+        return tongTienGiamGia.max(BigDecimal.ZERO);
     }
 }

@@ -56,11 +56,10 @@ public class NhanVien {
         private Boolean vaiTro;
 
         @NotBlank(message = "Mật khẩu không được bỏ trống !")
-        @Size(max = 10, message = "Mật khẩu không được dài quá 10 ký tự")
+        @Size(min = 8, max = 20, message = "Mật khẩu không được dài từ 8 - 20 ký tự")
         @Column(name = "MatKhau")
         private String matKhau;
 
-        @NotBlank(message = "CCCD không được bỏ trống !")
         @Column(unique = true, name = "CCCD")
         private String cccd;
 

@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
@@ -53,7 +54,7 @@ public class TrangAdminController {
         int pageSize = 5;
 
         Long tongSoKhachHang;
-        Double tongThuNhap = 0.0;
+        BigDecimal tongThuNhap = new BigDecimal("0.0");
         Long tongSoDonHang = 0L;
         Long tongSanPham = 0L;
         Page<Object[]> orderStarts = donHangService.thongKeKhachHangTheoTongTien(startDate, endDate, page,pageSize);
@@ -124,7 +125,7 @@ public class TrangAdminController {
             DefaultCategoryDataset thuNhapDataset = new DefaultCategoryDataset();
             for(Object[] data : thuNhapData){
                 Integer day = (Integer) data[0];
-                Double doanhThu = (Double) data[1];
+                BigDecimal doanhThu = (BigDecimal) data[1];
                 thuNhapDataset.addValue(doanhThu, "Thu nhập", "Ngày " + day);
             }
             //Tạo dataset cho biểu đồ đường (Số lượng đơn hàng)
@@ -175,7 +176,7 @@ public class TrangAdminController {
             DefaultCategoryDataset thuNhapDataset = new DefaultCategoryDataset();
             for(Object[] data : thuNhapDataTheoNam){
                 Integer thang = (Integer) data[0];
-                Double doanhThu = (Double) data[1];
+                BigDecimal doanhThu = (BigDecimal) data[1];
                 thuNhapDataset.addValue(doanhThu, "Thu nhập", "Tháng " + thang);
             }
             //Tạo dataset cho biểu đô đường (Số lượng đơn hàng)

@@ -7,7 +7,7 @@
 <!--<body>-->
 <ul th:fragment="resultsList">
     <li th:each="product : ${products}">
-        <a href="#"><img src="images/product/product56.jpg" alt="" style="height: 60px"></a>
+        <a href="#"><img src="../images/product/product56.jpg" alt="" style="height: 60px"></a>
         <a th:href="@{/xem-chi-tiet/{id}(id=${product[0]})}"><span th:text="${product[1]}"></span></a>
         (<span th:text="${product[2]}"></span>)
     </li>

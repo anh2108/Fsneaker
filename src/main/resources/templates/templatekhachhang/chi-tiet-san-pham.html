@@ -69,7 +69,7 @@
                     </div>
                     <div class="header_right_info">
                         <ul>
-                            <li class="search_box"><a href="javascript:void(0)"><img src="images/icon/icon-search.png" alt=""></a>
+                            <li class="search_box"><a href="javascript:void(0)"><img src="../images/icon/icon-search.png" alt=""></a>
                                 <div class="search_widget">
                                     <form action="#">
                                         <input id="searchInput1" placeholder="Tìm kiếm ..." type="text">
@@ -98,13 +98,14 @@
                                     }
                                 });
                             </script>
-                            <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="images/icon/icon-account.png" alt=""></a>
+                            <li th:if="${#authentication.name != 'anonymousUser'}" class="header_account"><a href="javascript:void(0)"><img src="../images/icon/icon-account.png" alt=""></a>
                                 <div class="dropdown_account">
                                     <span th:text="${#authentication.principal.displayName}" style="color: white"></span>
                                     <div class="dropdown_account-list">
                                         <ul>
                                             <li><a href="/thong-tin-ca-nhan">Thông tin cá nhân</a></li>
                                             <li><a href="/gio-hang">Giỏ hàng</a></li>
+                                            <li><a href="/lich-su-mua-hang">Lịch sử mua hàng</a></li>
                                             <li><a href="/logout">Đăng xuất</a></li>
                                         </ul>
                                     </div>
@@ -120,7 +121,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="mini_cart_wrapper"><a href="javascript:void(0)"><img src="images/icon/icon-cart.png" alt=""> <span class="item_count" th:text="${demTongSoLuongTrongGioHang}">2</span></a>
+                            <li class="mini_cart_wrapper"><a href="javascript:void(0)"><img src="../images/icon/icon-cart.png" alt=""> <span class="item_count" th:text="${demTongSoLuongTrongGioHang}">2</span></a>
                                 <!--mini cart-->
                                 <div class="mini_cart">
                                     <div class="cart_gallery">
@@ -256,7 +257,7 @@
                             <!--main menu end-->
                             <div class="header_right_info">
                                 <ul>
-                                    <li class="search_box"><a href="javascript:void(0)"><img src="images/icon/icon-search.png" alt=""></a>
+                                    <li class="search_box"><a href="javascript:void(0)"><img src="../images/icon/icon-search.png" alt=""></a>
                                         <div class="search_widget">
                                             <form action="#">
                                                 <input id="searchInput" placeholder="Tìm kiếm ..." type="text">
@@ -292,6 +293,7 @@
                                                 <ul>
                                                     <li><a href="/thong-tin-ca-nhan">Thông tin cá nhân</a></li>
                                                     <li><a href="/gio-hang">Giỏ hàng</a></li>
+                                                    <li><a href="/lich-su-mua-hang">Lịch sử mua hàng</a></li>
                                                     <li><a href="/logout">Đăng xuất</a></li>
                                                 </ul>
                                             </div>
@@ -316,7 +318,7 @@
                                                 </div>
                                                 <div class="cart_item" th:each="item : ${danhSachChiTiet}">
                                                     <div class="cart_img">
-                                                        <a href="#"><img src="images/product/product56.jpg" alt="" style="height: 60px"></a>
+                                                        <a href="#"><img src="../images/product/product56.jpg" alt="" style="height: 60px"></a>
                                                     </div>
                                                     <div class="cart_info">
                                                         <a th:href="@{/xem-chi-tiet/{id}(id=${item.sanPhamChiTiet.id})}" th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}">Primis In Faucibus</a>
@@ -416,7 +418,7 @@
                         <h2 th:text="${sanPhamChiTiet.sanPham.tenSanPham}">Donec Ac Tempus</h2>
                     </div>
                     <div class="modal_price mb-10">
-                        <span class="new_price" th:text="${sanPhamChiTiet.sanPham.khuyenMai != null ? sanPhamChiTiet.giaBanGiamGia : sanPhamChiTiet.giaBan}">$64.99</span>
+                        <span class="new_price" th:text="${#numbers.formatDecimal((sanPhamChiTiet.sanPham.khuyenMai != null ? sanPhamChiTiet.giaBanGiamGia : sanPhamChiTiet.giaBan), 0,'COMMA',0,'COMMA')}">$64.99</span>
                         <span class="old_price" th:text="${sanPhamChiTiet.sanPham.khuyenMai != null ? sanPhamChiTiet.giaBan : ''}">$78.99</span>
                     </div>
                     <div class="modal_description mb-15">
@@ -427,20 +429,53 @@
                         <div class="variants_size">
                             <h2>Kích thước</h2>
                             <select class="select_option" name="idKichThuoc" id="idKichThuoc">
-                                <option th:each="spct : ${sanPhamChiTiets}" th:text="${spct.kichThuoc.tenKichThuoc}" th:value="${spct.kichThuoc.id}"></option>
+                                <option th:each="spct : ${sanPhamChiTiets}"
+                                        th:text="${spct.kichThuoc.tenKichThuoc}"
+                                        th:value="${spct.kichThuoc.id}"
+                                        th:data-so-luong="${spct.soLuong}">
+                                </option>
                             </select>
                         </div>
                         <div class="variants_color">
                             <h2>Màu sắc: <span th:text="${sanPhamChiTiet.mauSac.tenMauSac}"></span></h2>
                         </div>
+                            <div class="variants_color">
+                                <h2>Số lượng: <span id="sanPhamSoLuong" th:text="${sanPhamChiTiet.soLuong}"></span></h2>
+                            </div>
                         <div class="modal_add_to_cart">
                                 <input type="hidden" name="idMauSac" id="idMauSac" th:value="${sanPhamChiTiet.mauSac.id}">
                                 <input type="hidden" name="idSanPham" id="idSanPham" th:value="${sanPhamChiTiet.sanPham.id}">
                                 <input name="soLuong" id="soLuong" min="1" value="1" th:max="${sanPhamChiTiet.soLuong}" type="number">
                                 <button type="submit" id="addToCartButton" class="btn btn-success">Thêm vào giỏ hàng</button>
-
                         </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const selectKichThuoc = document.getElementById("idKichThuoc");
+        const soLuongSpan = document.querySelector("#sanPhamSoLuong");
+        const soLuongInput = document.getElementById("soLuong");
+
+        // Lắng nghe sự thay đổi kích thước
+        selectKichThuoc.addEventListener("change", function() {
+            // Lấy số lượng từ `data-so-luong` của option được chọn
+            const selectedOption = selectKichThuoc.options[selectKichThuoc.selectedIndex];
+            const soLuong = selectedOption.getAttribute("data-so-luong");
+
+            // Cập nhật hiển thị số lượng
+            soLuongSpan.textContent = soLuong;
+            soLuongInput.setAttribute("max", soLuong); // Cập nhật giá trị tối đa cho input số lượng
+        });
+
+        // Kích hoạt sự kiện thay đổi để hiển thị số lượng ban đầu
+        selectKichThuoc.dispatchEvent(new Event("change"));
+    });
+</script>
 <!--                        <script>-->
 <!--                            $(document).ready(function() {-->
 <!--                                $("#addToCartButton").on("click", function(e) {-->
@@ -501,12 +536,6 @@
 <!--                                }-->
 <!--                            });-->
 <!--                        </script>-->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!--shop  area end-->
 <!-- Modal thông báo -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">

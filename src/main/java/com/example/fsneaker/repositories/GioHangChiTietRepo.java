@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -21,7 +22,7 @@ public interface GioHangChiTietRepo extends JpaRepository<GioHangChiTiet, Intege
 
     GioHangChiTiet findByGioHangIdAndSanPhamChiTietId(Integer idGioHang, Integer idSanPhamChiTiet);
     @Query("SELECT SUM(ghct.soLuong * ghct.gia) FROM GioHangChiTiet ghct WHERE ghct.gioHang.id = :gioHangId")
-    Double sumGiaByGioHangId(@Param("gioHangId")Integer gioHangId);
+    BigDecimal sumGiaByGioHangId(@Param("gioHangId")Integer gioHangId);
 
     void deleteGioHangChiTietByGioHangId(Integer idGioHang);
 }

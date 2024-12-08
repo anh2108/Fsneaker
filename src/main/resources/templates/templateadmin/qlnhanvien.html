@@ -253,7 +253,7 @@
                         <form action="#" th:action="@{/search-nhan-vien}" method="get">
                             <label for="search">Nhập mã nhân viên:</label>
                             <input type="text" id="search" name="keyword" placeholder="tìm kiếm theo mã hoặc tên" required w/>
-                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                            <button type="submit" class="btn btn-success">Tìm kiếm</button>
                         </form>
 
                         <table class="table">
@@ -282,14 +282,14 @@
                                 <td>[[${nhanvien.email}]]</td>
                                 <td>[[${nhanvien.soDienThoai}]]</td>
                                 <td>[[${nhanvien.ngaySinh}]]</td>
-                                <td>[[${nhanvien.gioiTinh}]]</td>
+                                <td>[[${nhanvien.gioiTinh == true ? "Nam" : "Nữ"}]]</td>
                                 <td>[[${nhanvien.diaChi}]]</td>
-                                <td>[[${nhanvien.vaiTro}]]</td>
+                                <td>[[${nhanvien.vaiTro == true ? "Admin" : "Nhân viên"} ]]</td>
                                 <td>[[${nhanvien.matKhau}]]</td>
                                 <td>[[${nhanvien.cccd}]]</td>
-                                <td>[[${nhanvien.trangThai}]]</td>
+                                <td>[[${nhanvien.trangThai  == true ? "Hoạt động" : "Không hoạt động"}]]</td>
                                 <td>
-                                    <a th:href="@{/edit-nhan-vien/{id}(id=${nhanvien.id})}" class="btn btn-warning">Sửa</a>
+                                    <a th:href="@{/edit-nhan-vien/{id}(id=${nhanvien.id})}" class="btn btn-success">Sửa</a>
                                 </td>
                             </tr>
                             </tbody>

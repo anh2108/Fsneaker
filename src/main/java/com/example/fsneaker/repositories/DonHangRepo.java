@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,11 +28,11 @@ public interface DonHangRepo extends JpaRepository<DonHang, Integer> {
     @Query("SELECT dh.trangThai, COUNT(dh) FROM DonHang dh GROUP BY dh.trangThai")
     List<Object[]> demDonHangTheoTrangThai();
     //Lấy tổng thu nhập trong tháng hiện tại
-    @Query("SELECT FUNCTION('DAY',dh.ngayMua), SUM(COALESCE(dh.tongTienGiamGia,dh.tongTien)) FROM DonHang dh WHERE MONTH(dh.ngayMua) = MONTH(CURRENT_DATE ) AND YEAR(dh.ngayMua) = YEAR(CURRENT_DATE ) GROUP BY FUNCTION('DAY',dh.ngayMua)")
-    List<Object[]> findThuNhapTheoThang();
+    @Query("SELECT FUNCTION('DAY',dh.ngayMua), SUM(COALESCE(dh.tongTienGiamGia,dh.tongTien)) FROM DonHang dh WHERE dh.trangThai = :trangThai AND MONTH(dh.ngayMua) = MONTH(CURRENT_DATE ) AND YEAR(dh.ngayMua) = YEAR(CURRENT_DATE ) GROUP BY FUNCTION('DAY',dh.ngayMua)")
+    List<Object[]> findThuNhapTheoThang(@Param("trangThai")String trangThai);
     //Lấy số lượng đơn hàng trong tháng hiện tại
-    @Query("SELECT FUNCTION('DAY',dh.ngayMua), COUNT(dh) FROM DonHang dh WHERE MONTH(dh.ngayMua) = MONTH(CURRENT_DATE ) AND YEAR(dh.ngayMua) = YEAR(CURRENT_DATE) GROUP BY FUNCTION('DAY',dh.ngayMua)")
-    List<Object[]> findDonHangTheoThang();
+    @Query("SELECT FUNCTION('DAY',dh.ngayMua), COUNT(dh) FROM DonHang dh WHERE dh.trangThai = :trangThai AND MONTH(dh.ngayMua) = MONTH(CURRENT_DATE ) AND YEAR(dh.ngayMua) = YEAR(CURRENT_DATE) GROUP BY FUNCTION('DAY',dh.ngayMua)")
+    List<Object[]> findDonHangTheoThang(@Param("trangThai")String trangThai);
     //Lấy tổng thu nhập trong năm hiện tại
     @Query("SELECT FUNCTION('MONTH',dh.ngayMua), SUM(COALESCE(dh.tongTienGiamGia,dh.tongTien)) FROM DonHang dh WHERE YEAR(dh.ngayMua) = YEAR(CURRENT_DATE ) GROUP BY FUNCTION('MONTH',dh.ngayMua)")
     List<Object[]> findThuNhapTheoNam();
@@ -49,8 +50,8 @@ public interface DonHangRepo extends JpaRepository<DonHang, Integer> {
     DonHang findByMaDonHang(String maDonHang);
 
     //Tính tổng thu nhập trong khoảng thời gian
-    @Query("SELECT SUM(coalesce(d.tongTienGiamGia,d.tongTien)) FROM DonHang d WHERE d.ngayMua BETWEEN :startDate AND :endDate")
-    Double tinhTongThuNhap(@Param("startDate")LocalDate startDate, @Param("endDate")LocalDate endDate);
+    @Query("SELECT SUM(coalesce(d.tongTienGiamGia,d.tongTien)) FROM DonHang d WHERE d.trangThai = :trangThai AND d.ngayMua BETWEEN :startDate AND :endDate")
+    BigDecimal tinhTongThuNhap(@Param("trangThai")String trangThai,@Param("startDate")LocalDate startDate, @Param("endDate")LocalDate endDate);
 
     //Đếm số lượng khách hàng duy nhất trong khoảng thời gian
     @Query("SELECT COUNT(distinct d.khachHang.id) FROM DonHang d WHERE d.ngayMua BETWEEN :startDate AND :endDate")

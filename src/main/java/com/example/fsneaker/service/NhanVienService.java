@@ -21,4 +21,27 @@ public class NhanVienService {
     public NhanVien getByIdNhanVien(Integer idNhanVien){
         return nhanVienRepo.findById(idNhanVien).orElse(null);
     }
+    public boolean existsByMaNhanVien(String maNhanVien){
+        return nhanVienRepo.existsByMaNhanVien(maNhanVien);
+    }
+    public boolean existsByEmail(String email){
+        return nhanVienRepo.existsByEmail(email);
+    }
+    public boolean existsBySoDienThoai(String soDienThoai){
+        return nhanVienRepo.existsBySoDienThoai(soDienThoai);
+    }
+
+    public boolean isDeplicationMaNhanVien(Integer id, String maNhanVien){
+        NhanVien existing = nhanVienRepo.findByMaNhanVien(maNhanVien);
+        return existing != null && !existing.getId().equals(id);
+    }
+    public boolean isDeplicationEmail(Integer id, String email){
+        NhanVien existing = nhanVienRepo.findByEmail(email);
+        return existing != null && !existing.getId().equals(id);
+    }
+
+    public boolean isDeplicationSoDienThoai(Integer id, String soDienThoai){
+        NhanVien  existing = nhanVienRepo.findBySoDienThoai(soDienThoai);
+        return existing != null && !existing.getId().equals(id);
+    }
 }

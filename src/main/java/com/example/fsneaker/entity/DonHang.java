@@ -3,6 +3,7 @@ package com.example.fsneaker.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -36,8 +37,8 @@ public class DonHang {
     private LocalDate ngayTao;
     private String loaiDonHang;
     private String trangThai;
-    private double tongTien;
-    private Double tongTienGiamGia;
+    private BigDecimal tongTien;
+    private BigDecimal tongTienGiamGia;
     @OneToMany(mappedBy = "donHang")
     private List<DonHangChiTiet> donHangChiTiets;
 }

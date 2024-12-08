@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -130,18 +131,28 @@ public class SanPhamNikeController {
         model.addAttribute("danhSachChiTiet", danhSachChiTiet);
         int demTongSoLuongTrongGioHang = gioHangChiTietService.getSoLuongTrongGioHang(gioHang.getId());
         model.addAttribute("demTongSoLuongTrongGioHang",demTongSoLuongTrongGioHang);
-        double tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
+        BigDecimal tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
         model.addAttribute("gioHang", gioHang);
         model.addAttribute("tongTien", tongTien);
         return "templatekhachhang/san-pham-nike";
     }
     @GetMapping("/san-pham-sap-xep")
-    public String hienThiSanPhamNikeSapXep(@RequestParam(value = "page",defaultValue = "0") int page,@RequestParam(value = "sortBy",required = false, defaultValue = "0") String sortBy, Model model){
+    public String hienThiSanPhamNikeSapXep(HttpServletRequest request,@RequestParam(value = "page",defaultValue = "0") int page,@RequestParam(value = "sortBy",required = false, defaultValue = "0") String sortBy, Model model){
         int pageSize = 12;
 //        System.out.println("Received sortBy: " + sortBy);
 //        if (sortBy != null && sortBy == 0) {
 //            sortBy = null; // hoặc gán lại về giá trị mặc định nào đó nếu cần
 //        }
+        List<Object[]> tenSanPhamVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(1);
+        model.addAttribute("tenSanPhamVoiSanPham", tenSanPhamVoiSanPham);
+        List<Object[]> tenSanPhamPumaVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(3);
+        model.addAttribute("tenSanPhamPumaVoiSanPham", tenSanPhamPumaVoiSanPham);
+        List<Object[]> tenSanPhamAdidasVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(2);
+        model.addAttribute("tenSanPhamAdidasVoiSanPham",tenSanPhamAdidasVoiSanPham);
+        List<Object[]> tenSanPhamNewBalanceVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(4);
+        model.addAttribute("tenSanPhamNewBalanceVoiSanPham",tenSanPhamNewBalanceVoiSanPham);
+        List<Object[]> tenSanPhamAsicsVoiSanPham = sanPhamChiTietService.getNiekByTenSanPham(5);
+        model.addAttribute("tenSanPhamAsicsVoiSanPham", tenSanPhamAsicsVoiSanPham);
         List<Object[]> mauSacVoiSanPham = mauSacService.getMauSacWithSanPham(1);
         model.addAttribute("mauSacVoiSanPham",mauSacVoiSanPham);
         List<Object[]> kichThuocVoiSanPham = kichThuocService.getKichThuocVoiSanPham(1);
@@ -155,9 +166,61 @@ public class SanPhamNikeController {
             case "5" -> tatCaSanPhamNike = sanPhamChiTietService.getNikeByName(1, page, pageSize);
             default -> tatCaSanPhamNike = sanPhamChiTietService.getThuongHieuTenThuongHieu(1, page, pageSize);
         };
+        String sessionId;
+        GioHang gioHang;
 
+        // Kiểm tra nếu người dùng chưa đăng nhập
+        if (request.getSession().getAttribute("userId") == null) {
+            // Lấy hoặc tạo sessionId
+            sessionId = (String) request.getSession().getAttribute("sessionId");
+            if (sessionId == null) {
+                sessionId = UUID.randomUUID().toString(); // Tạo sessionId duy nhất
+                request.getSession().setAttribute("sessionId", sessionId);
+            }
+            // Tìm giỏ hàng theo sessionId
+            gioHang = gioHangService.getGioHangBySessionId(sessionId);
+            if (gioHang == null) {
+                // Nếu chưa có giỏ hàng, tạo giỏ hàng mới
+                gioHang = new GioHang();
+                gioHang.setMaGioHang(sessionId);
+                gioHang.setNgayTao(LocalDate.now());
+                gioHang.setTrangThai(0); // 0: Chưa thanh toán
+                gioHangService.savaGioHang(gioHang);
+            }
+        } else {
+            // Nếu người dùng đã đăng nhập, lấy giỏ hàng theo tài khoản
+            int userId = (int) request.getSession().getAttribute("userId");
+            gioHang = gioHangService.getGioHangByUserId(userId);
+            KhachHang khachHang = khachHangService.getKhachHangById(userId);
+            // Nếu giỏ hàng chưa có, tạo giỏ hàng mới và gắn với khách hàng
+            if (gioHang == null) {
+                gioHang = new GioHang();
+                gioHang.setKhachHang(khachHang); // Gắn khách hàng vào giỏ hàng
+                gioHang.setNgayTao(LocalDate.now());
+                gioHang.setTrangThai(0); // 0: Chưa thanh toán
+                gioHangService.savaGioHang(gioHang);
+            }
+            // Nếu có session giỏ hàng tạm thời, gộp vào giỏ hàng đã đăng nhập
+            sessionId = (String) request.getSession().getAttribute("sessionId");
+            if (sessionId != null) {
+                GioHang tempGioHang = gioHangService.getGioHangBySessionId(sessionId);
+                if (tempGioHang != null) {
+                    gioHangChiTietService.mergeCart(tempGioHang, gioHang);
+                    gioHangService.delete(tempGioHang); // Xóa giỏ hàng tạm thời
+                    request.getSession().removeAttribute("sessionId"); // Xóa sessionId
+                }
+            }
+        }
+        // Tính toán dữ liệu hiển thị
+        List<GioHangChiTiet> danhSachChiTiet = gioHangChiTietService.getByGioHangId(gioHang.getId());
+        model.addAttribute("danhSachChiTiet", danhSachChiTiet);
+        int demTongSoLuongTrongGioHang = gioHangChiTietService.getSoLuongTrongGioHang(gioHang.getId());
+        model.addAttribute("demTongSoLuongTrongGioHang",demTongSoLuongTrongGioHang);
+        BigDecimal tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
+        model.addAttribute("gioHang", gioHang);
         model.addAttribute("tatCaSanPhamNike",tatCaSanPhamNike);
         model.addAttribute("sortBy",sortBy);
+        model.addAttribute("tongTien",tongTien);
         return "templatekhachhang/san-pham-nike";
     }
     @GetMapping("/xem-chi-tiet/{id}")
@@ -228,7 +291,7 @@ public class SanPhamNikeController {
         model.addAttribute("danhSachChiTiet", danhSachChiTiet);
         int demTongSoLuongTrongGioHang = gioHangChiTietService.getSoLuongTrongGioHang(gioHang.getId());
         model.addAttribute("demTongSoLuongTrongGioHang",demTongSoLuongTrongGioHang);
-        double tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
+        BigDecimal tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
         model.addAttribute("gioHang", gioHang);
         model.addAttribute("tongTien", tongTien);
         return "templatekhachhang/chi-tiet-san-pham";

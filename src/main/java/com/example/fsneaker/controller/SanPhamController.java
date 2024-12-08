@@ -233,10 +233,9 @@ public class SanPhamController {
             ThuongHieu thuongHieu = thuongHieuRepo.findById(thuongHieuId).orElse(null);
 
             // Gán các thuộc tính cho sanPham
-            if (km != null) sanPham.setKhuyenMai(km);
+             sanPham.setKhuyenMai(km);
             if (xuatXu != null) sanPham.setXuatXu(xuatXu);
             if (thuongHieu != null) sanPham.setThuongHieu(thuongHieu);
-
             // Lưu lại sanPham đã cập nhật
             sanPhamRepo.save(sanPham);
         }

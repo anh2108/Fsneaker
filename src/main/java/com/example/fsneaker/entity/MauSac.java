@@ -1,6 +1,9 @@
 package com.example.fsneaker.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,12 +25,17 @@ public class MauSac {
     private int id;
 
     @Column(name = "MaMauSac")
+    @NotEmpty(message = "Mã màu sắc không được để trống!")
+    @Size(min= 5, max = 20, message = "Mã màu sắc từ 5 đến 20 ký tự!")
     private String maMauSac;
 
     @Column(name = "TenMauSac")
+    @NotEmpty(message = "Tên màu sắc không được để trống!")
+    @Size(min = 5, max= 30, message = "Tên màu sắc từ 5 đến 30 ký tự!")
     private String tenMauSac;
 
     @Column(name = "TrangThai")
+    @NotNull(message = "Bạn chưa chọn trạng thái!")
     private int trangThai;
 
 

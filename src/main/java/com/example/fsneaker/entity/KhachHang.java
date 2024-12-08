@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -62,4 +63,6 @@ public class KhachHang {
     @Column(name = "TrangThai")
     @NotNull(message = "Bạn chưa chọn trạng thái!")
     private Boolean trangThai;
+    private String resetToken;
+    private Date tokenExpiration;
 }

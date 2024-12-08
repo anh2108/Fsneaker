@@ -3,6 +3,8 @@ package com.example.fsneaker.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -26,7 +28,7 @@ public class DonHangChiTiet {
     private SanPhamChiTiet sanPhamChiTiet;
 
     private int soLuong;
-    private double gia;
-    private double thanhTien;
+    private BigDecimal gia;
+    private BigDecimal thanhTien;
 }
 

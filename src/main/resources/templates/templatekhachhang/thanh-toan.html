@@ -68,7 +68,7 @@
                     </div>
                     <div class="header_right_info">
                         <ul>
-                            <li class="search_box"><a href="javascript:void(0)"><img src="images/icon/icon-search.png" alt=""></a>
+                            <li class="search_box"><a href="javascript:void(0)"><img src="../images/icon/icon-search.png" alt=""></a>
                                 <div class="search_widget">
                                     <form action="#">
                                         <input id="searchInput1" placeholder="Tìm kiếm ..." type="text">
@@ -103,6 +103,7 @@
                                     <div class="dropdown_account-list">
                                         <ul>
                                             <li><a href="/thong-tin-ca-nhan">Thông tin cá nhân</a></li>
+                                            <li><a href="/gio-hang">Giỏ hàng</a></li>
                                             <li><a href="/lich-su-mua-hang">Lịch sử mua hàng</a></li>
                                             <li><a href="/logout">Đăng xuất</a></li>
                                         </ul>
@@ -256,7 +257,7 @@
                             <!--main menu end-->
                             <div class="header_right_info">
                                 <ul>
-                                    <li class="search_box"><a href="javascript:void(0)"><img src="images/icon/icon-search.png" alt=""></a>
+                                    <li class="search_box"><a href="javascript:void(0)"><img src="../images/icon/icon-search.png" alt=""></a>
                                         <div class="search_widget">
                                             <form action="#">
                                                 <input id="searchInput" placeholder="Tìm kiếm ..." type="text">
@@ -292,6 +293,7 @@
                                             <div class="dropdown_account-list">
                                                 <ul>
                                                     <li><a href="/thong-tin-ca-nhan">Thông tin cá nhân</a></li>
+                                                    <li><a href="/gio-hang">Giỏ hàng</a></li>
                                                     <li><a href="/lich-su-mua-hang">Lịch sử mua hàng</a></li>
                                                     <li><a href="/logout">Đăng xuất</a></li>
                                                 </ul>
@@ -317,7 +319,7 @@
                                                 </div>
                                                 <div class="cart_item" th:each="item : ${danhSachChiTiet}">
                                                     <div class="cart_img">
-                                                        <a href="#"><img src="images/product/product56.jpg" alt="" style="height: 60px"></a>
+                                                        <a href="#"><img src="../images/product/product56.jpg" alt="" style="height: 60px"></a>
                                                     </div>
                                                     <div class="cart_info">
                                                         <a th:href="@{/xem-chi-tiet/{id}(id=${item.sanPhamChiTiet.id})}" th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}">Primis In Faucibus</a>
@@ -439,8 +441,16 @@
                                     <button type="submit" class="btn btn-success">Áp dụng</button>
                                 </div>
                             </form>
+                            <div id="cancel_voucher" class="text-center mt-3" th:if="${donHang.giamGia != null}">
+                                <form th:action="@{/thanh-toan/huy-voucher}" method="post" style="display: inline">
+                                    <input type="hidden" name="idDonHang" th:value="${donHang.id}"/>
+                                    <input th:if="${#authentication.name != 'anonymousUser'}" type="hidden" name="idKhachHang" th:value="${#authentication.principal.id}">
+                                    <button type="submit" class="btn btn-danger">Hủy Voucher</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -575,17 +585,17 @@
                                 </tr>
                                 </tbody>
                                 <tfoot>
-<!--                                <tr>-->
-<!--                                    <th> Tổng tiền giỏ hàng</th>-->
-<!--                                    <td>$215.00</td>-->
-<!--                                </tr>-->
-<!--                                <tr>-->
-<!--                                    <th>Shipping</th>-->
-<!--                                    <td><strong>$5.00</strong></td>-->
-<!--                                </tr>-->
+                                <tr>
+                                    <th> Tổng tiền giỏ hàng</th>
+                                    <td colspan="2"><strong th:text="${#numbers.formatDecimal(tongTien,0,'COMMA',0,'COMMA')} + ' đ'">$220.00</strong></td>
+                                </tr>
+                                <tr>
+                                    <th>Phí ship</th>
+                                    <td colspan="2"><strong th:text="${#numbers.formatDecimal(phiShip,0,'COMMA',0,'COMMA')} + ' đ'">25.000 đ</strong></td>
+                                </tr>
                                 <tr class="order_total">
                                     <th>Tổng tiền</th>
-                                    <td colspan="2"> <strong th:text="${#numbers.formatDecimal(tongTien,0,'COMMA',0,'COMMA')} + ' VND'">$220.00</strong></td>
+                                    <td colspan="2"> <strong th:text="${#numbers.formatDecimal(tongTien + phiShip,0,'COMMA',0,'COMMA')} + ' đ'">$220.00</strong></td>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -614,6 +624,7 @@
                     <form th:action="@{/dat-hang/{idDonHang}(idDonHang=${donHang.id})}" method="post">
                             <div class="order_button">
                                 <input type="hidden" name="idGioHang" th:value="${gioHang.id}">
+                                <input th:if="${#authentication.name != 'anonymousUser'}" type="hidden" name="idKhachHang" th:value="${#authentication.principal.id}">
                                 <button type="submit">Đặt hàng</button>
                             </div>
                     </form>

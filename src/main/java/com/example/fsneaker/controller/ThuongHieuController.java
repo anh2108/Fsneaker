@@ -9,12 +9,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ThuongHieuController {
@@ -28,24 +28,36 @@ public class ThuongHieuController {
                          @RequestParam(name = "limit", defaultValue = "5")Integer pageSize,
                          Pageable pageable){
 
-
+        ThuongHieu thuongHieu = new ThuongHieu();
+        model.addAttribute("thuongHieu",thuongHieu);
         Page<ThuongHieu> thuongHieuList = thuongHieuRepo.findAll(pageable);
 
 //        List<ThuongHieu> thuongHieuList = thuongHieuRepo.findAll();
         model.addAttribute("thieu", thuongHieuList);
-        return "/templateadmin/qlthuonghieu.html";
+        return "/templateadmin/qlthuonghieu";
 
     }
 
     @PostMapping("/qlthuonghieu/store")
-    public String store(@RequestParam String maThuongHieu,
-                        @RequestParam String tenThuongHieu,
-                        @RequestParam int trangThai){
-
-       ThuongHieu thuongHieu = new ThuongHieu();
-        thuongHieu.setMaThuongHieu(maThuongHieu);
-        thuongHieu.setTenThuongHieu(tenThuongHieu);
-        thuongHieu.setTrangThai(trangThai == 0? 0 : 1);
+    public String store(@ModelAttribute("thuongHieu") ThuongHieu thuongHieu, RedirectAttributes redirectAttributes){
+        Map<String , String > errors = new HashMap<>();
+        if(thuongHieu.getMaThuongHieu() == null || thuongHieu.getMaThuongHieu().isBlank()){
+            errors.put("maThuongHieu","Mã thương hiệu không được đê trống!");
+        }else if(thuongHieu.getMaThuongHieu().length() < 5 || thuongHieu.getMaThuongHieu().length() > 20){
+            errors.put("maThuongHieu", "Mã thương hiệu từ 5 đến 20 ký tự!");
+        }else if(thuongHieuRepo.existsByMaThuongHieu(thuongHieu.getMaThuongHieu())){
+            redirectAttributes.addFlashAttribute("error","Mã thương hiệu đã tồn tại!");
+            return "redirect:/qlthuonghieu";
+        }
+        if(thuongHieu.getTenThuongHieu() == null || thuongHieu.getTenThuongHieu().isBlank()){
+            errors.put("tenThuongHieu","Tên thương hiệu không được để trống!");
+        }else if(thuongHieu.getTenThuongHieu().length() < 2 || thuongHieu.getTenThuongHieu().length() > 30){
+            errors.put("tenThuongHieu", "Tên thương hiệu từ 2 đến 30 ký tự!");
+        }
+        if(!errors.isEmpty()){
+            redirectAttributes.addFlashAttribute("errors",errors);
+            return "redirect:/qlthuonghieu";
+        }
         thuongHieuRepo.save(thuongHieu);
         return "redirect:/qlthuonghieu";
     }

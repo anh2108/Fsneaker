@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -61,14 +62,16 @@ public class DonHangController {
             model.addAttribute("hasVoucher", hasVoucher);
             if (hasVoucher) {
                 Voucher voucher = donHang.getGiamGia(); //Lấy voucher đã áp dụng
-                double tongTienGiamGia = donHang.getTongTienGiamGia(); // Tổng tiền sau khi giảm giá
+                BigDecimal tongTienGiamGia = donHang.getTongTienGiamGia(); // Tổng tiền sau khi giảm giá
                 model.addAttribute("tongTien", tongTienGiamGia);//Cập nhật tổng tiền hiển thị
                 model.addAttribute("voucher", voucher); //Thêm thông tin voucher vào model
             }
             //Lấy danh sách voucher có trạng thái và giá tri phù hợp, sau đó lọc theo tổng tiền
             List<Voucher> vouchers = voucherService.getAllVoucherByTrangThaiAndGiaTri(1);
             List<Voucher> filteredVouchers = vouchers.stream()
-                    .filter(voucher -> voucher.getDonToiThieu() <= donHang.getTongTien()) //Chỉ giữ các voucher có đơn tối thiểu <= tổng tiền
+                    .filter(voucher -> voucher.getDonToiThieu() != null &&
+                            donHang.getTongTien() != null &&
+                            voucher.getDonToiThieu().compareTo(donHang.getTongTien()) <= 0)
                     .collect(Collectors.toList());
             model.addAttribute("vouchers", filteredVouchers);
             List<DonHangChiTiet> dsSanPhamtrongGioHang = donHangChiTietService.getAllDonHangChiTietById(id);
@@ -151,7 +154,7 @@ public class DonHangController {
         }
         //Nếu có hóa đơn, tiính lại tổng tiền sau giảm giá
         if (donHang.getGiamGia() != null) {
-            double tongTienGiamGia = donHang.getTongTienGiamGia();
+            BigDecimal tongTienGiamGia = donHang.getTongTienGiamGia();
             model.addAttribute("tongTien", tongTienGiamGia);
             model.addAttribute("voucher", donHang.getGiamGia());
         }
@@ -179,7 +182,7 @@ public class DonHangController {
         }
         //Nếu có hóa đơn, tiính lại tổng tiền sau giảm giá
         if (donHang.getGiamGia() != null) {
-            double tongTienGiamGia = donHang.getTongTienGiamGia();
+            BigDecimal tongTienGiamGia = donHang.getTongTienGiamGia();
             model.addAttribute("tongTien", tongTienGiamGia);
             model.addAttribute("voucher", donHang.getGiamGia());
         }
@@ -239,7 +242,7 @@ public class DonHangController {
                     model.addAttribute("hasVoucher", hasVoucher);
                     if (hasVoucher) {
                         Voucher voucher = donHang.getGiamGia(); //Lấy voucher đã áp dụng
-                        double tongTienGiamGia = donHang.getTongTienGiamGia(); // Tổng tiền sau khi giảm giá
+                        BigDecimal tongTienGiamGia = donHang.getTongTienGiamGia(); // Tổng tiền sau khi giảm giá
                         model.addAttribute("tongTien", tongTienGiamGia);//Cập nhật tổng tiền hiển thị
                         model.addAttribute("voucher", voucher); //Thêm thông tin voucher vào model
                     }
@@ -366,20 +369,22 @@ public class DonHangController {
                 return "redirect:/don-hang/chi-tiet?id"+donHang.getId();
             }
             sanPhamTonTai.setSoLuong(tongSoLuongMoi);
-            sanPhamTonTai.setThanhTien(tongSoLuongMoi * sanPhamChiTiet.getGiaBan());
+            BigDecimal giaBan = sanPhamChiTiet.getGiaBan();
+            BigDecimal thanhTienMoi = giaBan.multiply(BigDecimal.valueOf(tongSoLuongMoi));
+            sanPhamTonTai.setThanhTien(thanhTienMoi);
             donHangChiTietService.updateHoaDonChiTietById(sanPhamTonTai);
             //Cập nhật số lượng sản phẩm trong kho
             sanPhamChiTiet.setSoLuong(soLuongSPCT - soLuong);
             sanPhamChiTietService.capNhatSanPhamChiTiet(sanPhamChiTiet);
             //Cập nhật tổng tiền hóa đơn
-            donHang.setTongTien(donHang.getTongTien() + (soLuong * sanPhamChiTiet.getGiaBan()));
+            donHang.setTongTien(donHang.getTongTien().add(giaBan.multiply(BigDecimal.valueOf(soLuong))));
             donHangService.capNhatDonHang(donHang);
         }else {
             if (donHang != null) {
-                double tongTienHoaDonA = donHang.getTongTien();
-                double donGia = sanPhamChiTiet.getGiaBan();
-                double thanhTien = soLuong * donGia;
-                double tongTienHoaDonZ = tongTienHoaDonA + thanhTien;
+                BigDecimal tongTienHoaDonA = donHang.getTongTien();
+                BigDecimal donGia = sanPhamChiTiet.getGiaBan();
+                BigDecimal thanhTien = donGia.multiply(BigDecimal.valueOf(soLuong));
+                BigDecimal tongTienHoaDonZ = tongTienHoaDonA.add(thanhTien);
                 //Cập nhật tổng tiền hóa đơn và số lượng sản phẩm
                 donHang.setTongTien(tongTienHoaDonZ);
                 donHangService.capNhatDonHang(donHang);
@@ -407,9 +412,9 @@ public class DonHangController {
         //Lấy hóa đơn và cập nhật tổng tiền
         DonHang donHang = donHangService.getDonHangById(idDonHang);
         DonHangChiTiet donHangChiTiet = donHangChiTietService.getDonHangChiTietById(idDonHangChiTiet);
-        double tongTien = donHang.getTongTien();
-        double thanhTien = donHangChiTiet.getThanhTien();
-        double truTienKhiXoa = tongTien - thanhTien;
+        BigDecimal tongTien = donHang.getTongTien();
+        BigDecimal thanhTien = donHangChiTiet.getThanhTien();
+        BigDecimal truTienKhiXoa = tongTien.subtract(thanhTien);
 
         donHang.setTongTien(truTienKhiXoa);
         donHangService.capNhatDonHang(donHang);
@@ -435,13 +440,13 @@ public class DonHangController {
         DonHang donHang = donHangService.getDonHangById(idDonHang);
         DonHangChiTiet donHangChiTiet = donHangChiTietService.getDonHangChiTietById(idDonHangChiTiet);
 
-        double tongSLBanDau = sanPhamChiTiet.getSoLuong() + donHangChiTiet.getSoLuong();
-        double tongSLDaSua = tongSLBanDau - soLuongSP;
-        double thanhTienDaSua = soLuongSP * sanPhamChiTiet.getGiaBan();
+        int tongSLBanDau = sanPhamChiTiet.getSoLuong() + donHangChiTiet.getSoLuong();
+        int tongSLDaSua = tongSLBanDau - soLuongSP;
+        BigDecimal thanhTienDaSua = sanPhamChiTiet.getGiaBan().multiply(BigDecimal.valueOf(soLuongSP));
 
         // Câập nhật lại thông tin tổng tiền hóa đơn
-        double tongTienHDBanDau = donHang.getTongTien() - donHangChiTiet.getThanhTien();
-        double tongTienHDDaSua = tongTienHDBanDau + thanhTienDaSua;
+        BigDecimal tongTienHDBanDau = donHang.getTongTien().subtract(donHangChiTiet.getThanhTien());
+        BigDecimal tongTienHDDaSua = tongTienHDBanDau.add(thanhTienDaSua);
 
         donHang.setTongTien(tongTienHDDaSua);
         donHangService.capNhatDonHang(donHang);
@@ -462,8 +467,10 @@ public class DonHangController {
         model.addAttribute("tongTien", donHang.getTongTien());
         List<Voucher> vouchers = voucherService.getAllVoucherByTrangThaiAndGiaTri(1);
         List<Voucher> filteredVouchers = vouchers.stream()
-                .filter(voucher -> voucher.getDonToiThieu() <= donHang.getTongTien()) //Chỉ giữ các voucher có đơn tối thiểu <= tổng tiền
+                .filter(voucher -> voucher.getDonToiThieu() != null
+                        && voucher.getDonToiThieu().compareTo(donHang.getTongTien()) <= 0)
                 .collect(Collectors.toList());
+
         model.addAttribute("vouchers", filteredVouchers);
         //Hiển thị một form trống để người dùng tạo hóa đơn mới
         model.addAttribute("donHang", new DonHang());
@@ -487,11 +494,13 @@ public class DonHangController {
             DonHangChiTiet donHangChiTiet = donHangChiTietService.getDonHangIdAndSanPhamChiTietId(idDonHang, idSanPhamChiTiet);
 
             // Tính toán tổng số lượng và tổng tiền
-            double thanhTienDaSua = soLuong * sanPhamChiTiet.getGiaBan();
+            BigDecimal giaBan = sanPhamChiTiet.getGiaBan();
+            BigDecimal soLuongBigDecimal = BigDecimal.valueOf(soLuong);
+            BigDecimal thanhTienDaSua = giaBan.multiply(soLuongBigDecimal);
 
             // Cập nhật lại tổng tiền hóa đơn
-            double tongTienHDBanDau = donHang.getTongTien() - donHangChiTiet.getThanhTien();
-            double tongTienHDDaSua = tongTienHDBanDau + thanhTienDaSua;
+            BigDecimal tongTienHDBanDau = donHang.getTongTien().subtract(donHangChiTiet.getThanhTien());
+            BigDecimal tongTienHDDaSua = tongTienHDBanDau.add(thanhTienDaSua);
 
             // Cập nhật tổng tiền cho hóa đơn
             donHang.setTongTien(tongTienHDDaSua);
@@ -510,7 +519,7 @@ public class DonHangController {
             //Lấy lại danh sách voucher hợp lệ
             List<Voucher> vouchers = voucherService.getAllVoucherByTrangThaiAndGiaTri(1);
             List<Voucher> filteredVouchers = vouchers.stream()
-                    .filter(voucher -> voucher.getDonToiThieu() <= donHang.getTongTien()) //Chỉ giữ các voucher có đơn tối thiểu <= tổng tiền
+                    .filter(voucher -> voucher.getDonToiThieu().compareTo(donHang.getTongTien()) <= 0)
                     .collect(Collectors.toList());
             Map<String, Object> response = new HashMap<>();
             response.put("message","Cập nhật số lượng thành công");
@@ -553,26 +562,26 @@ public class DonHangController {
         if (idVoucher != null) {
             Voucher voucher = voucherService.getVoucherById(idVoucher);
             donHang.setGiamGia(voucher); //Áp dụng voucher cho hóa đơn
-            double tongTienGiamGia = donHang.getTongTienGiamGia();// Tông tiền sau khi giảm
+            BigDecimal tongTienGiamGia = donHang.getTongTienGiamGia();// Tông tiền sau khi giảm
             model.addAttribute("tongTien", tongTienGiamGia);
         }
-        double tongTien = donHang.getTongTien();
+        BigDecimal  tongTien = donHang.getTongTien();
 //        if(idVoucher != null){
 //            Voucher voucher = voucherService.getVoucherById(idVoucher);
 //            donHang.setGiamGia(voucher);
 //        }
         //Xử lý nhập tiền khách trả và tính tiền dư
         try {
-            double tienKhachTra = Float.parseFloat(tienKhachTraStr);
-            double tienDu;
+            BigDecimal tienKhachTra = new BigDecimal(tienKhachTraStr);
+            BigDecimal tienDu;
             if(idVoucher != null){
-                double tongTienGiamGia = donHang.getTongTienGiamGia();
-                tienDu = tienKhachTra - tongTienGiamGia;//Tính tiền dư dựa trên tổng tiền đã giảm
+                BigDecimal tongTienGiamGia = donHang.getTongTienGiamGia();
+                tienDu = tienKhachTra.subtract(tongTienGiamGia);//Tính tiền dư dựa trên tổng tiền đã giảm
             }else{
-                tienDu = tienKhachTra - tongTien;
+                tienDu = tienKhachTra.subtract(tongTien);
             }
 
-            if (tienDu < 0) {
+            if (tienDu.compareTo(BigDecimal.ZERO) < 0) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Số tiền khách trả không đủ.");
                 return "redirect:/don-hang/chi-tiet?id=" + donHang.getId();
             }
@@ -618,7 +627,7 @@ public class DonHangController {
 
     @GetMapping("/them-san-pham-vao-hoa-don/{id}")
     public String testBanHang(@PathVariable Integer id,@RequestParam(value = "page", defaultValue = "0") int page,
-                              @RequestParam("idSanPhamChiTiet")int idSanPhamChiTiet,@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+                              @RequestParam(value = "keyword", required = false) String keyword, Model model) {
         int pageSize = 10;
         Page<SanPhamChiTiet> sanPhamChiTietPage;
         if (keyword != null && !keyword.isEmpty()) {
@@ -627,8 +636,6 @@ public class DonHangController {
         } else {
             sanPhamChiTietPage = sanPhamChiTietService.findPaginated(page, pageSize);
         }
-        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getSanPhamChiTietById(idSanPhamChiTiet);
-        model.addAttribute("sanPhamChiTiet",sanPhamChiTiet);
         DonHang donHang = donHangService.getDonHangById(id);
         //Hiển thị một form trống để người dùng tạo hóa đơn mới
         model.addAttribute("donHang", donHang);
@@ -662,7 +669,9 @@ public class DonHangController {
             redirectAttributes.addFlashAttribute("errorMessage", "Mã voucher không tồn tại!");
             return "redirect:/don-hang/chi-tiet?id=" + donHang.getId();
         }
-        if(voucher.getDonToiThieu() > donHang.getTongTien()){
+        BigDecimal tongTienHoaDon = donHang.getTongTien();
+        BigDecimal donToiThieu = voucher.getDonToiThieu();
+        if(tongTienHoaDon.compareTo(donToiThieu) < 0){
             redirectAttributes.addFlashAttribute("errorMessage", "Mã voucher dành cho hóa đơn có tổng tiền phải lớn hơn " + voucher.getDonToiThieu());
             return "redirect:/don-hang/chi-tiet?id="+donHang.getId();
         }
@@ -672,7 +681,8 @@ public class DonHangController {
             return "redirect:/don-hang/chi-tiet?id=" + donHang.getId();
         }
         //Áp dụng voucher và tính số tiền sau khi giảm
-        double tongTienGiamGia = voucherService.applyVoucher(donHang, voucher);
+        BigDecimal giamGia = voucher.getGiaTri();
+        BigDecimal tongTienGiamGia = tongTienHoaDon.subtract(giamGia);
         int slVoucher = voucher.getSoLuong();
         //Cập nhật hóa đơn
         donHang.setGiamGia(voucher);

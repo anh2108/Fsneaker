@@ -232,82 +232,84 @@
                 <div class="card shadow-lg p-4">
                     <h1 class="text-center mb-4">Thêm mới nhân viên</h1>
                     <form action="/add-nhan-vien" method="post" th:object="${nhanvien}">
-                        <div class="mb-3">
-                            <label class="form-label">Mã nhân viên:</label>
-                            <input class="form-control" th:field="*{maNhanVien}" placeholder="Nhập mã nhân viên">
-                            <span th:if="${errors != null and errors.containsKey('maNhanVien')}" class="text-danger">
-                        <small th:text="${errors['maNhanVien']}"></small>
-                    </span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tên nhân viên:</label>
-                            <input class="form-control" th:field="*{tenNhanVien}" placeholder="Nhập tên nhân viên">
-                            <span th:if="${errors != null and errors.containsKey('tenNhanVien')}" class="text-danger">
-                        <small th:text="${errors['tenNhanVien']}"></small>
-                    </span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email:</label>
-                            <input class="form-control" th:field="*{email}" placeholder="Nhập email">
-                            <span th:if="${errors != null and errors.containsKey('email')}" class="text-danger">
-                        <small th:text="${errors['email']}"></small>
-                    </span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Số điện thoại:</label>
-                            <input class="form-control" th:field="*{soDienThoai}" placeholder="Nhập số điện thoại">
-                            <span th:if="${errors != null and errors.containsKey('soDienThoai')}" class="text-danger">
-                        <small th:text="${errors['soDienThoai']}"></small>
-                    </span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Ngày sinh:</label>
-                            <input type="date" class="form-control" th:field="*{ngaySinh}">
-                            <span th:if="${errors != null and errors.containsKey('ngaySinh')}" class="text-danger">
+                        <div class="row">
+                            <div class="mb-3 col-sm-6 col-lg-6">
+                                <label class="form-label">Mã nhân viên:</label>
+                                <input class="form-control" th:field="*{maNhanVien}" placeholder="Nhập mã nhân viên">
+                                <span th:if="${errors != null and errors.containsKey('maNhanVien')}" class="text-danger">
+                        <small th:text="${errors['maNhanVien']}"></small></span>
+                                <div th:if="${errorMaNhanVien != null}" style="color: red" th:text="${errorMaNhanVien}"></div>
+                            </div>
+                            <div class="mb-3 col-sm-6 col-lg-6">
+                                <label class="form-label">Tên nhân viên:</label>
+                                <input class="form-control" th:field="*{tenNhanVien}" placeholder="Nhập tên nhân viên">
+                                <span th:if="${errors != null and errors.containsKey('tenNhanVien')}" class="text-danger">
+                        <small th:text="${errors['tenNhanVien']}"></small></span>
+
+                            </div>
+                            <div class="mb-3 col-sm-6 col-lg-6">
+                                <label class="form-label">Email:</label>
+                                <input class="form-control" th:field="*{email}" placeholder="Nhập email">
+                                <span th:if="${errors != null and errors.containsKey('email')}" class="text-danger">
+                        <small th:text="${errors['email']}"></small></span>
+                                <div th:if="${errorEmail != null}" style="color: red" th:text="${errorEmail}"></div>
+                            </div>
+                            <div class="mb-3 col-sm-6 col-lg-6">
+                                <label class="form-label">Số điện thoại:</label>
+                                <input class="form-control" th:field="*{soDienThoai}" placeholder="Nhập số điện thoại">
+                                <span th:if="${errors != null and errors.containsKey('soDienThoai')}" class="text-danger">
+                        <small th:text="${errors['soDienThoai']}"></small></span>
+                                <div th:if="${errorSoDienThoai != null}" style="color: red" th:text="${errorSoDienThoai}"></div>
+                            </div>
+                            <div class="mb-3 col-sm-6 col-lg-6">
+                                <label class="form-label">Ngày sinh:</label>
+                                <input type="date" class="form-control" th:field="*{ngaySinh}">
+                                <span th:if="${errors != null and errors.containsKey('ngaySinh')}" class="text-danger">
                         <small th:text="${errors['ngaySinh']}"></small>
                     </span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Giới tính:</label>
-                            <select class="form-select" th:field="*{gioiTinh}">
-                                <option value="1">Nam</option>
-                                <option value="0">Nữ</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Địa chỉ:</label>
-                            <input class="form-control" th:field="*{diaChi}" placeholder="Nhập địa chỉ">
-                            <span th:if="${errors != null and errors.containsKey('diaChi')}" class="text-danger">
+                            </div>
+                            <div class="mb-3 col-sm-6 col-lg-6">
+                                <label class="form-label">Giới tính:</label>
+                                <select class="form-select" th:field="*{gioiTinh}">
+                                    <option value="1">Nam</option>
+                                    <option value="0">Nữ</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-sm-6 col-lg-6">
+                                <label class="form-label">Địa chỉ:</label>
+                                <input class="form-control" th:field="*{diaChi}" placeholder="Nhập địa chỉ">
+                                <span th:if="${errors != null and errors.containsKey('diaChi')}" class="text-danger">
                         <small th:text="${errors['diaChi']}"></small>
                     </span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Vai trò:</label>
-                            <select class="form-select" th:field="*{vaiTro}">
-                                <option value="1">Nhân viên</option>
-                                <option value="0">Admin</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Mật khẩu:</label>
-                            <input type="password" class="form-control" th:field="*{matKhau}" placeholder="Nhập mật khẩu">
-                            <span th:if="${errors != null and errors.containsKey('matKhau')}" class="text-danger">
+                            </div>
+                            <div class="mb-3 col-sm-6 col-lg-6">
+                                <label class="form-label">Vai trò:</label>
+                                <select class="form-select" th:field="*{vaiTro}">
+                                    <option value="0">Nhân viên</option>
+                                    <option value="1">Admin</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-sm-6 col-lg-6">
+                                <label class="form-label">Mật khẩu:</label>
+                                <input type="password" class="form-control" th:field="*{matKhau}" placeholder="Nhập mật khẩu">
+                                <span th:if="${errors != null and errors.containsKey('matKhau')}" class="text-danger">
                         <small th:text="${errors['matKhau']}"></small>
                     </span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Cccd:</label>
-                            <input class="form-control" th:field="*{cccd}" placeholder="Nhập CCCD">
-                            <span th:if="${errors != null and errors.containsKey('cccd')}" class="text-danger">
+                            </div>
+                            <div class="mb-3 col-sm-6 col-lg-6">
+                                <label class="form-label">Cccd:</label>
+                                <input class="form-control" th:field="*{cccd}" placeholder="Nhập CCCD">
+                                <span th:if="${errors != null and errors.containsKey('cccd')}" class="text-danger">
                         <small th:text="${errors['cccd']}"></small>
                     </span>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Trạng thái:</label>
-                            <select class="form-select" th:field="*{trangThai}">
-                                <option value="1">Hoạt động</option>
-                                <option value="0">Không hoạt động</option>
-                            </select>
+                            </div>
+                            <div class="mb-4 col-sm-6 col-lg-6">
+                                <label class="form-label">Trạng thái:</label>
+                                <select class="form-select" th:field="*{trangThai}">
+                                    <option value="1">Hoạt động</option>
+                                    <option value="0">Không hoạt động</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-success btn-lg px-4">Thêm mới</button>

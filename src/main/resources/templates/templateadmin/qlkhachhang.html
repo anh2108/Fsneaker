@@ -285,30 +285,35 @@
                             <td th:text="${khachHang.tenKhachHang}"></td>
                             <td th:text="${khachHang.email}"></td>
                             <td th:text="${#dates.format(khachHang.ngaySinh,'dd/MM/yyyy')}"></td>
-                            <td th:text="${khachHang.gioiTinh} == true ? 'Nữ' : 'Nam'"></td>
+                            <td th:text="${khachHang.gioiTinh} == true ? 'Nam' : 'Nữ'"></td>
                             <td th:text="${khachHang.diaChi}"></td>
                             <td th:text="${khachHang.soDienThoai}"></td>
-                            <td th:text="${khachHang.trangThai} == true ? 'Không hoạt động' : 'Hoạt động'"></td>
-                            <td><a th:href="@{/sua/{id}(id=${khachHang.id})}" class="link-primary"><i class="ri-edit-line"></i>EDIT</a>
-                                <a th:href="@{/select(id=${khachHang.id})}">Chọn</a></td>
+                            <td th:text="${khachHang.trangThai} == true ? 'Hoạt động' : 'Không hoạt động'"></td>
+                            <td><a th:href="@{/sua/{id}(id=${khachHang.id})}" class="btn btn-success"><i class="ri-edit-line"></i>Sửa</a>
                         </tr>
                     </table>
-                    <div>
+                    <div class="text-center">
                         <!-- Nút về trang đầu -->
                         <a th:href="@{/qlkhachhang(page=0, keyword=${keyword})}"
-                           th:classappend="${khachHangs.number == 0} ? 'disabled' : ''">First</a>
+                           th:classappend="${khachHangs.number == 0} ? 'disabled' : ''"> << </a>
 
-                        <!-- Nút Previous -->
-                        <a th:href="@{/qlkhachhang(page=${khachHangs.number - 1}, keyword=${keyword})}"
-                           th:classappend="${!khachHangs.hasPrevious()} ? 'disabled' : ''">Previous</a>
+<!--                        &lt;!&ndash; Nút Previous &ndash;&gt;-->
+<!--                        <a th:href="@{/qlkhachhang(page=${khachHangs.number - 1}, keyword=${keyword})}"-->
+<!--                           th:classappend="${!khachHangs.hasPrevious()} ? 'disabled' : ''">Previous</a>-->
+                        <!-- Hiển thị số trang -->
+                        <span th:each="i : ${#numbers.sequence(0, khachHangs.totalPages - 1)}">
+                                                            <a th:href="@{/qlkhachhang(page=${i}, keyword=${keyword})}"
+                                                               th:classappend="${khachHangs.number == i} ? 'active' : ''"
+                                                               th:text="${i + 1}">1</a>
+                                                        </span>
 
                         <!-- Nút Next -->
-                        <a th:href="@{/qlkhachhang(page=${khachHangs.number + 1}, keyword=${keyword})}"
-                           th:classappend="${!khachHangs.hasNext()} ? 'disabled' : ''">Next</a>
+<!--                        <a th:href="@{/qlkhachhang(page=${khachHangs.number + 1}, keyword=${keyword})}"-->
+<!--                           th:classappend="${!khachHangs.hasNext()} ? 'disabled' : ''">Next</a>-->
 
                         <!-- Nút về trang cuối -->
                         <a th:href="@{/qlkhachhang(page=${khachHangs.totalPages - 1}, keyword=${keyword})}"
-                           th:classappend="${khachHangs.number + 1 >= khachHangs.totalPages} ? 'disabled' : ''">Last</a>
+                           th:classappend="${khachHangs.number + 1 >= khachHangs.totalPages} ? 'disabled' : ''"> >> </a>
                     </div>
                 </div>
             </div><!-- end card -->

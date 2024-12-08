@@ -341,7 +341,7 @@
                                 <td th:text="${i.soLuong}"></td>
                                 <td>
                                     <span th:if="${i.loaiVoucher == 'Giảm giá %'}" th:text="${i.giaTri + ' %'}"></span>
-                                    <span th:if="${i.loaiVoucher == 'Giảm giá số tiền'}" th:text="${i.giaTri + ' VND'}"></span>
+                                    <span th:if="${i.loaiVoucher == 'Giảm giá số tiền'}" th:text="${#numbers.formatDecimal(i.giaTri,0,'COMMA',0,'COMMA') + ' VND'}"></span>
                                 </td>
                                 <td th:text="${#numbers.formatDecimal(i.donToiThieu,0,'COMMA',0,'COMMA')}"></td>
                                 <td th:text="${i.ngayBatDau}"></td>

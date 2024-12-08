@@ -3,12 +3,17 @@ package com.example.fsneaker.controller;
 import com.example.fsneaker.entity.KichThuoc;
 import com.example.fsneaker.entity.MauSac;
 import com.example.fsneaker.repositories.KichThuocRepo;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class KichThuocController {
@@ -17,21 +22,36 @@ public class KichThuocController {
     @GetMapping("/qlkichthuoc")
     public String index(Model model){
         List<KichThuoc> list = kichThuocRepo.findAll();
+        KichThuoc kt = new KichThuoc();
+        model.addAttribute("kt",kt);
         model.addAttribute("kichthuoc", list);
-        return "templateadmin/qlkichthuoc.html";
+        return "templateadmin/qlkichthuoc";
     }
 
     @PostMapping("qlkichthuoc/store")
-    public String store(@RequestParam String maKichThuoc,
-                        @RequestParam String tenKichThuoc,
-                        @RequestParam int trangThai){
-
-        KichThuoc kt = new KichThuoc();
-        kt.setMakichThuoc(maKichThuoc);
-        kt.setTenKichThuoc(tenKichThuoc);
-        kt.setTrangThai(trangThai == 0 ? 0 : 1);
+    public String store(@ModelAttribute("kt") KichThuoc kt,
+                         Model model, RedirectAttributes redirectAttributes){
+        Map<String, String> errors = new HashMap<>();
+        //Kiểm tra lỗi validate
+        if(kt.getMakichThuoc() == null || kt.getMakichThuoc().isBlank()){
+            errors.put("makichThuoc","Mã kích thước không được để trống!");
+        }else if(kt.getMakichThuoc().length() < 5 || kt.getMakichThuoc().length() > 20){
+            errors.put("makichThuoc", "Mã kích thước phải từ 5 đến 20 ký tự!");
+        }else if(kichThuocRepo.existsByMakichThuoc(kt.getMakichThuoc())){
+            redirectAttributes.addFlashAttribute("error","Mã kích thước đã tồn tại!");
+            return "redirect:/qlkichthuoc";
+        }
+        if(kt.getTenKichThuoc() == null || kt.getTenKichThuoc().isBlank()){
+            errors.put("tenKichThuoc","Tên kích thước không được để trống!");
+        }else if(kt.getTenKichThuoc().length() != 2){
+            errors.put("tenKichThuoc","Tên kích thước phải đúng 2 ký tự!");
+        }
+        if(!errors.isEmpty()){
+            redirectAttributes.addFlashAttribute("errors",errors);
+            return "redirect:/qlkichthuoc";
+        }
         kichThuocRepo.save(kt);
-
+        redirectAttributes.addFlashAttribute("success","Thêm kích thước thành công!");
         return "redirect:/qlkichthuoc";
     }
 

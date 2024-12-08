@@ -6,6 +6,7 @@ import com.example.fsneaker.repositories.GioHangChiTietRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -43,8 +44,8 @@ public class GioHangChiTietService {
         }
     }
 
-    public double tinhTongTien(Integer idGioHang){
-        Double tongTien = gioHangChiTietRepo.sumGiaByGioHangId(idGioHang);
-        return tongTien != null ? tongTien : 0.0;
+    public BigDecimal tinhTongTien(Integer idGioHang){
+        BigDecimal tongTien = gioHangChiTietRepo.sumGiaByGioHangId(idGioHang);
+        return tongTien != null ? tongTien : BigDecimal.valueOf(0.0);
     }
 }

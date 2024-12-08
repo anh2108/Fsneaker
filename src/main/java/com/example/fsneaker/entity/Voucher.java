@@ -19,6 +19,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -57,12 +58,12 @@ public class Voucher {
     @DecimalMin(value = "0.0", inclusive = false, message = "Giá trị phải lớn hơn 0")
     @NotNull(message = "GiaTri không được bỏ trống")
     @Column(name = "GiaTri")
-    private Double giaTri;
+    private BigDecimal giaTri;
 
     @Positive(message = "Đơn tối thiểu phải là số dương")
     @NotNull(message = "DonToiThieu không được bỏ trống")
     @Column(name = "DonToiThieu")
-    private Double donToiThieu;
+    private BigDecimal donToiThieu;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     @NotNull(message = "NgayBatDau không được bỏ trống")
@@ -95,7 +96,7 @@ public class Voucher {
 
     @AssertTrue(message = "Đơn tối thiểu phải lớn hơn giá trị giảm")
     public boolean isDonToiThieuLonHonGiaTriGiam() {
-        return donToiThieu != null && giaTri != null && donToiThieu > giaTri;
+        return donToiThieu != null && giaTri != null && donToiThieu.compareTo(giaTri) > 0;
     }
 
     public int getTrangThai() {

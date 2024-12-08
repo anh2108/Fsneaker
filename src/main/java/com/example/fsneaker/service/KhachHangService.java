@@ -88,11 +88,35 @@ public class KhachHangService {
         Optional<KhachHang> khachHang = khachHangRepo.findById(id);
         return khachHang.orElse(null);
     }
-
     // Lưu nhân viên vào cơ sở dữ liệu
     public KhachHang save(KhachHang khachHang) {
         return khachHangRepo.save(khachHang);
     }
+    public KhachHang findByResetToken(String token){
+        return khachHangRepo.findByResetToken(token);
+    }
+    public boolean existsByMaKhachHang(String maKhachHang){
+        return khachHangRepo.existsByMaKhachHang(maKhachHang);
+    }
+    public boolean isDuplicationMaKhachHang(Integer id, String maKhachHang){
+        KhachHang existing = khachHangRepo.findByMaKhachHang(maKhachHang);
+        return existing != null && existing.getId() != id;
+    }
 
+    public boolean existsBySoDienThoai(String soDienThoai){
+        return khachHangRepo.existsBySoDienThoai(soDienThoai);
+    }
+    public boolean isDuplicationSoDienThoai(Integer id,String soDienThoai){
+         KhachHang existing = khachHangRepo.findBySoDienThoai(soDienThoai);
+         return existing != null && existing.getId() != id;
+    }
 
+    public boolean existsByEmail(String email){
+        return khachHangRepo.existsByEmail(email);
+    }
+
+    public boolean isDuplicationEmail(Integer id, String email){
+        KhachHang existing = khachHangRepo.findByEmail(email);
+        return existing != null && existing.getId() != id;
+    }
 }

@@ -248,7 +248,7 @@
 
 
 
-                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                            <button type="submit" class="btn btn-success">Tìm kiếm</button>
 
                         </form>
 
@@ -276,8 +276,9 @@
                                 <td>[[${khuyenmai.loaiKhuyenMai}]]</td>
                                 <td>[[${khuyenmai.moTa}]]</td>
 
-                                <td>[[${khuyenmai.giaTri}]]</td>
-                                <td>[[${khuyenmai.donToiThieu}]]</td>
+                                <td><span th:if="${khuyenmai.loaiKhuyenMai == 'Giảm giá %'}" th:text="${khuyenmai.giaTri + ' %'}"></span>
+                                    <span th:if="${khuyenmai.loaiKhuyenMai == 'Giảm giá số tiền'}" th:text="${#numbers.formatDecimal(khuyenmai.giaTri,0,'COMMA',0,'COMMA') + ' VND'}"></span></td>
+                                <td>[[${#numbers.formatDecimal(khuyenmai.donToiThieu,0,'COMMA',0,'COMMA')}]]</td>
                                 <td>[[${khuyenmai.ngayBatDau}]]</td>
                                 <td>[[${khuyenmai.ngayKetThuc}]]</td>
 
@@ -286,7 +287,7 @@
                                 <td>
 
 
-                                    <a th:href="@{edit/{id}(id=${khuyenmai.id})}" class="btn btn-warning">Sửa</a>
+                                    <a th:href="@{edit/{id}(id=${khuyenmai.id})}" class="btn btn-success">Sửa</a>
 
 
                                 </td>
@@ -299,7 +300,7 @@
                             <ul class="pagination justify-content-center">
                                 <!-- Nút Previous -->
                                 <li th:if="${currentPage > 0}" class="page-item">
-                                    <a th:href="@{/qlkhuyenmai(page=${currentPage - 1})}" class="page-link">Previous</a>
+                                    <a th:href="@{/qlkhuyenmai(page=${currentPage - 1})}" class="page-link"> << </a>
                                 </li>
 
                                 <!-- Hiển thị các số trang -->
@@ -310,7 +311,7 @@
 
                                 <!-- Nút Next -->
                                 <li th:if="${currentPage < totalPages - 1}" class="page-item">
-                                    <a th:href="@{/qlkhuyenmai(page=${currentPage + 1})}" class="page-link">Next</a>
+                                    <a th:href="@{/qlkhuyenmai(page=${currentPage + 1})}" class="page-link"> >> </a>
                                 </li>
                             </ul>
                         </nav>

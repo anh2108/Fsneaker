@@ -62,7 +62,18 @@ public class NhanVienController {
             model.addAttribute("errors", errors);
             return "templateadmin/addNhanVien";
         }
-
+        if(nhanVienService.existsByMaNhanVien(nhanVien.getMaNhanVien())){
+            model.addAttribute("errorMaNhanVien","Mã nhân viên đã tồn tại!");
+            return "templateadmin/addNhanVien";
+        }
+        if(nhanVienService.existsByEmail(nhanVien.getEmail())){
+            model.addAttribute("errorEmail","Email đã tồn tại!");
+            return "templateadmin/addNhanVien";
+        }
+        if(nhanVienService.existsBySoDienThoai(nhanVien.getSoDienThoai())){
+            model.addAttribute("errorSoDienThoai", "Số điện thoại đã tồn tại!");
+            return "templateadmin/addNhanVien";
+        }
         nhanVienRepo.save(nhanVien);
         return "redirect:/qlnhanvien";
     }
@@ -77,10 +88,21 @@ public class NhanVienController {
 
 
     @PostMapping("/update-nhan-vien/{id}")
-    public String updateNhanVien(@PathVariable Integer id, @ModelAttribute NhanVien nhanVien) {
+    public String updateNhanVien(@PathVariable Integer id, @ModelAttribute NhanVien nhanVien, Model model) {
         NhanVien existingNhanVien = nhanVienRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nhân viên không tồn tại"));
-
+        if(nhanVienService.isDeplicationMaNhanVien(id, nhanVien.getMaNhanVien())){
+            model.addAttribute("errorMaNhanVien", "Mã nhân viên đã tồn tại!");
+            return "templateadmin/updateNhanVien";
+        }
+        if(nhanVienService.isDeplicationEmail(id, nhanVien.getEmail())){
+            model.addAttribute("errorEmail","Email đã tồn tai!");
+            return "templateadmin/updateNhanVien";
+        }
+        if(nhanVienService.isDeplicationSoDienThoai(id, nhanVien.getSoDienThoai())){
+            model.addAttribute("errorSoDienThoai","Số điện thoại đã tồn tại!");
+            return "templateadmin/updateNhanVien";
+        }
         existingNhanVien.setMaNhanVien(nhanVien.getMaNhanVien());
         existingNhanVien.setTenNhanVien(nhanVien.getTenNhanVien());
         existingNhanVien.setEmail(nhanVien.getEmail());

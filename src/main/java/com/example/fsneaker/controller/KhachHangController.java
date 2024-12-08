@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -37,8 +38,20 @@ import java.util.List;
             return "templateadmin/themkhachhang";
         }
         @PostMapping("/themkhachhang")
-        public String addKhachHang(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result){
+        public String addKhachHang(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model){
             if(result.hasErrors()){
+                return "templateadmin/themkhachhang";
+            }
+            if(khachHangService.existsByMaKhachHang(khachHang.getMaKhachHang())){
+                model.addAttribute("errorMessage","Mã khách hàng đã tồn tại!");
+                return "templateadmin/themkhachhang";
+            }
+            if(khachHangService.existsBySoDienThoai(khachHang.getSoDienThoai())){
+                model.addAttribute("errorSoDienThoai","Số điện thoại đã tồn tại!");
+                return "templateadmin/themkhachhang";
+            }
+            if(khachHangService.existsByEmail(khachHang.getEmail())){
+                model.addAttribute("errorEmail","Email đã tồn tại!");
                 return "templateadmin/themkhachhang";
             }
             khachHangService.themKH(khachHang);
@@ -52,8 +65,20 @@ import java.util.List;
         }
         // Lưu thôn tin khách hàng sau khi chỉnh sửa
         @PostMapping("/cap-nhat/{id}")
-        public String updateKhachHang(@PathVariable("id") Integer id,@Valid @ModelAttribute("khachHang")KhachHang khachHang, BindingResult result){
+        public String updateKhachHang(@PathVariable("id") Integer id,@Valid @ModelAttribute("khachHang")KhachHang khachHang, BindingResult result, Model model){
             if(result.hasErrors()){
+                return "templateadmin/suakhachhang";
+            }
+            if(khachHangService.isDuplicationMaKhachHang(id,khachHang.getMaKhachHang())){
+                model.addAttribute("errorMessage","Mã khách hàng đã tồn tại!");
+                return "templateadmin/suakhachhang";
+            }
+            if(khachHangService.isDuplicationSoDienThoai(id, khachHang.getSoDienThoai())){
+                model.addAttribute("errorSoDienThoai","Số điện thoại đã tồn tại!");
+                return "templateadmin/suakhachhang";
+            }
+            if(khachHangService.isDuplicationEmail(id,khachHang.getEmail())){
+                model.addAttribute("errorEmail","Email đã tồn tại!");
                 return "templateadmin/suakhachhang";
             }
             //Lấy thông tin khách hàng cũ từ cơ sở dữ liệu theo id

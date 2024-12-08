@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -108,7 +109,7 @@ public class TrangChuController {
         model.addAttribute("danhSachChiTiet", danhSachChiTiet);
         int demTongSoLuongTrongGioHang = gioHangChiTietService.getSoLuongTrongGioHang(gioHang.getId());
         model.addAttribute("demTongSoLuongTrongGioHang",demTongSoLuongTrongGioHang);
-        double tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
+        BigDecimal tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
         model.addAttribute("gioHang", gioHang);
         model.addAttribute("tongTien", tongTien);
 

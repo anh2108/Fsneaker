@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,5 +29,5 @@ public class GioHangChiTiet {
     private SanPhamChiTiet sanPhamChiTiet;
 
     private int soLuong;
-    private double gia;
+    private BigDecimal gia;
 }

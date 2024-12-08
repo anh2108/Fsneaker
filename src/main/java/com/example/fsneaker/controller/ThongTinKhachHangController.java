@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -93,7 +94,7 @@ public class ThongTinKhachHangController {
         model.addAttribute("danhSachChiTiet", danhSachChiTiet);
         int demTongSoLuongTrongGioHang = gioHangChiTietService.getSoLuongTrongGioHang(gioHang.getId());
         model.addAttribute("demTongSoLuongTrongGioHang",demTongSoLuongTrongGioHang);
-        double tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
+        BigDecimal tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
         model.addAttribute("gioHang", gioHang);
         model.addAttribute("tongTien", tongTien);
         return "templatekhachhang/thong-tin-khach-hang";

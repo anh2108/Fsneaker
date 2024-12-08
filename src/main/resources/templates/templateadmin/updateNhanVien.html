@@ -266,6 +266,7 @@
                             <span th:if="${errors != null and errors.containsKey('maNhanVien')}" class="text-danger">
                         <small th:text="${errors['maNhanVien']}"></small>
                     </span>
+                            <div th:if="${errorMaNhanVien != null}" style="color: red" th:text="${errorMaNhanVien}"></div>
                         </div>
 
                         <!-- Tên nhân viên -->
@@ -282,8 +283,8 @@
                             <label class="form-label">Email:</label>
                             <input class="form-control" th:field="*{email}" placeholder="Nhập email" type="email" required>
                             <span th:if="${errors != null and errors.containsKey('email')}" class="text-danger">
-                        <small th:text="${errors['email']}"></small>
-                    </span>
+                        <small th:text="${errors['email']}"></small></span>
+                            <div th:if="${errorEmail != null}" style="color: red" th:text="${errorEmail}"></div>
                         </div>
 
                         <!-- Số điện thoại -->
@@ -291,8 +292,8 @@
                             <label class="form-label">Số điện thoại:</label>
                             <input class="form-control" th:field="*{soDienThoai}" placeholder="Nhập số điện thoại" required>
                             <span th:if="${errors != null and errors.containsKey('soDienThoai')}" class="text-danger">
-                        <small th:text="${errors['soDienThoai']}"></small>
-                    </span>
+                        <small th:text="${errors['soDienThoai']}"></small></span>
+                            <div th:if="${errorSoDienThoai != null}" style="color: red" th:text="${errorSoDienThoai}"></div>
                         </div>
 
                         <!-- Ngày sinh -->
@@ -326,8 +327,8 @@
                         <div class="mb-3">
                             <label class="form-label">Vai trò:</label>
                             <select class="form-select" th:field="*{vaiTro}">
-                                <option value="1">Nhân viên</option>
-                                <option value="0">Admin</option>
+                                <option value="0">Nhân viên</option>
+                                <option value="1">Admin</option>
                             </select>
                         </div>
 

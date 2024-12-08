@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
@@ -111,7 +112,7 @@ public class GioHangController {
         model.addAttribute("danhSachChiTiet", danhSachChiTiet);
         int demTongSoLuongTrongGioHang = gioHangChiTietService.getSoLuongTrongGioHang(gioHang.getId());
         model.addAttribute("demTongSoLuongTrongGioHang",demTongSoLuongTrongGioHang);
-        double tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
+        BigDecimal tongTien = gioHangChiTietService.tinhTongTien(gioHang.getId());
         model.addAttribute("gioHang", gioHang);
         model.addAttribute("tongTien", tongTien);
         return "templatekhachhang/gio-hang";
@@ -206,9 +207,20 @@ public class GioHangController {
         if (request.getSession().getAttribute("userId") == null) {
             // Lấy hoặc tạo sessionId
             sessionId = (String) request.getSession().getAttribute("sessionId");
-            if (sessionId == null) {
+            Long sessionCreatedTime = (Long) request.getSession().getAttribute("sessionCreatedTime");
+            if (sessionId == null || sessionCreatedTime == null || System.currentTimeMillis() - sessionCreatedTime > 7*24*60*60*1000) {//Hơn 1 tuần
+                //Nếu hết hạn, xóa giỏ hàng tạm thời cũ
+                if(sessionId != null){
+                    GioHang tempGioHang = gioHangService.getGioHangBySessionId(sessionId);
+                    if(tempGioHang != null){
+                        gioHangService.delete(tempGioHang);
+                    }
+                    request.getSession().removeAttribute("sessionId");
+                    request.getSession().removeAttribute("sessionCreatedTime");
+                }
                 sessionId = UUID.randomUUID().toString(); // Tạo sessionId duy nhất
                 request.getSession().setAttribute("sessionId", sessionId);
+                request.getSession().setAttribute("sessionCreatedTime", System.currentTimeMillis());
             }
             // Tìm giỏ hàng theo sessionId
             gioHang = gioHangService.getGioHangBySessionId(sessionId);
@@ -259,6 +271,10 @@ public class GioHangController {
         GioHangChiTiet gioHangChiTiet = gioHangChiTietService.getByGioHangIdAndSanPhamIdAndKichThuocIdAndMauSacId(gioHang.getId(),idSanPham,idKichThuoc,idMauSac);
         if(gioHangChiTiet != null){
             //Sản phẩm đã tồn tại, cập nhật số lượng
+            if(gioHangChiTiet.getSoLuong() + soLuong > sanPhamChiTiet.getSoLuong()){
+                redirectAttributesl.addFlashAttribute("errorMessage", "Không thể thêm quá số lượng trong kho!");
+                return "redirect:/xem-chi-tiet/"+sanPhamChiTiet.getId();
+            }
             gioHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong() + soLuong);
             gioHangChiTietService.saveGioHangChiTiet(gioHangChiTiet);
         }else {

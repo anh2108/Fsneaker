@@ -15,4 +15,5 @@ public interface MauSacRepo extends JpaRepository<MauSac, Integer> {
     //Chỗ này là code của trưởng nhóm cẩm đụng vào
     @Query("SELECT ms.tenMauSac, COUNT(spct.id) FROM MauSac ms join SanPhamChiTiet spct ON ms.id = spct.mauSac.id WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY ms.tenMauSac HAVING COUNT(spct.id) > 0")
     List<Object[]> findByMauSacWithProduct(@Param("idThuongHieu") Integer idThuongHieu);
+    boolean existsByMaMauSac(String maMauSac);
 }

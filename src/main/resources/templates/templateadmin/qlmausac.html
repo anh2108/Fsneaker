@@ -238,29 +238,33 @@
                         <h1 class="card-title mb-0">Quản lý màu sắc</h1>
                     </div>
                     <div class="card-body">
-                        <form class="" action="/qlmausac/store" method="post">
+                        <form class="" action="/qlmausac/store" method="post" th:object="${mauSac}">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <label class="form-label">Mã màu sắc</label>
-                                    <input type="text" class="form-control" name="maMauSac" >
+                                    <input type="text" class="form-control" name="maMauSac" th:field="*{maMauSac}">
+                                    <div th:if="${errors != null && errors.containsKey('maMauSac')}" th:text="${errors['maMauSac']}" style="color:red;"></div>
+                                    <div th:if="${error != null}" th:text="${error}" style="color: red"></div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     <label class="form-label">Màu sắc</label>
-                                    <input type="text" class="form-control" name="tenMauSac">
+                                    <input type="text" class="form-control" name="tenMauSac" th:field="*{tenMauSac}">
+                                    <div th:if="${errors != null && errors.containsKey('tenMauSac')}" th:text="${errors['tenMauSac']}" style="color: red"></div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     <label class="form-label">Trạng thái</label>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="trangThai" value="0" checked>
+                                        <input class="form-check-input" type="radio" name="trangThai" value="1" checked th:checked="${mauSac.trangThai == 1}">
                                         <label class="form-check-label" >Hoạt động</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="trangThai" value="1">
+                                        <input class="form-check-input" type="radio" name="trangThai" value="0" th:checked="${mauSac.trangThai == 0}">
                                         <label class="form-check-label">Ngừng hoạt động</label>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-animation waves-effect waves-light">Thêm</button>
+
                                 </div>
                             </div>
+                            <button type="submit" class="btn btn-primary btn-animation waves-effect waves-light"><i class="ri-add-line"></i> Thêm</button>
                         </form>
                         <table class="table">
                             <thead>
@@ -277,11 +281,11 @@
                                 <td th:text="${index.index + 1 }"></td>
                                 <td th:text="${ms.maMauSac}"></td>
                                 <td th:text="${ms.tenMauSac}"></td>
-                                <td th:text="${ms.trangThai == 0 ? 'Hoạt động' : 'Ngừng hoạt động'}"></td>
+                                <td th:text="${ms.trangThai == 1 ? 'Hoạt động' : 'Ngừng hoạt động'}"></td>
                                 <td>
 
-                                    <button type="button" class="link-primary" data-bs-toggle="modal" th:data-bs-target="'#editModal-' + ${ms.id}">
-                                        <i class="ri-edit-line"></i> Chỉnh sửa
+                                    <button type="button" class="btn btn-primary btn-animation waves-light waves-effect" data-bs-toggle="modal" th:data-bs-target="'#editModal-' + ${ms.id}">
+                                        <i class="ri-edit-line"></i> Sửa
                                     </button>
 
                                     <!-- Modal chỉnh sửa -->
@@ -306,17 +310,17 @@
                                                         <div class="mb-3">
                                                             <label class="form-label">Trạng thái</label>
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="radio" th:checked="${ms.trangThai == 0}" name="trangThai" value="0">
+                                                                <input class="form-check-input" type="radio" th:checked="${ms.trangThai == 1}" name="trangThai" value="1">
                                                                 <label class="form-check-label">Hoạt động</label>
                                                             </div>
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="radio" th:checked="${ms.trangThai == 1}" name="trangThai" value="1">
+                                                                <input class="form-check-input" type="radio" th:checked="${ms.trangThai == 0}" name="trangThai" value="0">
                                                                 <label class="form-check-label">Ngừng hoạt động</label>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -327,7 +331,25 @@
                             </tr>
                             </tbody>
                         </table>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <!-- Nút Previous -->
+                                <li th:if="${ms.number > 0}" class="page-item">
+                                    <a th:href="@{/qlmausac(page=${ms.number - 1})}" class="page-link">Previous</a>
+                                </li>
 
+                                <!-- Hiển thị các số trang -->
+                                <li th:each="i : ${#numbers.sequence(0, ms.totalPages - 1)}" class="page-item"
+                                    th:classappend="${i == ms.number ? 'active' : ''}">
+                                    <a th:href="@{/qlmausac(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
+                                </li>
+
+                                <!-- Nút Next -->
+                                <li th:if="${ms.number < ms.totalPages - 1}" class="page-item">
+                                    <a th:href="@{/qlmausac(page=${ms.number + 1})}" class="page-link">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
 

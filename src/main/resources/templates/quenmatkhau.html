@@ -12,7 +12,7 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="shortcut icon" href="images/shoes.png">
     <!-- Thêm Line Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
     <!-- Thêm Material Design Icons CDN -->
@@ -118,10 +118,10 @@
                                         Nhập email của bạn và hướng dẫn sẽ được gửi đến bạn!
                                     </div>
                                     <div class="p-2">
-                                        <form>
+                                        <form th:action="@{/forgot-password}" method="post">
                                             <div class="mb-4">
                                                 <label class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="email" placeholder="Email">
+                                                <input type="email" name="email" class="form-control" id="email" placeholder="Email">
                                             </div>
 
                                             <div class="text-center mt-4">
@@ -129,7 +129,27 @@
                                             </div>
                                         </form><!-- end form -->
                                     </div>
-
+                                    <!-- Modal thông báo -->
+                                    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+                                        <!-- Toast for Success -->
+                                        <div th:if="${message}" id="toastSuccess" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                                            <div class="d-flex">
+                                                <div class="toast-body">
+                                                    <p th:text="${message}">Thông báo thành công!</p>
+                                                </div>
+                                                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                            </div>
+                                        </div>
+                                        <!-- Toast for Error -->
+                                        <div th:if="${error}" id="toastError" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                                            <div class="d-flex">
+                                                <div class="toast-body">
+                                                    <p th:text="${error}">Thông báo lỗi!</p>
+                                                </div>
+                                                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="mt-5 text-center">
                                         <p class="mb-0">Bạn đã nhớ lại mật khẩu của bạn... <a th:href="@{/login}" class="fw-semibold text-primary text-decoration-underline"> Ấn vào đây </a> </p>
                                     </div>
@@ -167,7 +187,28 @@
     <!-- end Footer -->
 </div>
 <!-- end auth-page-wrapper -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastSuccessElement = document.getElementById('toastSuccess');
+        const toastErrorElement = document.getElementById('toastError');
 
+        if (toastSuccessElement) {
+            const toastSuccess = new bootstrap.Toast(toastSuccessElement, {
+                autohide: true,
+                delay: 5000 // 5 seconds
+            });
+            toastSuccess.show();
+        }
+
+        if (toastErrorElement) {
+            const toastError = new bootstrap.Toast(toastErrorElement, {
+                autohide: true,
+                delay: 5000 // 5 seconds
+            });
+            toastError.show();
+        }
+    });
+</script>
 <!-- JAVASCRIPT -->
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/simplebar.min.js"></script>

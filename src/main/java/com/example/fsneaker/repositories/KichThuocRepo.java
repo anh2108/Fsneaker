@@ -16,4 +16,8 @@ public interface KichThuocRepo extends JpaRepository<KichThuoc, Integer> {
     //Chỗ này là code của trưởng nhóm cấm đụng vào
     @Query("SELECT kt.tenKichThuoc, COUNT(spct.id) FROM KichThuoc kt JOIN SanPhamChiTiet spct ON kt.id = spct.kichThuoc.id WHERE spct.sanPham.thuongHieu.id = :idThuongHieu GROUP BY kt.tenKichThuoc HAVING COUNT(spct.id) > 0")
     List<Object[]> findKichThuocWithSanPham(@Param("idThuongHieu") Integer idThuongHieu);
+
+    boolean existsByMakichThuoc(String maKichThuoc);
+
+    KichThuoc findByMakichThuoc(String maKichThuoc);
 }

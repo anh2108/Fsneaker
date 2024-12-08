@@ -241,6 +241,7 @@
                             <label  class="form-label">Mã khách hàng</label>
                             <input type="text" th:field="*{maKhachHang}" class="form-control" />
                             <div th:if="${#fields.hasErrors('maKhachHang')}" th:errors="*{maKhachHang}" style="color: red"></div>
+                            <div th:if="${errorMessage != null}" style="color: red" th:text="${errorMessage}"></div>
                         </div>
                         <div class="col-6 mb-2">
                             <label  class="form-label">Tên khách hàng</label>
@@ -251,6 +252,7 @@
                             <label for="email" class="form-label">Email</label>
                             <input type="email" id="email" th:field="*{email}" class="form-control form-control-icon"   placeholder="example@gmail.com">
                             <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red"></div>
+                            <div th:if="${errorEmail != null}" style="color: red" th:text="${errorEmail}"></div>
                         </div>
                         <div class="col-6 mb-2">
                             <label for="ngaySinh" class="form-label">Ngày sinh</label>
@@ -259,11 +261,11 @@
                         <div class="col-6 mb-2">
                             <label class="form-label">Giới tính</label>
                             <div class="form-check mb-2">
-                                <input id="male" class="form-check-input" type="radio"  value="false" name="gioiTinh" th:checked="${khachHang.gioiTinh == false}">
+                                <input id="male" class="form-check-input" type="radio"  value="true" name="gioiTinh" th:checked="${khachHang.gioiTinh == true}">
                                 <label for="male" class="form-check-label" >Nam</label>
                             </div>
                             <div class="form-check">
-                                <input id="female" class="form-check-input" type="radio" value="true" name="gioiTinh" th:checked="${khachHang.gioiTinh == true}">
+                                <input id="female" class="form-check-input" type="radio" value="false" name="gioiTinh" th:checked="${khachHang.gioiTinh == false}">
                                 <label for="female" class="form-check-label" >Nữ</label>
                             </div>
                             <div th:if="${#fields.hasErrors('gioiTinh')}" th:errors="*{gioiTinh}" style="color: red"></div>
@@ -277,15 +279,16 @@
                             <label for="soDienThoai" class="form-label">Số điện thoại</label>
                             <input type="text" id="soDienThoai" th:field="*{soDienThoai}" class="form-control" >
                             <div th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}" style="color: red"></div>
+                            <div th:if="${errorSoDienThoai != null}" style="color: red" th:text="${errorSoDienThoai}"></div>
                         </div>
                         <div class="col-6 mb-2">
                             <label class="form-label">Trạng thái</label>
                             <div class="form-check mb-2">
-                                <input class="form-check-input" id="active" type="radio" value="false" name="trangThai" th:checked="${khachHang.trangThai == false}">
+                                <input class="form-check-input" id="active" type="radio" value="true" name="trangThai" th:checked="${khachHang.trangThai == true}">
                                 <label for="active" class="form-check-label">Hoạt động</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" id="inactive" type="radio" value="true" name="trangThai" th:checked="${khachHang.trangThai == true}">
+                                <input class="form-check-input" id="inactive" type="radio" value="false" name="trangThai" th:checked="${khachHang.trangThai == false}">
                                 <label for="inactive" class="form-check-label">Không hoạt động</label>
                             </div>
                             <div th:if="${#fields.hasErrors('trangThai')}" th:errors="*{trangThai}" style="color: red"></div>

@@ -11,4 +11,5 @@ public interface ThuongHieuRepo extends JpaRepository<ThuongHieu, Integer> {
     @Query("Select th from ThuongHieu th where th.id = :id")
     public ThuongHieu getThuongHieuById(int id);
 
+    boolean existsByMaThuongHieu(String maThuongHieu);
 }
