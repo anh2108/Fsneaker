@@ -55,8 +55,8 @@ public class KhachHangDTO {
 
     @Column(name = "MatKhau")
     @NotEmpty(message = "Mật khẩu không được để trống!")
-    @Size(min = 8, message = "Mật khẩu phải có ít nhất 8 ký tự!")
-    @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+", message = "Mật khẩu phải chứa ít nhất một chữ cái viết hoa, một chữ cái viết thường và một chữ số.")
+    @Size(min = 8, max=30, message = "Mật khẩu từ 8 đến 30 kí tự")
+
     private String matKhau;
 
     @Transient
