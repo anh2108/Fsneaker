@@ -66,7 +66,7 @@ public class KhuyenMai {
     @NotNull
     private Date ngayKetThuc;
 
-    @NotNull
+
     @Column(name="TrangThai")
     private int trangThai;
 

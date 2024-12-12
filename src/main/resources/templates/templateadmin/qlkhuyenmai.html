@@ -241,16 +241,45 @@
                     <div class="card-body">
                         <a href="create" class="btn btn-success">Thêm mới</a><br><hr>
 
-                        <form action="#" th:action="@{search}" method="get">
-                            <label for="search">Nhập mã khuyến mãi:</label>
-                            <input type="text" id="search" name="keyword" placeholder="tìm kiếm theo ma,ten,loai,..." />
+                        <form action="#" th:action="@{search}" method="get" class="p-4 border rounded shadow-sm bg-light">
+                            <div class="mb-4">
+                                <label for="search" class="form-label fw-bold">Nhập mã khuyến mãi:</label>
+                                <input type="text" id="search" name="keyword" class="form-control shadow-sm"
+                                       placeholder="Tìm kiếm theo mã, tên, loại" th:value="${keyword}">
+                            </div>
 
+                            <div class="row">
+                                <!-- Ngày bắt đầu -->
+                                <div class="col-md-4 mb-4">
+                                    <label for="ngayBatDau" class="form-label fw-bold">Ngày bắt đầu:</label>
+                                    <input type="date" id="ngayBatDau" name="ngayBatDau" class="form-control shadow-sm"
+                                           th:value="${ngayBatDau}">
+                                </div>
 
+                                <!-- Ngày kết thúc -->
+                                <div class="col-md-4 mb-4">
+                                    <label for="ngayKetThuc" class="form-label fw-bold">Ngày kết thúc:</label>
+                                    <input type="date" id="ngayKetThuc" name="ngayKetThuc" class="form-control shadow-sm"
+                                           th:value="${ngayKetThuc}">
+                                </div>
 
+                                <!-- Trạng thái -->
+                                <div class="col-md-4 mb-4">
+                                    <label  class="form-label fw-bold">Trạng thái:</label>
+                                    <select  name="trangThai" class="form-select shadow-sm">
+                                        <option value="" th:selected="${trangThai == null}">Tất cả</option>
+                                        <option value="1" th:selected="${trangThai == 1}">Hoạt động</option>
+                                        <option value="0" th:selected="${trangThai == 0}">Không hoạt động</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                            <button type="submit" class="btn btn-success">Tìm kiếm</button>
-
+                            <!-- Nút tìm kiếm -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success px-5 py-2 shadow-sm fw-bold">Tìm kiếm</button>
+                            </div>
                         </form>
+                        <br>
 
                         <table class="table">
                             <thead>
@@ -300,18 +329,18 @@
                             <ul class="pagination justify-content-center">
                                 <!-- Nút Previous -->
                                 <li th:if="${currentPage > 0}" class="page-item">
-                                    <a th:href="@{/qlkhuyenmai(page=${currentPage - 1})}" class="page-link"> << </a>
+                                    <a th:href="@{/search(keyword=${keyword}, ngayBatDau=${ngayBatDau}, ngayKetThuc=${ngayKetThuc},  trangThai=${trangThai}, page=${currentPage - 1})}" class="page-link"> << </a>
                                 </li>
 
                                 <!-- Hiển thị các số trang -->
                                 <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
                                     th:classappend="${i == currentPage ? 'active' : ''}">
-                                    <a th:href="@{/qlkhuyenmai(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
+                                    <a th:href="@{/search(keyword=${keyword}, ngayBatDau=${ngayBatDau}, ngayKetThuc=${ngayKetThuc},  trangThai=${trangThai},  page=${i})}" class="page-link" th:text="${i + 1}">1</a>
                                 </li>
 
                                 <!-- Nút Next -->
                                 <li th:if="${currentPage < totalPages - 1}" class="page-item">
-                                    <a th:href="@{/qlkhuyenmai(page=${currentPage + 1})}" class="page-link"> >> </a>
+                                    <a th:href="@{/search(keyword=${keyword}, ngayBatDau=${ngayBatDau}, ngayKetThuc=${ngayKetThuc},  trangThai=${trangThai}, page=${currentPage + 1})}" class="page-link"> >> </a>
                                 </li>
                             </ul>
                         </nav>

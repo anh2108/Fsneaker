@@ -17,10 +17,15 @@ public interface KhuyenMaiRepo extends JpaRepository<KhuyenMai,Integer> {
     // tìm kiếm theo  tên khuyến mại
     @Query("SELECT k FROM KhuyenMai k WHERE " +
             "(:keyword IS NULL OR k.tenKhuyenMai LIKE %:keyword% OR k.maKhuyenMai LIKE %:keyword% OR k.loaiKhuyenMai LIKE %:keyword%) " +
-            "OR (CAST(k.ngayBatDau AS string) LIKE %:keyword% OR CAST(k.ngayKetThuc AS string) LIKE %:keyword%) " +
-            "OR (:date IS NOT NULL AND (k.ngayBatDau = :date OR k.ngayKetThuc = :date))")
+            "AND (:ngayBatDau IS NULL OR k.ngayBatDau >= :ngayBatDau) " +
+            "AND (:ngayKetThuc IS NULL OR k.ngayKetThuc <= :ngayKetThuc)"+
+            "AND (:trangThai IS NULL OR k.trangThai = :trangThai)"
+    )
+
     Page<KhuyenMai> searchByKeywordAndDate(@Param("keyword") String keyword,
-                                           @Param("date") LocalDate date,
+                                           @Param("ngayBatDau") LocalDate ngayBatDau,
+                                           @Param("ngayKetThuc") LocalDate ngayKetThuc,
+                                           @Param("trangThai") Integer trangThai,
                                            Pageable pageable);
 
    KhuyenMai findByMaKhuyenMai(String maKhuyenMai);

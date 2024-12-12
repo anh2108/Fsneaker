@@ -15,7 +15,8 @@ public class KhuyenMaiService {
     @Autowired
     private KhuyenMaiRepo khuyenMaiRepository;
 
-    public Page<KhuyenMai> searchKhuyenMai(String keyword, LocalDate date, Pageable pageable) {
-        return khuyenMaiRepository.searchByKeywordAndDate(keyword, date, pageable);
+    public Page<KhuyenMai> searchKhuyenMai(String keyword, LocalDate ngayBatDau, LocalDate ngayKetThuc, Integer trangThai,  Pageable pageable) {
+
+        return khuyenMaiRepository.searchByKeywordAndDate(keyword, ngayBatDau, ngayKetThuc, trangThai, pageable);
     }
 }

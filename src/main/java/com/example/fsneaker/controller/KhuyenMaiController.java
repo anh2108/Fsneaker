@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -225,38 +226,28 @@ public class KhuyenMaiController {
     }
 
     @GetMapping("search")
-    public String search(@RequestParam( "keyword") String keyword,
-
-
+    public String search(@RequestParam("keyword") String keyword,
+                         @RequestParam(value = "ngayBatDau", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate ngayBatDau,
+                         @RequestParam(value = "ngayKetThuc", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate ngayKetThuc,
+                         @RequestParam(value = "trangThai", required = false) Integer trangThai,
                          @RequestParam(value = "page", defaultValue = "0") int page,
                          Model model) {
-
         int pageSize = 5; // Số lượng bản ghi mỗi trang
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending()); // Sắp xếp theo id tăng dần
 
-        LocalDate date = null;
+        // Sử dụng phương thức searchKhuyenMai từ service
+        Page<KhuyenMai> khuyenMaiPage = khuyenMaiService.searchKhuyenMai(keyword, ngayBatDau, ngayKetThuc,trangThai, pageable);
 
-        // Kiểm tra xem từ khóa có phải là một ngày không
-        if (keyword != null && !keyword.isEmpty()) {
-            try {
-                date = LocalDate.parse(keyword, DATE_FORMATTER);
-            } catch (DateTimeParseException e) {
-                // Nếu không phải ngày thì tiếp tục sử dụng từ khóa
-            }
-        }
-
-
-
-
-
-
-
-        Page<KhuyenMai> khuyenMaiPage = khuyenMaiService.searchKhuyenMai(keyword, date, pageable);
 
         // Thêm dữ liệu phân trang vào model
         model.addAttribute("khuyenmai", khuyenMaiPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", khuyenMaiPage.getTotalPages());
+        model.addAttribute("keyword", keyword); // Để giữ lại từ khóa trong form tìm kiếm
+        model.addAttribute("ngayBatDau", ngayBatDau); // Để giữ lại ngày bắt đầu trong form tìm kiếm
+        model.addAttribute("ngayKetThuc", ngayKetThuc); // Để giữ lại ngày kết thúc trong form tìm kiếm
+        model.addAttribute("trangThai", trangThai); // Để giữ lại trạng thái trong form tìm kiếm
         return "templateadmin/qlkhuyenmai";
+
     }
 }
