@@ -113,4 +113,41 @@ public class ThongTinKhachHangController {
         redirectAttributes.addFlashAttribute("message", "Đổi thông tin thành công!");
         return "redirect:/thong-tin-ca-nhan";
     }
+
+    @PostMapping("/doi-mat-khau")
+    public String doiMatKhau(
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes,
+            @ModelAttribute("matKhauCu") String matKhauCu,
+            @ModelAttribute("matKhauMoi") String matKhauMoi,
+            @ModelAttribute("xacNhanMatKhauMoi") String xacNhanMatKhauMoi,
+            Model model) {
+
+        int userId = (int) request.getSession().getAttribute("userId");
+        KhachHang khachHang = khachHangService.getKhachHangById(userId);
+
+
+        // Kiểm tra mật khẩu cũ
+        if (!khachHang.getMatKhau().equals(matKhauCu)) {
+            System.out.println("Mật khẩu cũ không đúng!"); // Debug log
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu cũ không đúng!");
+            return "redirect:/thong-tin-ca-nhan";  // Quay lại trang thông tin cá nhân và hiển thị lỗi
+        }
+
+        // Kiểm tra xác nhận mật khẩu mới
+        if (!matKhauMoi.equals(xacNhanMatKhauMoi)) {
+            System.out.println("Xác nhận mật khẩu mới không khớp!"); // Debug log
+            redirectAttributes.addFlashAttribute("errorMessage", "Xác nhận mật khẩu mới không khớp!");
+            return "redirect:/thong-tin-ca-nhan";  // Quay lại trang thông tin cá nhân và hiển thị lỗi
+        }
+
+        // Cập nhật mật khẩu mới
+        khachHang.setMatKhau(matKhauMoi);
+        khachHangService.themKH(khachHang);
+
+        System.out.println("Đổi mật khẩu thành công!"); // Debug log
+        redirectAttributes.addFlashAttribute("message", "Đổi mật khẩu thành công!");
+        return "redirect:/thong-tin-ca-nhan";
+    }
+
 }

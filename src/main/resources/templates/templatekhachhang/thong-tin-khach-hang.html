@@ -420,26 +420,29 @@
             </h3>
             <div id="checkout_coupon" class="collapse" data-parent="#accordion">
                 <div class="checkout_info coupon_info">
-                    <form th:action="@{/doi-mat-khau}" style="display: inline">
+
+                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+                    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+                    <form th:action="@{/doi-mat-khau}" style="display: inline" method="post">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div>
                                     <label for="oldpasswordInput" class="form-label">Mật khẩu cũ *</label>
-                                    <input type="password" class="form-control" id="oldpasswordInput" placeholder="">
+                                    <input type="password" class="form-control" id="oldpasswordInput" name="matKhauCu" placeholder="">
                                 </div>
                             </div>
                             <!--end col-->
                             <div class="col-lg-4">
                                 <div>
                                     <label for="newpasswordInput" class="form-label">Mật khẩu mới *</label>
-                                    <input type="password" class="form-control" id="newpasswordInput" placeholder="">
+                                    <input type="password" class="form-control" id="newpasswordInput" name="matKhauMoi" placeholder="">
                                 </div>
                             </div>
                             <!--end col-->
                             <div class="col-lg-4">
                                 <div>
                                     <label for="confirmpasswordInput" class="form-label">Nhập lại mật khẩu mới *</label>
-                                    <input type="password" class="form-control" id="confirmpasswordInput" placeholder="">
+                                    <input type="password" class="form-control" id="confirmpasswordInput" name="xacNhanMatKhauMoi" placeholder="">
                                 </div>
                             </div>
                             <!--end col-->
@@ -454,6 +457,8 @@
                                     <button type="submit" class="btn btn-success">Thay đổi mật khẩu</button>
                                 </div>
                             </div>
+
+
                             <!--end col-->
                         </div>
                         <!--end row-->
