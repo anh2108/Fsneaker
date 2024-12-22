@@ -53,13 +53,14 @@ public class NhanVien {
 
         @NotNull(message = "Vai trò không được bỏ trống !")
         @Column(name = "VaiTro")
-        private Boolean vaiTro;
+        private Integer vaiTro;
 
         @NotBlank(message = "Mật khẩu không được bỏ trống !")
         @Size(min = 8, max = 20, message = "Mật khẩu không được dài từ 8 - 20 ký tự")
         @Column(name = "MatKhau")
         private String matKhau;
 
+        @Size(min = 12, max = 12, message = "Căm cước công dân phải đúng 12 ký tự!")
         @Column(unique = true, name = "CCCD")
         private String cccd;
 

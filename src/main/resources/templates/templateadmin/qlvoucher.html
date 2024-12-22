@@ -84,7 +84,7 @@
                             <img class="rounded-circle header-profile-user" src="images/users/avatar-1.jpg" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" th:text="${#authentication.principal.displayName}"></span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text" th:text="${#authentication.principal.role == 'ROLE_ADMIN' ? 'Admin' : 'Nhân viên'}">Trưởng nhóm</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text" th:text="${#authentication.principal.role == 'ROLE_ADMIN' ? 'Admin' : (#authentication.principal.role == 'ROLE_MANAGER' ? 'Quản lý' : 'Nhân viên')}">Trưởng nhóm</span>
                             </span>
                         </span>
                         </button>
@@ -140,7 +140,7 @@
                 </div>
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
                         <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                            aria-expanded="false" aria-controls="sidebarDashboards">
                             <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
@@ -155,7 +155,7 @@
                             </ul>
                         </div>
                     </li> <!-- end Dashboard Menu -->
-                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
                         <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
                            aria-expanded="false" aria-controls="sidebarApps">
                             <i class="ri-apps-2-line"></i> <span data-key="t-apps">Quản lý</span>
@@ -201,13 +201,13 @@
                         </div>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                         <a class="nav-link menu-link" href="/don-hang/hien-thi" >
                             <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Bán hàng</span>
                         </a>
 
                     </li> <!-- end Dashboard Menu -->
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                         <a class="nav-link menu-link" href="/donhangadmin" >
                             <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Đơn hàng</span>
                         </a>
@@ -218,10 +218,10 @@
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarAuth">
                             <ul class="nav nav-sm flex-column">
-                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','ADMIN')">
                                     <a href="/qlnhanvien" class="nav-link" data-key="t-nhanvien"> Nhân viên </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                                     <a href="/qlkhachhang" class="nav-link" data-key="t-khachang"> Khách hàng </a>
                                 </li>
                             </ul>
@@ -246,11 +246,7 @@
         <div class="page-content">
             <div class="container-fluid">
                 <!-- COde  tại đây -->
-                <div>
-                    <a href="/qlvoucher/create">
-                        <button class="btn btn-primary btn-animation ">+ Tạo</button>
-                    </a>
-                </div>
+
                 <div class="card">
                     <div class="card-header">
                         <h1 class="card-title mb-0">Quản lý voucher</h1>
@@ -295,9 +291,15 @@
                                     <br><br>
                                     <a href="/qlvoucher" class="btn btn-info btn-animation w-75 h-45" >Làm mới</a>
                                 </div>
-
+                                <div class="col-2">
+                                    <br><br>
+                                    <a href="/qlvoucher/create">
+                                        <button class="btn btn-primary btn-animation w-75 h-45"><i class="ri-add-line"></i> Thêm</button>
+                                    </a>
+                                </div>
                             </div>
                         </form>
+
                         <br><br>
 
 
@@ -341,36 +343,43 @@
                                 <td th:text="${i.soLuong}"></td>
                                 <td>
                                     <span th:if="${i.loaiVoucher == 'Giảm giá %'}" th:text="${i.giaTri + ' %'}"></span>
-                                    <span th:if="${i.loaiVoucher == 'Giảm giá số tiền'}" th:text="${#numbers.formatDecimal(i.giaTri,0,'COMMA',0,'COMMA') + ' VND'}"></span>
+                                    <span th:if="${i.loaiVoucher == 'Giảm giá số tiền'}" th:text="${#numbers.formatDecimal(i.giaTri,0,'COMMA',0,'COMMA')} + ' đ'"></span>
                                 </td>
-                                <td th:text="${#numbers.formatDecimal(i.donToiThieu,0,'COMMA',0,'COMMA')}"></td>
+                                <td th:text="${#numbers.formatDecimal(i.donToiThieu,0,'COMMA',0,'COMMA')} + ' đ'"></td>
                                 <td th:text="${i.ngayBatDau}"></td>
                                 <td th:text="${i.ngayKetThuc}"></td>
 <!--                                <td th:text="${i.ngayTao}"></td>-->
                                 <td th:text="${i.nhanVien.tenNhanVien}"></td>
                                 <td th:text="${i.trangThai == 1 ? 'Đang hoạt động' : (i.trangThai == 0 ? 'Ngừng hoạt đông' : (i.trangThai == 2 ? 'Chờ kích hoạt' : 'Không xác định'))}"></td>
                                 <td><a th:href="@{/qlvoucher-edit/{id}(id=${i.id})}" class="link-primary"><i
-                                        class="ri-edit-line"></i></a></td>
+                                        class="ri-edit-line"></i> Sửa</a></td>
                             </tr>
                             </tbody>
                         </table>
-                        <th:block th:if="${data.totalPages > 1}">
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-center">
-                                    <!-- Previous button -->
-                                    <li class="page-item" th:classappend="${!data.hasPrevious()} ? 'disabled'">
-                                        <a class="page-link"
-                                           th:href="@{/qlvoucher(page=${data.number - 1}, keyword=${param.keyword}, ngayBatDau=${param.ngayBatDau},ngayKetThuc=${param.ngayKetThuc},trangThai=${param.trangThai})}">Previous</a>
-                                    </li>
-                                    <!-- Next button -->
-                                    <li class="page-item" th:classappend="${!data.hasNext()} ? 'disabled'">
-                                        <a class="page-link"
-                                           th:href="@{/qlvoucher(page=${data.number + 1}, keyword=${param.keyword}, ngayBatDau=${param.ngayBatDau},ngayKetThuc=${param.ngayKetThuc},trangThai=${param.trangThai})}">Next</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </th:block>
-                    </div>
+
+                    </div><th:block th:if="${data.totalPages > 1}">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <!-- Previous button -->
+                            <li class="page-item" th:classappend="${!data.hasPrevious()} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/qlvoucher(page=${data.number - 1}, keyword=${param.keyword}, ngayBatDau=${param.ngayBatDau},ngayKetThuc=${param.ngayKetThuc},trangThai=${param.trangThai})}">&lt;</a>
+                            </li>
+                            <!-- Page numbers -->
+                            <li class="page-item" th:each="page : ${#numbers.sequence(0, data.totalPages - 1)}"
+                                th:classappend="${page == data.number} ? 'active'">
+                                <a class="page-link"
+                                   th:href="@{/qlvoucher(page=${page}, keyword=${param.keyword}, ngayBatDau=${param.ngayBatDau}, ngayKetThuc=${param.ngayKetThuc}, trangThai=${param.trangThai})}"
+                                   th:text="${page + 1}">1</a>
+                            </li>
+                            <!-- Next button -->
+                            <li class="page-item" th:classappend="${!data.hasNext()} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/qlvoucher(page=${data.number + 1}, keyword=${param.keyword}, ngayBatDau=${param.ngayBatDau},ngayKetThuc=${param.ngayKetThuc},trangThai=${param.trangThai})}">&gt;</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </th:block>
                 </div>
             </div>
             <!-- container-fluid -->

@@ -199,4 +199,25 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
             "OR LOWER(spct.mauSac.tenMauSac) LIKE LOWER(CONCAT('%' , :keyword, '%'))" +
             "OR LOWER(spct.kichThuoc.tenKichThuoc) LIKE LOWER(CONCAT('%', :keyword, '%')) GROUP BY spct.sanPham.tenSanPham, spct.mauSac.tenMauSac")
     List<Object[]> searchProducts(@Param("keyword")String keyword);
+    //Lệnh thực hiện update phía sản phẩm
+    @Modifying
+    @Transactional
+    @Query("""
+        UPDATE SanPhamChiTiet chiTiet 
+        SET chiTiet.giaBanGiamGia = 
+            CASE 
+                WHEN :tyLeGiamGia <= 100 THEN chiTiet.giaBan - (chiTiet.giaBan * :tyLeGiamGia / 100)
+                ELSE chiTiet.giaBan - :tyLeGiamGia 
+            END
+        WHERE chiTiet.sanPham = :sanPham
+    """)
+    int updateGiaBanGiamGiaBySanPham(
+            @Param("sanPham") SanPham sanPham,
+            @Param("tyLeGiamGia") BigDecimal tyLeGiamGia
+    );
+
+    //Lấy sản phẩm chi tiết qua SanPham
+    @Query("SELECT spct FROM SanPhamChiTiet spct WHERE spct.sanPham = :sanPham")
+    List<SanPhamChiTiet> findChiTietBySanPham(@Param("sanPham") SanPham sanPham);
+
 }

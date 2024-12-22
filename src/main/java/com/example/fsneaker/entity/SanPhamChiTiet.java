@@ -29,7 +29,6 @@ public class  SanPhamChiTiet {
     private String maSanPhamChiTiet;
 
 
-    @Min(value = 1, message = "Số lượng phải lớn hơn 0")
     @Column(name = "SoLuong")
     private int soLuong;
 
