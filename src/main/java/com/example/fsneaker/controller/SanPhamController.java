@@ -19,6 +19,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
@@ -234,10 +235,17 @@ public class SanPhamController {
 
             // Gán các thuộc tính cho sanPham
              sanPham.setKhuyenMai(km);
+
             if (xuatXu != null) sanPham.setXuatXu(xuatXu);
+
             if (thuongHieu != null) sanPham.setThuongHieu(thuongHieu);
+
             // Lưu lại sanPham đã cập nhật
             sanPhamRepo.save(sanPham);
+
+            if (km != null) {
+                updateGiaBanGiamGiaSpt(sanPham, km);
+            }
         }
 
         // Trả về thông báo thành công nếu là AJAX
@@ -258,7 +266,25 @@ public class SanPhamController {
                 .build();
     }
 
+    public void updateGiaBanGiamGiaSpt(SanPham sanPham, KhuyenMai khuyenMai) {
 
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietRepo.findChiTietBySanPham(sanPham);
+
+        BigDecimal giaTriKhuyenMai = BigDecimal.valueOf(khuyenMai.getGiaTri());
+
+        for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList) {
+            BigDecimal giaBan = sanPhamChiTiet.getGiaBan();
+            BigDecimal giaBanGiamGia;
+            if(giaTriKhuyenMai.compareTo(BigDecimal.valueOf(100))<=0){
+                giaBanGiamGia = giaBan.subtract(giaBan.multiply(giaTriKhuyenMai).divide(BigDecimal.valueOf(100)));
+            }
+            else{
+                giaBanGiamGia=giaBan.subtract(giaTriKhuyenMai);
+            }
+            sanPhamChiTiet.setGiaBanGiamGia(giaBanGiamGia);
+            sanPhamChiTietRepo.save(sanPhamChiTiet);
+        }
+    }
 
 
 }

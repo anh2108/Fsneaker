@@ -1,16 +1,43 @@
 package com.example.fsneaker.repositories;
 
+import com.example.fsneaker.entity.SanPham;
 import com.example.fsneaker.entity.SanPhamChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-
+@Repository
 public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer> {
+
+
+    //Lệnh thực hiện update phía sản phẩm
+    @Modifying
+    @Transactional
+    @Query("""
+        UPDATE SanPhamChiTiet chiTiet 
+        SET chiTiet.giaBanGiamGia = 
+            CASE 
+                WHEN :tyLeGiamGia <= 100 THEN chiTiet.giaBan - (chiTiet.giaBan * :tyLeGiamGia / 100)
+                ELSE chiTiet.giaBan - :tyLeGiamGia 
+            END
+        WHERE chiTiet.sanPham = :sanPham
+    """)
+    int updateGiaBanGiamGiaBySanPham(
+            @Param("sanPham") SanPham sanPham,
+            @Param("tyLeGiamGia") BigDecimal tyLeGiamGia
+    );
+
+    //Lấy sản phẩm chi tiết qua SanPham
+    @Query("SELECT spct FROM SanPhamChiTiet spct WHERE spct.sanPham = :sanPham")
+    List<SanPhamChiTiet> findChiTietBySanPham(@Param("sanPham") SanPham sanPham);
+
 
     @Query("select e from SanPhamChiTiet e where e.id = :id")
     public SanPhamChiTiet findById(int id);
