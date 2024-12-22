@@ -20,7 +20,7 @@ import java.util.List;
         private KhachHangService khachHangService;
         @GetMapping("/qlkhachhang")
         public String KhachHang(@RequestParam(value = "keyword",required = false)String keyword, @RequestParam(value = "page",defaultValue =  "0")int page, Model model){
-            int pageSize = 8;
+            int pageSize = 5;
             Page<KhachHang> khachHangPage;
             if(keyword != null && !keyword.isEmpty()){
                 khachHangPage = khachHangService.searchPaginated(keyword,page,pageSize);

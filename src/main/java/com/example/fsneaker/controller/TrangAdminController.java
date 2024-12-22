@@ -72,6 +72,14 @@ public class TrangAdminController {
             // Kiểm tra nếu ngày kết thúc trước ngày bắt đầu
             if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
                 model.addAttribute("errorMessage", "Ngày kết thúc không được trước ngày bắt đầu.");
+                tongThuNhap = BigDecimal.ZERO;
+                tongSoDonHang = 0L;
+                tongSanPham = 0L;
+                tongSoKhachHang = 0L;
+                model.addAttribute("tongThuNhap", tongThuNhap);
+                model.addAttribute("tongSoKhachHang",tongSoKhachHang);
+                model.addAttribute("tongSoDonHang", tongSoDonHang);
+                model.addAttribute("tongSanPham", tongSanPham);
                 return "templateadmin/trangadmin"; // Trả về template với thông báo lỗi
             }
             if (startDate == null) {
@@ -101,7 +109,7 @@ public class TrangAdminController {
 
 
         model.addAttribute("thongKeSanPham",thongKeSanPham);
-//        model.addAttribute("sanPhamDoanhThuCaoNhat",sanPhamDoanhThuCaoNhat);
+        //model.addAttribute("sanPhamDoanhThuCaoNhat",sanPhamDoanhThuCaoNhat);
         //Thống kê theo khoảng thời gian
 
         model.addAttribute("tongThuNhap", tongThuNhap != null ? tongThuNhap : 0);
@@ -110,7 +118,9 @@ public class TrangAdminController {
         model.addAttribute("tongSanPham", tongSanPham);
         //Thông kế số lần khách hàng mua trong khoảng thời gian
         // Nếu thiếu startDate hoặc endDate, cung cấp giá trị mặc định
-
+        // Thêm ngày bắt đầu và ngày kết thúc vào model để hiển thị lại
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
 
         model.addAttribute("orderStarts", orderStarts);
         //Lấy dữ liệu thu nhập và đơn hàng trong tháng hiện tại

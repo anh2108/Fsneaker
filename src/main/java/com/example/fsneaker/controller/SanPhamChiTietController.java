@@ -28,10 +28,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class SanPhamChiTietController {
@@ -60,7 +57,7 @@ public class SanPhamChiTietController {
                                    @RequestParam(value = "sanPhamId", required = false) Integer sanPhamId,
                                    @RequestParam(value = "kichThuocIds", required = false) Integer[] kichThuocIds,
                                    @RequestParam(value = "mauSacIds", required = false) Integer[] mauSacIds,
-                                   @RequestParam(value = "image", required = false) MultipartFile image) {
+                                   @RequestParam(value = "images", required = false) MultipartFile[] images) {
 
         // Kiểm tra lỗi từ BindingResult
         if (result.hasErrors()) {
@@ -87,19 +84,36 @@ public class SanPhamChiTietController {
         }
 
         // Kiểm tra nếu có ảnh được upload
-        String imageName = null;
-        if (image != null && !image.isEmpty()) {
-            String uploadDir = "rc/main/resources/static/images/";
-            imageName = image.getOriginalFilename();
-            Path path = Paths.get(uploadDir + imageName);
-            model.addAttribute("imageName", imageName);
-            try {
-                Files.createDirectories(path.getParent());
-                Files.write(path, image.getBytes());
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi lưu ảnh.");
+        List<String> imageNames = new ArrayList<>();
+        if (images != null && images.length > 0) {
+            String uploadDir = "Fsneaker/src/main/resources/static/images/product/";
+            for (MultipartFile image : images) {
+                if (!image.isEmpty()) {
+                    String imageName = image.getOriginalFilename();
+                    Path path = Paths.get(uploadDir + imageName);
+                    imageNames.add(imageName);
+                    try {
+                        Files.createDirectories(path.getParent());
+                        Files.write(path, image.getBytes());
+                    } catch (IOException e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi lưu ảnh.");
+                    }
+                }
             }
         }
+//        String imageName = null;
+//        if (image != null && !image.isEmpty()) {
+//            String uploadDir = "Fsneaker/src/main/resources/static/images/product/";
+//            imageName = image.getOriginalFilename();
+//            Path path = Paths.get(uploadDir + imageName);
+//            model.addAttribute("imageName", imageName);
+//            try {
+//                Files.createDirectories(path.getParent());
+//                Files.write(path, image.getBytes());
+//            } catch (IOException e) {
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi lưu ảnh.");
+//            }
+//        }
 
         // Kiểm tra xem sản phẩm có được chọn không
         Optional<SanPham> sanPhamOptional = sanPhamRepo.findById(sanPhamId);
@@ -140,9 +154,12 @@ public class SanPhamChiTietController {
                 newSanPhamChiTiet.setGiaBanGiamGia(sanPhamChiTiet.getGiaBanGiamGia());
 
                 // Lưu tên ảnh vào sản phẩm chi tiết nếu có
-                if (imageName != null) {
-                    newSanPhamChiTiet.setImanges(imageName);
+                if (!imageNames.isEmpty()) {
+                    newSanPhamChiTiet.setImanges(String.join(",", imageNames));
                 }
+//                if (imageName != null) {
+//                    newSanPhamChiTiet.setImanges(imageName);
+//                }
 
                 index++;
                 sanPhamChiTietRepo.save(newSanPhamChiTiet);
@@ -225,7 +242,7 @@ public class SanPhamChiTietController {
                                     @RequestParam(name = "sanPhamId", required = false) Integer sanPhamId,
                                     @RequestParam(name = "kichThuocId", required = false) Integer kichThuocId,
                                     @RequestParam(name = "mauSacId", required = false) Integer mauSacId,
-                                    @RequestParam(value = "imagee", required = false) MultipartFile imagee,
+                                    @RequestParam(value = "imagees", required = false) MultipartFile[] imagees,
                                     Model model) {
 
         // Kiểm tra lỗi từ BindingResult
@@ -237,54 +254,61 @@ public class SanPhamChiTietController {
             return new ResponseEntity<>(new ValidationErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
 
+        // Lấy sản phẩm chi tiết hiện tại từ cơ sở dữ liệu
+        SanPhamChiTiet existingProductDetail = sanPhamChiTietRepo.findById(sanPhamChiTiet.getId());
+        if (existingProductDetail == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy sản phẩm chi tiết.");
+        }
 
+        // Cập nhật các thông tin từ request
+        existingProductDetail.setSanPham(sanPhamRepo.findById(sanPhamId).orElse(null));
+        existingProductDetail.setKichThuoc(kichThuocRepo.findById(kichThuocId).orElse(null));
+        existingProductDetail.setMauSac(mauSacRepo.findById(mauSacId).orElse(null));
+        existingProductDetail.setSoLuong(sanPhamChiTiet.getSoLuong());
+        existingProductDetail.setGiaBan(sanPhamChiTiet.getGiaBan());
+        existingProductDetail.setNgayTao(existingProductDetail.getNgayTao());
+        // Xử lý ảnh nếu có tải lên ảnh mới
+        // Xử lý lưu trữ nhiều ảnh
+        if (imagees != null && imagees.length > 0) {
+            String uploadDir = "Fsneaker/src/main/resources/static/images/product/";
+            List<String> imageNames = new ArrayList<>();
 
-        // Cập nhật thông tin sản phẩm chi tiết
-        sanPhamChiTiet.setSanPham(sanPhamRepo.findById(sanPhamId).orElse(null));
-        sanPhamChiTiet.setKichThuoc(kichThuocRepo.findById(kichThuocId).orElse(null));
-        sanPhamChiTiet.setMauSac(mauSacRepo.findById(mauSacId).orElse(null));
-
-        // Cập nhật ảnh nếu có
-        String imageName = null;
-        if (imagee != null && !imagee.isEmpty()) {
-            String uploadDir = "rc/main/resources/static/images/";
-            imageName = imagee.getOriginalFilename();
-            Path path = Paths.get(uploadDir + imageName);
-            model.addAttribute("imageName", imageName);
-            try {
-                Files.createDirectories(path.getParent());
-                Files.write(path, imagee.getBytes());
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi lưu ảnh.");
+            for (MultipartFile image : imagees) {
+                if (!image.isEmpty()) {
+                    String imageName = image.getOriginalFilename();
+                    Path path = Paths.get(uploadDir + imageName);
+                    try {
+                        Files.createDirectories(path.getParent());
+                        Files.write(path, image.getBytes());
+                        imageNames.add(imageName); // Thêm tên ảnh vào danh sách
+                    } catch (IOException e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi lưu ảnh: " + imageName);
+                    }
+                }
             }
-        }
-        if (imageName != null) {
-            sanPhamChiTiet.setImanges(imageName);
+
+            // Lưu danh sách ảnh vào cột `imanges` (chuỗi các tên ảnh cách nhau bởi dấu phẩy)
+            existingProductDetail.setImanges(String.join(",", imageNames));
+        }else{
+            existingProductDetail.setImanges(existingProductDetail.getImanges());
         }
 
-        // Lấy giá trị phiếu giảm giá
+        // Tính giá bán sau giảm giá (logic giữ nguyên)
         BigDecimal giaTriGiamGia = sanPhamChiTietRepo.giaTri(sanPhamId);
-
-        // Tính giá bán sau giảm
         if (giaTriGiamGia != null && giaTriGiamGia.compareTo(BigDecimal.valueOf(100)) <= 0) {
             BigDecimal phanTramGiamGia = giaTriGiamGia.divide(BigDecimal.valueOf(100));
-            BigDecimal giaBanGiamGia = sanPhamChiTiet.getGiaBan().multiply(BigDecimal.ONE.subtract(phanTramGiamGia));
-            sanPhamChiTiet.setGiaBanGiamGia(giaBanGiamGia);
+            BigDecimal giaBanGiamGia = existingProductDetail.getGiaBan().multiply(BigDecimal.ONE.subtract(phanTramGiamGia));
+            existingProductDetail.setGiaBanGiamGia(giaBanGiamGia);
         } else if (giaTriGiamGia != null && giaTriGiamGia.compareTo(BigDecimal.valueOf(100)) > 0) {
             BigDecimal giabanGiamGia = giaTriGiamGia.subtract(giaTriGiamGia);
-            sanPhamChiTiet.setGiaBanGiamGia(giabanGiamGia);
+            existingProductDetail.setGiaBanGiamGia(giabanGiamGia);
         } else {
-            sanPhamChiTiet.setGiaBanGiamGia(BigDecimal.ZERO);
+            existingProductDetail.setGiaBanGiamGia(BigDecimal.ZERO);
         }
 
-        // Cập nhật số lượng và giá bán
-        sanPhamChiTiet.setSoLuong(sanPhamChiTiet.getSoLuong());
-        sanPhamChiTiet.setGiaBan(sanPhamChiTiet.getGiaBan());
-
         // Lưu lại thay đổi
-        sanPhamChiTietRepo.save(sanPhamChiTiet);
+        sanPhamChiTietRepo.save(existingProductDetail);
 
-        // Trả về kết quả thành công
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", "/qlsanphamchitiet")
                 .build();

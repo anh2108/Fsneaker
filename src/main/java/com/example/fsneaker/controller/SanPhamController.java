@@ -19,6 +19,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
@@ -228,16 +229,26 @@ public class SanPhamController {
 
         if (sanPham != null) {
             // Lấy các đối tượng liên quan từ repository
-            KhuyenMai km = khuyenMaiRepo.findById(khuyenMaiId).orElse(null);
+            KhuyenMai km = (khuyenMaiId != null) ? khuyenMaiRepo.findById(khuyenMaiId).orElse(null) : null;
             XuatXu xuatXu = xuatXuRepo.findById(xuatXuId).orElse(null);
             ThuongHieu thuongHieu = thuongHieuRepo.findById(thuongHieuId).orElse(null);
 
             // Gán các thuộc tính cho sanPham
-             sanPham.setKhuyenMai(km);
+             sanPham.setKhuyenMai(km); //Nếu khuyenMaiId là null thì km sẽ là null
             if (xuatXu != null) sanPham.setXuatXu(xuatXu);
             if (thuongHieu != null) sanPham.setThuongHieu(thuongHieu);
             // Lưu lại sanPham đã cập nhật
             sanPhamRepo.save(sanPham);
+            if (km != null) {
+                updateGiaBanGiamGiaSpt(sanPham, km);
+            }else{
+                List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietRepo.findChiTietBySanPham(sanPham);
+                // Nếu không có khuyến mãi, cập nhật giá bán giảm giá về 0 hoặc null
+                for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList) {
+                    sanPhamChiTiet.setGiaBanGiamGia(null);  // Hoặc sanPhamChiTiet.setGiaBanGiamGia(BigDecimal.ZERO); tùy thuộc vào yêu cầu
+                    sanPhamChiTietRepo.save(sanPhamChiTiet);
+                }
+            }
         }
 
         // Trả về thông báo thành công nếu là AJAX
@@ -257,7 +268,24 @@ public class SanPhamController {
                 .header("Location", "/qlsanpham")
                 .build();
     }
+    public void updateGiaBanGiamGiaSpt(SanPham sanPham, KhuyenMai khuyenMai) {
 
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietRepo.findChiTietBySanPham(sanPham);
+
+            BigDecimal giaTriKhuyenMai = BigDecimal.valueOf(khuyenMai.getGiaTri());
+
+            for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList) {
+                BigDecimal giaBan = sanPhamChiTiet.getGiaBan();
+                BigDecimal giaBanGiamGia;
+                if (giaTriKhuyenMai.compareTo(BigDecimal.valueOf(100)) <= 0) {
+                    giaBanGiamGia = giaBan.subtract(giaBan.multiply(giaTriKhuyenMai).divide(BigDecimal.valueOf(100)));
+                } else {
+                    giaBanGiamGia = giaBan.subtract(giaTriKhuyenMai);
+                }
+                sanPhamChiTiet.setGiaBanGiamGia(giaBanGiamGia);
+                sanPhamChiTietRepo.save(sanPhamChiTiet);
+            }
+    }
 
 
 

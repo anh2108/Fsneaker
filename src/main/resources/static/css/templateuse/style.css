@@ -3401,7 +3401,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     text-align: center;
 }
 .slider_content.content_right {
-    padding-left: 90px;
+    padding-left: 200px;
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
     .slider_content.content_right {
@@ -6184,7 +6184,8 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 
 .product_carousel .product_thumb a img {
-    width: inherit;
+    width: 250px;
+    height: 300px;
     margin: 0 auto;
 }
 @media only screen and (max-width: 767px) {

@@ -85,7 +85,7 @@
                             <img class="rounded-circle header-profile-user" src="images/users/avatar-1.jpg" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" th:text="${#authentication.principal.displayName}"></span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text" th:text="${#authentication.principal.role == 'ROLE_ADMIN' ? 'Admin' : 'Nhân viên'}">Trưởng nhóm</span>
+                               <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text" th:text="${#authentication.principal.role == 'ROLE_ADMIN' ? 'Admin' : (#authentication.principal.role == 'ROLE_MANAGER' ? 'Quản lý' : 'Nhân viên')}">Trưởng nhóm</span>
                             </span>
                         </span>
                         </button>
@@ -139,7 +139,7 @@
                 </div>
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
                         <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                             <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
                         </a>
@@ -153,7 +153,7 @@
                             </ul>
                         </div>
                     </li> <!-- end Dashboard Menu -->
-                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
                         <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
                             <i class="ri-apps-2-line"></i> <span data-key="t-apps">Quản lý</span>
                         </a>
@@ -194,13 +194,13 @@
                         </div>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                         <a class="nav-link menu-link" href="/don-hang/hien-thi" >
                             <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Bán hàng</span>
                         </a>
 
                     </li> <!-- end Dashboard Menu -->
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                         <a class="nav-link menu-link" href="/donhangadmin">
                             <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Đơn hàng</span>
                         </a>
@@ -211,10 +211,10 @@
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarAuth">
                             <ul class="nav nav-sm flex-column">
-                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','MANAGER')">
                                     <a href="/qlnhanvien" class="nav-link" data-key="t-nhanvien"> Nhân viên </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                                     <a href="/qlkhachhang" class="nav-link" data-key="t-khachang"> Khách hàng </a>
                                 </li>
                             </ul>
@@ -246,12 +246,12 @@
                     <form th:action="@{/qlkhachhang}" method="get">
                         <label for="search">Tìm kiếm</label>
                         <input type="text" id="search" name="keyword" th:value="${keyword}" placeholder="Mã, tên, email, điện thoại" style="width: 250px"/>
-                        <input type="submit" value="Tìm" class="btn btn-success">
+                        <button type="submit" class="btn btn-primary btn-animation waves-light waves-effect"><i class="ri-search-line"></i> Tìm kiếm</button>
                     </form>
-                    <a href="/themkhachhang-form" class="btn btn-success mb-3">Thêm khách hàng</a>
+                    <a href="/themkhachhang-form" class="btn btn-primary btn-animation waves-effect waves-light mb-3"><i class="ri-add-line"></i> Thêm</a>
                     <table class="table table-nowrap">
                         <tr class="">
-                            <th>ID</th>
+                            <th>STT</th>
                             <th>
                                 Mã khách hàng
                             </th>
@@ -279,8 +279,8 @@
                                 Hành động
                             </th>
                         </tr>
-                        <tr th:each="khachHang : ${khachHangs}">
-                            <td th:text="${khachHang.id}"></td>
+                        <tr th:each="khachHang,index : ${khachHangs}">
+                            <td th:text="${index.index + 1}"></td>
                             <td th:text="${khachHang.maKhachHang}"></td>
                             <td th:text="${khachHang.tenKhachHang}"></td>
                             <td th:text="${khachHang.email}"></td>
@@ -289,32 +289,51 @@
                             <td th:text="${khachHang.diaChi}"></td>
                             <td th:text="${khachHang.soDienThoai}"></td>
                             <td th:text="${khachHang.trangThai} == true ? 'Hoạt động' : 'Không hoạt động'"></td>
-                            <td><a th:href="@{/sua/{id}(id=${khachHang.id})}" class="btn btn-success"><i class="ri-edit-line"></i>Sửa</a>
+                            <td><a th:href="@{/sua/{id}(id=${khachHang.id})}" class="btn btn-primary btn-animation waves-light waves-effect"><i class="ri-edit-line"></i>Sửa</a>
                         </tr>
                     </table>
-                    <div class="text-center">
-                        <!-- Nút về trang đầu -->
-                        <a th:href="@{/qlkhachhang(page=0, keyword=${keyword})}"
-                           th:classappend="${khachHangs.number == 0} ? 'disabled' : ''"> << </a>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <!-- Nút Previous -->
+                            <li th:if="${khachHangs.number > 0}" class="page-item">
+                                <a th:href="@{/qlkhachhang(page=${khachHangs.number - 1})}" class="page-link">&lt;</a>
+                            </li>
 
-<!--                        &lt;!&ndash; Nút Previous &ndash;&gt;-->
+                            <!-- Hiển thị các số trang -->
+                            <li th:each="i : ${#numbers.sequence(0, khachHangs.totalPages - 1)}" class="page-item"
+                                th:classappend="${i == khachHangs.number ? 'active' : ''}">
+                                <a th:href="@{/qlkhachhang(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
+                            </li>
+
+                            <!-- Nút Next -->
+                            <li th:if="${khachHangs.number < khachHangs.totalPages - 1}" class="page-item">
+                                <a th:href="@{/qlkhachhang(page=${khachHangs.number + 1})}" class="page-link">&gt;</a>
+                            </li>
+                        </ul>
+                    </nav>
+<!--                    <div class="text-center">-->
+<!--                        &lt;!&ndash; Nút về trang đầu &ndash;&gt;-->
+<!--&lt;!&ndash;                        <a th:href="@{/qlkhachhang(page=0, keyword=${keyword})}"&ndash;&gt;-->
+<!--&lt;!&ndash;                           th:classappend="${khachHangs.number == 0} ? 'disabled' : ''"> << </a>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        &lt;!&ndash; Nút Previous &ndash;&gt;&ndash;&gt;-->
 <!--                        <a th:href="@{/qlkhachhang(page=${khachHangs.number - 1}, keyword=${keyword})}"-->
-<!--                           th:classappend="${!khachHangs.hasPrevious()} ? 'disabled' : ''">Previous</a>-->
-                        <!-- Hiển thị số trang -->
-                        <span th:each="i : ${#numbers.sequence(0, khachHangs.totalPages - 1)}">
-                                                            <a th:href="@{/qlkhachhang(page=${i}, keyword=${keyword})}"
-                                                               th:classappend="${khachHangs.number == i} ? 'active' : ''"
-                                                               th:text="${i + 1}">1</a>
-                                                        </span>
+<!--                           th:classappend="${!khachHangs.hasPrevious()} ? 'disabled' : ''"> < </a>-->
+<!--                        &lt;!&ndash; Hiển thị số trang &ndash;&gt;-->
+<!--                        <span th:each="i : ${#numbers.sequence(0, khachHangs.totalPages - 1)}">-->
+<!--                                                            <a th:href="@{/qlkhachhang(page=${i}, keyword=${keyword})}"-->
+<!--                                                               th:classappend="${khachHangs.number == i} ? 'active' : ''"-->
+<!--                                                               th:text="${i + 1}">1</a>-->
+<!--                                                        </span>-->
 
-                        <!-- Nút Next -->
+<!--                        &lt;!&ndash; Nút Next &ndash;&gt;-->
 <!--                        <a th:href="@{/qlkhachhang(page=${khachHangs.number + 1}, keyword=${keyword})}"-->
-<!--                           th:classappend="${!khachHangs.hasNext()} ? 'disabled' : ''">Next</a>-->
+<!--                           th:classappend="${!khachHangs.hasNext()} ? 'disabled' : ''"> > </a>-->
 
-                        <!-- Nút về trang cuối -->
-                        <a th:href="@{/qlkhachhang(page=${khachHangs.totalPages - 1}, keyword=${keyword})}"
-                           th:classappend="${khachHangs.number + 1 >= khachHangs.totalPages} ? 'disabled' : ''"> >> </a>
-                    </div>
+<!--                        &lt;!&ndash; Nút về trang cuối &ndash;&gt;-->
+<!--&lt;!&ndash;                        <a th:href="@{/qlkhachhang(page=${khachHangs.totalPages - 1}, keyword=${keyword})}"&ndash;&gt;-->
+<!--&lt;!&ndash;                           th:classappend="${khachHangs.number + 1 >= khachHangs.totalPages} ? 'disabled' : ''"> >> </a>&ndash;&gt;-->
+<!--                    </div>-->
                 </div>
             </div><!-- end card -->
         </div>

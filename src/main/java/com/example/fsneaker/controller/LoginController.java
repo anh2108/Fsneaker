@@ -29,8 +29,10 @@ public class LoginController {
     public String redirectByRole(Authentication authentication){
         String role = authentication.getAuthorities().iterator().next().getAuthority();
         if("ROLE_ADMIN".equals(role)){
-            return "redirect:/trangchuadmin";
+            return "redirect:/qlnhanvien";
         }else if("ROLE_STAFF".equals(role)){
+            return "redirect:/don-hang/hien-thi";
+        }else if("ROLE_MANAGER".equals(role)){
             return "redirect:/trangchuadmin";
         }else if("ROLE_CUSTOMER".equals(role)){
             return "redirect:/trang-chu";

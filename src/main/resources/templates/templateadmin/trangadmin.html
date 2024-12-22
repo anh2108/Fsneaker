@@ -126,7 +126,7 @@
                             <img class="rounded-circle header-profile-user" src="images/users/avatar-1.jpg" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" th:text="${#authentication.principal.displayName}"></span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text" th:text="${#authentication.principal.role == 'ROLE_ADMIN' ? 'Admin' : 'Nhân viên'}">Trưởng nhóm</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text" th:text="${#authentication.principal.role == 'ROLE_ADMIN' ? 'Admin' : (#authentication.principal.role == 'ROLE_MANAGER' ? 'Quản lý' : 'Nhân viên')}">Trưởng nhóm</span>
                             </span>
                         </span>
                         </button>
@@ -174,37 +174,13 @@
             </button>
         </div>
 
-        <!--        <div class="dropdown sidebar-user m-1 rounded">-->
-        <!--            <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-        <!--                    <span class="d-flex align-items-center gap-2">-->
-        <!--                        <img class="rounded header-profile-user" src="images/users/avatar-1.jpg" alt="Header Avatar">-->
-        <!--                        <span class="text-start">-->
-        <!--                            <span class="d-block fw-medium sidebar-user-name-text">Anna Adame</span>-->
-        <!--                            <span class="d-block fs-14 sidebar-user-name-sub-text"><i class="ri ri-circle-fill fs-10 text-success align-baseline"></i> <span class="align-middle">Online</span></span>-->
-        <!--                        </span>-->
-        <!--                    </span>-->
-        <!--            </button>-->
-        <!--            <div class="dropdown-menu dropdown-menu-end">-->
-        <!--                &lt;!&ndash; item&ndash;&gt;-->
-        <!--                <h6 class="dropdown-header">Welcome Anna!</h6>-->
-        <!--                <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>-->
-        <!--                <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>-->
-        <!--                <a class="dropdown-item" href="apps-tasks-kanban.html"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>-->
-        <!--                <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>-->
-        <!--                <div class="dropdown-divider"></div>-->
-        <!--                <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>-->
-        <!--                <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>-->
-        <!--                <a class="dropdown-item" href="auth-lockscreen-basic.html"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>-->
-        <!--                <a class="dropdown-item" href="auth-logout-basic.html"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>-->
-        <!--            </div>-->
-        <!--        </div>-->
         <div id="scrollbar">
             <div class="container-fluid">
                 <div id="two-column-menu">
                 </div>
                 <ul class="navbar-nav" id="navbar-nav" data-simplebar="init">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
                         <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                             <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
                         </a>
@@ -218,7 +194,7 @@
                             </ul>
                         </div>
                     </li> <!-- end Dashboard Menu -->
-                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
                         <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
                             <i class="ri-apps-2-line"></i> <span data-key="t-apps">Quản lý</span>
                         </a>
@@ -269,12 +245,12 @@
                         </div>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                         <a class="nav-link menu-link" href="/don-hang/hien-thi">
                             <i class="ri-store-line"></i> <span data-key="t-layouts">Bán hàng</span>
                         </a>
                     </li> <!-- end Dashboard Menu -->
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                         <a class="nav-link menu-link" href="/donhangadmin">
                             <i class="ri-file-text-line"></i> <span data-key="t-layouts">Đơn hàng</span>
                         </a>
@@ -285,10 +261,10 @@
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarAuth">
                             <ul class="nav nav-sm flex-column">
-                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','MANAGER')">
                                     <a href="/qlnhanvien" class="nav-link" data-key="t-nhanvien"> Nhân viên </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                                     <a href="/qlkhachhang" class="nav-link" data-key="t-khachang"> Khách hàng </a>
                                 </li>
                             </ul>
@@ -323,20 +299,26 @@
                                         <div class="flex-grow-1">
                                             <h1 class=" mb-1">Thống kê </h1>
                                             <p class="text-muted mb-0">Hôm nay, như nào</p>
-                                            <div th:if="${errorMessage != null}">
-                                                <p th:text="${errorMessage}" style="color: red;"></p>
+                                            <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+                                                <!-- Toast for Success -->
+                                                <div th:if="${message}" id="toastSuccess" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                                                    <div class="d-flex">
+                                                        <div class="toast-body">
+                                                            <p th:text="${message}">Thông báo thành công!</p>
+                                                        </div>
+                                                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                                    </div>
+                                                </div>
+                                                <!-- Toast for Error -->
+                                                <div th:if="${errorMessage}" id="toastError" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                                                    <div class="d-flex">
+                                                        <div class="toast-body">
+                                                            <p th:text="${errorMessage}">Thông báo lỗi!</p>
+                                                        </div>
+                                                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <script>
-                                                // Ẩn thông báo sau 5 giây (5000ms)
-                                                window.onload = function () {
-                                                    setTimeout(function () {
-                                                        var errorAlert = document.getElementById("error-alert");
-                                                        if (errorAlert) {
-                                                            errorAlert.style.display = "none";
-                                                        }
-                                                    }, 5000);
-                                                };
-                                            </script>
                                         </div>
 
                                         <div class="mt-3 mt-lg-0">
@@ -345,12 +327,24 @@
                                                     <div class="col-sm-auto">
                                                         <div class="input-group">
                                                             <label for="startDate" style="margin-top: 5px; margin-right: 15px">Từ ngày:</label>
-                                                            <input type="date" id="startDate" name="startDate" >
+                                                            <input type="date" id="startDate" name="startDate" th:value="${startDate != null ? startDate : ''}">
 
                                                             <label for="endDate" style="margin-top: 5px;margin-right: 15px; margin-left: 15px"> đến ngày:</label>
-                                                            <input type="date" id="endDate" name="endDate" >
+                                                            <input type="date" id="endDate" name="endDate" th:value="${endDate != null ? endDate : ''}">
 
-                                                            <button type="submit" class="btn btn-success" style="margin-left: 15px">Lọc</button>
+                                                            <button type="submit" class="btn btn-primary btn-animation waves-effect waves-light" style="margin-left: 15px">Lọc</button>
+                                                            <!-- Nút làm mới -->
+                                                            <button type="button" class="btn btn-secondary btn-animation waves-light waves-effect" onclick="resetForm()" style="margin-left: 10px">Làm mới</button>
+                                                            <script>
+                                                                function resetForm() {
+                                                                    // Reset các trường date bằng cách set lại value của chúng thành empty
+                                                                    document.getElementById('startDate').value = '';
+                                                                    document.getElementById('endDate').value = '';
+
+                                                                    // Nếu muốn reset lại form, có thể sử dụng:
+                                                                    // document.querySelector('form').reset();
+                                                                }
+                                                            </script>
                                                         </div>
                                                     </div>
                                                     <!--end col-->
@@ -381,7 +375,7 @@
                                             </div>
                                             <div class="d-flex align-items-end justify-content-between mt-4">
                                                 <div>
-                                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span th:text="${#numbers.formatDecimal(tongThuNhap, 0, 'COMMA',0, 'COMMA')}"></span> VND</h4>
+                                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span th:text="${#numbers.formatDecimal(tongThuNhap, 0, 'COMMA',0, 'COMMA') + ' đ'}"></span> </h4>
                                                     <!--                                                    <a href="#" class="text-decoration-underline">View net earnings</a>-->
                                                 </div>
                                                 <div class="avatar-sm flex-shrink-0">
@@ -461,7 +455,7 @@
                                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Tổng sản phẩm đã bán</p>
                                                 </div>
                                                 <!--                                                <div class="flex-shrink-0">-->
-                                                <!--                                                    <h5 class="text-muted fs-14 mb-0">-->
+                                                <!--                                                     <h5 class="text-muted fs-14 mb-0">-->
                                                 <!--                                                        +0.00 %-->
                                                 <!--                                                    </h5>-->
                                                 <!--                                                </div>-->
@@ -490,7 +484,7 @@
                                             <div class="flex-shrink-0">
                                                 <div class="dropdown card-header-dropdown">
                                                     <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <span class="fw-semibold text-uppercase fs-12">Sort by:
+                                                            <span class="fw-semibold text-uppercase fs-12">Sắp xếp:
                                                             </span><span class="text-muted">Chọn<i class="mdi mdi-chevron-down ms-1"></i></span>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
@@ -545,7 +539,7 @@
                                             <div class="flex-shrink-0">
                                                 <div class="dropdown card-header-dropdown">
                                                     <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <span class="fw-semibold text-uppercase fs-12">Sort by:
+                                                            <span class="fw-semibold text-uppercase fs-12">Sắp xếp:
                                                             </span><span class="text-muted">Chọn<i class="mdi mdi-chevron-down ms-1"></i></span>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
@@ -576,25 +570,25 @@
                                                                     <img src="images/products/img-1.png" alt="" class="img-fluid d-block" />
                                                                 </div>
                                                                 <div>
-                                                                    <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset" th:text="${dhtc[1]}"></a></h5>
+                                                                    <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset" th:text="${dhtc[1]}"></a> (<span th:text="${dhtc[3] + ' - ' + dhtc[4]}"></span>)</h5>
                                                                     <span class="text-muted" th:text="${#dates.format(dhtc[2], 'dd/MM/yyyy')}"></span>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[3]}"></h5>
+                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${#numbers.formatDecimal(dhtc[5], 0, 'COMMA', 0 ,'COMMA') + ' đ'}"></h5>
                                                             <span class="text-muted">Giá</span>
                                                         </td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[4]}"></h5>
+                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[6]}"></h5>
                                                             <span class="text-muted">Số lượng bán</span>
                                                         </td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[5]}"></h5>
+                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[7]}"></h5>
                                                             <span class="text-muted">Số lượng kho</span>
                                                         </td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${dhtc[3] * dhtc[4]}"></h5>
+                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${#numbers.formatDecimal((dhtc[5] * dhtc[6]), 0, 'COMMA', 0 ,'COMMA') + ' đ'}"></h5>
                                                             <span class="text-muted">Tổng tiền</span>
                                                         </td>
                                                     </tr>
@@ -632,87 +626,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <!--                                <div class="col-xl-6">-->
-                                <!--                                    <div class="card card-height-100">-->
-                                <!--                                        <div class="card-header align-items-center d-flex">-->
-                                <!--                                            <h4 class="card-title mb-0 flex-grow-1">Sản phẩm có doanh thu cao nhất</h4>-->
-                                <!--                                            <div class="flex-shrink-0">-->
-                                <!--                                                <div class="dropdown card-header-dropdown">-->
-                                <!--                                                    <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-                                <!--                                                        <span class="text-muted">Report<i class="mdi mdi-chevron-down ms-1"></i></span>-->
-                                <!--                                                    </a>-->
-                                <!--                                                    <div class="dropdown-menu dropdown-menu-end">-->
-                                <!--                                                        <a class="dropdown-item" href="#">Download Report</a>-->
-                                <!--                                                        <a class="dropdown-item" href="#">Export</a>-->
-                                <!--                                                        <a class="dropdown-item" href="#">Import</a>-->
-                                <!--                                                    </div>-->
-                                <!--                                                </div>-->
-                                <!--                                            </div>-->
-                                <!--                                        </div>&lt;!&ndash; end card header &ndash;&gt;-->
-
-                                <!--                                        <div class="card-body">-->
-                                <!--                                            <div class="table-responsive table-card">-->
-                                <!--                                                <table class="table table-centered table-hover align-middle table-nowrap mb-0">-->
-                                <!--                                                    <tbody>-->
-                                <!--                                                    <tr th:each="spdtc: ${sanPhamDoanhThuCaoNhat}">-->
-                                <!--                                                        <td>-->
-                                <!--                                                            <div class="d-flex align-items-center">-->
-                                <!--                                                                <div class="avatar-sm bg-light rounded p-1 me-2">-->
-                                <!--                                                                    <img src="images/products/img-1.png" alt="" class="img-fluid d-block" />-->
-                                <!--                                                                </div>-->
-                                <!--                                                                <div>-->
-                                <!--                                                                    <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset" th:text="${spdtc[0]}"></a></h5>-->
-                                <!--                                                                    <span class="text-muted" th:text="${#dates.format(spdtc[1], 'dd/MM/yyyy')}"></span>-->
-                                <!--                                                                </div>-->
-                                <!--                                                            </div>-->
-                                <!--                                                        </td>-->
-                                <!--                                                        <td>-->
-                                <!--                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${spdtc[2]}"></h5>-->
-                                <!--                                                            <span class="text-muted">Giá</span>-->
-                                <!--                                                        </td>-->
-                                <!--                                                        <td>-->
-                                <!--                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${spdtc[3]}"></h5>-->
-                                <!--                                                            <span class="text-muted">Số lượng bán</span>-->
-                                <!--                                                        </td>-->
-                                <!--                                                        <td>-->
-                                <!--                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${spdtc[4]}"></h5>-->
-                                <!--                                                            <span class="text-muted">Số lượng kho</span>-->
-                                <!--                                                        </td>-->
-                                <!--                                                        <td>-->
-                                <!--                                                            <h5 class="fs-14 my-1 fw-normal" th:text="${spdtc[2] * spdtc[3]}"></h5>-->
-                                <!--                                                            <span class="text-muted">Tổng tiền</span>-->
-                                <!--                                                        </td>-->
-                                <!--                                                    </tr>-->
-                                <!--                                                    </tbody>-->
-                                <!--                                                </table>&lt;!&ndash; end table &ndash;&gt;-->
-                                <!--                                            </div>-->
-
-                                <!--                                            <div class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">-->
-                                <!--                                                <div class="col-sm">-->
-                                <!--                                                    <div>-->
-                                <!--                                                        &lt;!&ndash; Nút về trang đầu &ndash;&gt;-->
-                                <!--                                                        <a th:href="@{/trangchuadmin(page=0)}"-->
-                                <!--                                                           th:classappend="${sanPhamDoanhThuCaoNhat.number == 0} ? 'disabled' : ''">First</a>-->
-
-                                <!--                                                        &lt;!&ndash; Nút Previous &ndash;&gt;-->
-                                <!--                                                        <a th:href="@{/trangchuadmin(page=${sanPhamDoanhThuCaoNhat.number - 1})}"-->
-                                <!--                                                           th:classappend="${!sanPhamDoanhThuCaoNhat.hasPrevious()} ? 'disabled' : ''">Previous</a>-->
-
-                                <!--                                                        &lt;!&ndash; Nút Next &ndash;&gt;-->
-                                <!--                                                        <a th:href="@{/trangchuadmin(page=${sanPhamDoanhThuCaoNhat.number + 1})}"-->
-                                <!--                                                           th:classappend="${!sanPhamDoanhThuCaoNhat.hasNext()} ? 'disabled' : ''">Next</a>-->
-
-                                <!--                                                        &lt;!&ndash; Nút về trang cuối &ndash;&gt;-->
-                                <!--                                                        <a th:href="@{/trangchuadmin(page=${sanPhamDoanhThuCaoNhat.totalPages - 1})}"-->
-                                <!--                                                           th:classappend="${sanPhamDoanhThuCaoNhat.number + 1 >= sanPhamDoanhThuCaoNhat.totalPages} ? 'disabled' : ''">Last</a>-->
-                                <!--                                                    </div>-->
-                                <!--                                                </div>-->
-                                <!--                                            </div>-->
-
-                                <!--                                        </div> &lt;!&ndash; .card-body&ndash;&gt;-->
-                                <!--                                    </div> &lt;!&ndash; .card&ndash;&gt;-->
-                                <!--                                </div> &lt;!&ndash; .col&ndash;&gt;-->
                             </div> <!-- end row-->
 
                             <div class="row">
@@ -736,7 +649,7 @@
                                             <div class="flex-shrink-0">
                                                 <div class="dropdown card-header-dropdown">
                                                     <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <span class="fw-semibold text-uppercase fs-12">Sort by:
+                                                            <span class="fw-semibold text-uppercase fs-12">Sắp xếp:
                                                             </span><span class="text-muted">Chọn<i class="mdi mdi-chevron-down ms-1"></i></span>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
@@ -776,7 +689,7 @@
                                                         <td th:text="${stat[1]}"></td>
                                                         <td th:text="${stat[2]}"></td>
                                                         <td th:text="${stat[3]}"></td>
-                                                        <td th:text="${#numbers.formatDecimal(stat[4],1,'COMMA',0,'POINT')}"></td>
+                                                        <td th:text="${#numbers.formatDecimal(stat[4],0,'COMMA',0,'COMMA') + ' đ'}"></td>
                                                     </tr>
                                                     </tbody><!-- end tbody -->
                                                 </table><!-- end table -->
@@ -785,10 +698,6 @@
                                                 <div class="col-sm">
                                                     <div th:if="${orderStarts != null}">
                                                         <div class="pagination" th:if="${orderStarts.totalPages > 0}">
-                                                            <!-- Nút về trang đầu -->
-                                                            <a th:href="@{/trangchuadmin(page=0)}"
-                                                               th:classappend="${orderStarts.number == 0} ? 'disabled' : ''">&laquo;</a>
-
                                                             <!-- Nút Previous -->
                                                             <a th:href="@{/trangchuadmin(page=${orderStarts.number - 1})}"
                                                                th:classappend="${!orderStarts.hasPrevious()} ? 'disabled' : ''">&lt;</a>
@@ -804,9 +713,6 @@
                                                             <a th:href="@{/trangchuadmin(page=${orderStarts.number + 1})}"
                                                                th:classappend="${!orderStarts.hasNext()} ? 'disabled' : ''">&gt;</a>
 
-                                                            <!-- Nút về trang cuối -->
-                                                            <a th:href="@{/trangchuadmin(page=${orderStarts.totalPages - 1})}"
-                                                               th:classappend="${orderStarts.number + 1 >= orderStarts.totalPages} ? 'disabled' : ''">&raquo;</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -856,7 +762,28 @@
     <i class="ri-arrow-up-line"></i>
 </button>
 <!--end back-to-top-->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastSuccessElement = document.getElementById('toastSuccess');
+        const toastErrorElement = document.getElementById('toastError');
 
+        if (toastSuccessElement) {
+            const toastSuccess = new bootstrap.Toast(toastSuccessElement, {
+                autohide: true,
+                delay: 5000 // 5 seconds
+            });
+            toastSuccess.show();
+        }
+
+        if (toastErrorElement) {
+            const toastError = new bootstrap.Toast(toastErrorElement, {
+                autohide: true,
+                delay: 5000 // 5 seconds
+            });
+            toastError.show();
+        }
+    });
+</script>
 <!-- JAVASCRIPT -->
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/simplebar.min.js"></script>

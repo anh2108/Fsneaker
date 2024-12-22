@@ -318,7 +318,7 @@
                                                 </div>
                                                 <div class="cart_item" th:each="item : ${danhSachChiTiet}">
                                                     <div class="cart_img">
-                                                        <a href="#"><img src="../images/product/product56.jpg" alt="" style="height: 60px"></a>
+                                                        <a href="#"><img th:src="@{'/images/product/'+${item.sanPhamChiTiet.imanges}}" alt="" style="height: 60px"></a>
                                                     </div>
                                                     <div class="cart_info">
                                                         <a th:href="@{/xem-chi-tiet/{id}(id=${item.sanPhamChiTiet.id})}" th:text="${item.sanPhamChiTiet.sanPham.tenSanPham}">Primis In Faucibus</a>
@@ -370,44 +370,59 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-5 col-md-5 col-sm-12">
-                <div class="modal_tab">
-                    <div class="tab-content product-details-large">
+                <div class="modal_tab" >
+                    <div class="tab-content product-details-large" th:each="image,iterStat : ${#strings.arraySplit(sanPhamChiTiet.imanges, ',')}">
                         <div class="tab-pane fade show active" id="tab1" role="tabpanel" >
-                            <div class="modal_tab_img">
-                                <a href="#"><img src="../images/product/productbig1.jpg" alt=""></a>
+                            <div class="modal_tab_img" th:if="${iterStat.index == 0}">
+                                <a href="#"><img th:src="@{'/images/product/'+${image}}" alt=""></a>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tab2" role="tabpanel">
-                            <div class="modal_tab_img">
-                                <a href="#"><img src="../images/product/productbig2.jpg" alt=""></a>
+                            <div class="modal_tab_img" th:if="${iterStat.index == 1}">
+                                <a href="#"><img th:src="@{'/images/product/'+${image}}" alt=""></a>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tab3" role="tabpanel">
-                            <div class="modal_tab_img">
-                                <a href="#"><img src="../images/product/productbig3.jpg" alt=""></a>
+                            <div class="modal_tab_img" th:if="${iterStat.index == 2}">
+                                <a href="#"><img th:src="@{'../images/product/'+${image}}" alt=""></a>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tab4" role="tabpanel">
-                            <div class="modal_tab_img">
-                                <a href="#"><img src="../images/product/productbig4.jpg" alt=""></a>
+                            <div class="modal_tab_img" th:if="${iterStat.index == 3}">
+                                <a href="#"><img th:src="@{'../images/product/'+${image}}" alt=""></a>
                             </div>
                         </div>
                     </div>
-                    <div class="modal_tab_button">
+                    <div class="modal_tab_button" >
                         <ul class="nav product_navactive owl-carousel" role="tablist">
-                            <li >
-                                <a class="nav-link active" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="false"><img src="../images/product/product1.jpg" alt=""></a>
+                            <li>
+                                <div th:each="image,iterStat : ${#strings.arraySplit(sanPhamChiTiet.imanges, ',')}">
+                                    <div th:if="${iterStat.index == 0}">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="false"><img th:src="@{'/images/product/'+${image}}" alt=""></a>
+                                    </div>
+                                </div>
                             </li>
                             <li>
-                                <a class="nav-link" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false"><img src="../images/product/product2.jpg" alt=""></a>
+                                <div th:each="image,iterStat : ${#strings.arraySplit(sanPhamChiTiet.imanges, ',')}">
+                                    <div th:if="${iterStat.index == 1}">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false"><img th:src="@{'/images/product/'+${image}}" alt=""></a>
+                                    </div>
+                                </div>
                             </li>
                             <li>
-                                <a class="nav-link button_three" data-bs-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false"><img src="../images/product/product3.jpg" alt=""></a>
+                                <div th:each="image,iterStat : ${#strings.arraySplit(sanPhamChiTiet.imanges, ',')}">
+                                    <div th:if="${iterStat.index == 2}">
+                                        <a class="nav-link button_three" data-bs-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false"><img th:src="@{'/images/product/'+${image}}" alt=""></a>
+                                    </div>
+                                </div>
                             </li>
                             <li>
-                                <a class="nav-link" data-bs-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false"><img src="../images/product/product8.jpg" alt=""></a>
+                                <div th:each="image,iterStat : ${#strings.arraySplit(sanPhamChiTiet.imanges, ',')}">
+                                    <div th:if="${iterStat.index == 3}">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false"><img th:src="@{'/images/product/'+${image}}" alt=""></a>
+                                    </div>
+                                </div>
                             </li>
-
                         </ul>
                     </div>
                 </div>
@@ -419,7 +434,7 @@
                     </div>
                     <div class="modal_price mb-10">
                         <span class="new_price" th:text="${#numbers.formatDecimal((sanPhamChiTiet.sanPham.khuyenMai != null ? sanPhamChiTiet.giaBanGiamGia : sanPhamChiTiet.giaBan), 0,'COMMA',0,'COMMA')}">$64.99</span>
-                        <span class="old_price" th:text="${sanPhamChiTiet.sanPham.khuyenMai != null ? sanPhamChiTiet.giaBan : ''}">$78.99</span>
+                        <span class="old_price" th:text="${#numbers.formatDecimal((sanPhamChiTiet.sanPham.khuyenMai != null ? sanPhamChiTiet.giaBan : ''), 0, 'COMMA', 0 ,'COMMA')}">$78.99</span>
                     </div>
                     <div class="modal_description mb-15">
                         <p>Sẵn sàng nâng cấp phong cách của bạn với <span th:text="${sanPhamChiTiet.sanPham.tenSanPham}"></span>  – sự kết hợp hoàn hảo giữa sự thoải mái và thời trang. Được thiết kế hoàn toàn bằng màu hồng, đôi giày này mang đến vẻ ngoài nổi bật, độc đáo, chắc chắn sẽ thu hút mọi ánh nhìn. Không chỉ là một món đồ thời trang, <span th:text="${sanPhamChiTiet.sanPham.tenSanPham}"></span> còn được biết đến với sự hỗ trợ tuyệt vời cho bàn chân và hiệu suất cao.</p>

@@ -21,7 +21,7 @@ public interface GioHangChiTietRepo extends JpaRepository<GioHangChiTiet, Intege
     int demTongSoLuongTrongGioHang(@Param("idGioHang") Integer idGioHang);
 
     GioHangChiTiet findByGioHangIdAndSanPhamChiTietId(Integer idGioHang, Integer idSanPhamChiTiet);
-    @Query("SELECT SUM(ghct.soLuong * ghct.gia) FROM GioHangChiTiet ghct WHERE ghct.gioHang.id = :gioHangId")
+    @Query("SELECT SUM(ghct.soLuong * COALESCE(ghct.giaBanGiamGia,ghct.gia)) FROM GioHangChiTiet ghct WHERE ghct.gioHang.id = :gioHangId")
     BigDecimal sumGiaByGioHangId(@Param("gioHangId")Integer gioHangId);
 
     void deleteGioHangChiTietByGioHangId(Integer idGioHang);

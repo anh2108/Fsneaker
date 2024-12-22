@@ -31,7 +31,7 @@ public class MauSac {
 
     @Column(name = "TenMauSac")
     @NotEmpty(message = "Tên màu sắc không được để trống!")
-    @Size(min = 5, max= 30, message = "Tên màu sắc từ 5 đến 30 ký tự!")
+    @Size(min = 2, max= 30, message = "Tên màu sắc từ 2 đến 30 ký tự!")
     private String tenMauSac;
 
     @Column(name = "TrangThai")
