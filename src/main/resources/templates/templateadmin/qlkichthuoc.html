@@ -278,7 +278,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="kt,index : ${kichthuoc}">
+                            <tr th:each="kt,index : ${kichthuocs}">
                                 <td>[[${index.index + 1}]]</td>
                                 <td>[[${kt.makichThuoc}]]</td>
                                 <td>[[${kt.tenKichThuoc}]]</td>
@@ -331,6 +331,25 @@
                             </tr>
                             </tbody>
                         </table>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <!-- Nút Previous -->
+                                <li th:if="${kichthuocs.number > 0}" class="page-item">
+                                    <a th:href="@{/qlkichthuoc(page=${kichthuocs.number - 1})}" class="page-link">Previous</a>
+                                </li>
+
+                                <!-- Hiển thị các số trang -->
+                                <li th:each="i : ${#numbers.sequence(0, kichthuocs.totalPages - 1)}" class="page-item"
+                                    th:classappend="${i == kichthuocs.number ? 'active' : ''}">
+                                    <a th:href="@{/qlkichthuoc(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
+                                </li>
+
+                                <!-- Nút Next -->
+                                <li th:if="${kichthuocs.number < kichthuocs.totalPages - 1}" class="page-item">
+                                    <a th:href="@{/qlkichthuoc(page=${kichthuocs.number + 1})}" class="page-link">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

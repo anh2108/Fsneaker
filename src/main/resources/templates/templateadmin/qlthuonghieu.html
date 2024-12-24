@@ -330,6 +330,23 @@
                             </tr>
                             </tbody>
                         </table>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <!-- Nút Previous -->
+                                <li th:if="${thieu.number > 0}" class="page-item">
+                                    <a th:href="@{/qlthuonghieu(page=${thieu.number - 1})}" class="page-link">Previous</a>
+                                </li>
+                                <!-- Hiển thị các số trang -->
+                                <li th:each="i : ${#numbers.sequence(0, thieu.totalPages - 1)}" class="page-item"
+                                    th:classappend="${i == thieu.number ? 'active' : ''}">
+                                    <a th:href="@{/qlthuonghieu(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
+                                </li>
+                                <!-- Nút Next -->
+                                <li th:if="${thieu.number < thieu.totalPages - 1}" class="page-item">
+                                    <a th:href="@{/qlthuonghieu(page=${thieu.number + 1})}" class="page-link">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

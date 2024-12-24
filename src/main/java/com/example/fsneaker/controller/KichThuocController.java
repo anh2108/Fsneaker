@@ -1,10 +1,11 @@
 package com.example.fsneaker.controller;
 
 import com.example.fsneaker.entity.KichThuoc;
-import com.example.fsneaker.entity.MauSac;
 import com.example.fsneaker.repositories.KichThuocRepo;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,14 +20,32 @@ import java.util.Map;
 public class KichThuocController {
     @Autowired
     KichThuocRepo kichThuocRepo;
+//    @GetMapping("/qlkichthuoc")
+//    public String index(Model model){
+//        List<KichThuoc> list = kichThuocRepo.findAll();
+//        KichThuoc kt = new KichThuoc();
+//        model.addAttribute("kt",kt);
+//        model.addAttribute("kichthuoc", list);
+//        return "templateadmin/qlkichthuoc";
+//    }
+
     @GetMapping("/qlkichthuoc")
-    public String index(Model model){
-        List<KichThuoc> list = kichThuocRepo.findAll();
+    public String index(Model model,
+                        @RequestParam(name = "page", defaultValue = "0") Integer pageNo,
+                        @RequestParam(name = "limit", defaultValue = "5") Integer pageSize
+    ){
+
+//        Pageable pageable = PageRequest.of(pageNo, pageSize);
+//        Page<KichThuoc> list = kichThuocRepo.findAll(pageable);
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<KichThuoc> kichThuocs = kichThuocRepo.findAll(pageable);
         KichThuoc kt = new KichThuoc();
         model.addAttribute("kt",kt);
-        model.addAttribute("kichthuoc", list);
+        model.addAttribute("kichthuocs", kichThuocs);
         return "templateadmin/qlkichthuoc";
     }
+
 
     @PostMapping("qlkichthuoc/store")
     public String store(@ModelAttribute("kt") KichThuoc kt,
