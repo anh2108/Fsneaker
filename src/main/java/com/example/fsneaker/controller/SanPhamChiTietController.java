@@ -101,19 +101,6 @@ public class SanPhamChiTietController {
                 }
             }
         }
-//        String imageName = null;
-//        if (image != null && !image.isEmpty()) {
-//            String uploadDir = "Fsneaker/src/main/resources/static/images/product/";
-//            imageName = image.getOriginalFilename();
-//            Path path = Paths.get(uploadDir + imageName);
-//            model.addAttribute("imageName", imageName);
-//            try {
-//                Files.createDirectories(path.getParent());
-//                Files.write(path, image.getBytes());
-//            } catch (IOException e) {
-//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi lưu ảnh.");
-//            }
-//        }
 
         // Kiểm tra xem sản phẩm có được chọn không
         Optional<SanPham> sanPhamOptional = sanPhamRepo.findById(sanPhamId);
@@ -164,14 +151,11 @@ public class SanPhamChiTietController {
                 index++;
                 sanPhamChiTietRepo.save(newSanPhamChiTiet);
 
-                return ResponseEntity.status(HttpStatus.FOUND)
-                        .header("Location", "/qlsanphamchitiet")
-                        .build();
+
             }
         }
-
         return ResponseEntity.status(HttpStatus.FOUND)
-                .header("Location", "/qlsanpham")
+                .header("Location", "/qlsanphamchitiet")
                 .build();
     }
 
@@ -313,7 +297,5 @@ public class SanPhamChiTietController {
                 .header("Location", "/qlsanphamchitiet")
                 .build();
     }
-
-
 
 }

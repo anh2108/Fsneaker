@@ -30,6 +30,4 @@ public class GioHangChiTiet {
 
     private int soLuong;
     private BigDecimal gia;
-
-    private BigDecimal giaBanGiamGia;
 }
