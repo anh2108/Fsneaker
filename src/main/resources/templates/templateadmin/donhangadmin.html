@@ -380,7 +380,7 @@
                                                 <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
                                                 <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
                                             </td>
-                                            <td th:text="${i.tongTien}"></td>
+                                            <td th:text="${#numbers.formatDecimal(i.tongTien,0,'COMMA',0,'COMMA')}"></td>
                                             <td th:text="${i.loaiDonHang}"></td>
                                             <td th:text="${i.ngayTao}"></td>
                                             <td th:text="${i.trangThai}"></td>
@@ -460,7 +460,7 @@
                                                 <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
                                                 <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
                                             </td>
-                                            <td th:text="${i.tongTien}"></td>
+                                            <td th:text="${#numbers.formatDecimal(i.tongTien,0,'COMMA',0,'COMMA')}"></td>
                                             <td th:text="${i.loaiDonHang}"></td>
                                             <td th:text="${i.ngayTao}"></td>
                                             <td th:text="${i.trangThai}"></td>
@@ -540,7 +540,7 @@
                                                 <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
                                                 <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
                                             </td>
-                                            <td th:text="${i.tongTien}"></td>
+                                            <td th:text="${#numbers.formatDecimal(i.tongTien,0,'COMMA',0,'COMMA')}"></td>
                                             <td th:text="${i.loaiDonHang}"></td>
                                             <td th:text="${i.ngayTao}"></td>
                                             <td th:text="${i.trangThai}"></td>
@@ -620,7 +620,7 @@
                                                 <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
                                                 <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
                                             </td>
-                                            <td th:text="${i.tongTien}"></td>
+                                            <td th:text="${#numbers.formatDecimal(i.tongTien,0,'COMMA',0,'COMMA')}"></td>
                                             <td th:text="${i.loaiDonHang}"></td>
                                             <td th:text="${i.ngayTao}"></td>
                                             <td th:text="${i.trangThai}"></td>
@@ -700,7 +700,7 @@
                                                 <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
                                                 <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
                                             </td>
-                                            <td th:text="${i.tongTien}"></td>
+                                            <td th:text="${#numbers.formatDecimal(i.tongTien,0,'COMMA',0,'COMMA')}"></td>
                                             <td th:text="${i.loaiDonHang}"></td>
                                             <td th:text="${i.ngayTao}"></td>
                                             <td th:text="${i.trangThai}"></td>
@@ -780,7 +780,7 @@
                                                 <!-- Kiểm tra nếu khachHang là null hoặc soDienThoai là null -->
                                                 <span th:text="${i.khachHang == null || i.khachHang.soDienThoai == null ? '...' : i.khachHang.soDienThoai}"></span>
                                             </td>
-                                            <td th:text="${i.tongTien}"></td>
+                                            <td th:text="${#numbers.formatDecimal(i.tongTien,0,'COMMA',0,'COMMA')}"></td>
                                             <td th:text="${i.loaiDonHang}"></td>
                                             <td th:text="${i.ngayTao}"></td>
                                             <td th:text="${i.trangThai}"></td>
