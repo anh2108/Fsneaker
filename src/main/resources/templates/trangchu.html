@@ -382,7 +382,7 @@
             </div>
 
         </div>
-        <div class="single_slider single_slider2 d-flex align-items-center" data-bgimg="images/bg/banner40.png">
+        <div class="single_slider single_slider2 d-flex align-items-center" data-bgimg="images/slider/slider12.jpg">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-7 offset-lg-5 col-md-7 offset-md-5 col-sm-7 offset-sm-5">
@@ -726,9 +726,22 @@
                         <div class="col-lg-3" th:each="nike : ${sanPhamBanChayNike}">
                             <article class="single_product">
                                 <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="#"><img src="images/product/product52.jpg" alt=""></a>
-                                        <a class="secondary_img" href="#"><img src="images/product/product1.jpg" alt=""></a>
+                                    <div class="product_thumb" >
+                                        <div th:if="${#strings.contains(nike[5], ',')}">
+                                            <!-- Chuyển chuỗi ảnh thành danh sách và hiển thị từng ảnh -->
+                                            <div th:each="image,iterStat : ${#strings.arraySplit(nike[5], ',')}">
+                                                <div th:if="${iterStat.index == 0}">
+                                                    <a class="primary_img" href="#"><img th:src="@{'../images/product/'+ ${image}}" alt=""></a>
+                                                </div>
+                                                <div th:if="${iterStat.index == 1}">
+                                                    <a class="secondary_img" href="#"><img th:src="@{'/images/product/'+ ${image}}" alt=""></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:if="${#strings.contains(nike[5], ',') == false}">
+                                            <!-- Nếu chỉ có một ảnh, hiển thị ảnh đó -->
+                                            <img th:src="@{'/repository/'+${nike[5]}}" alt="Ảnh sản phẩm"/>
+                                        </div>
                                         <div class="action_links">
                                             <ul>
                                                 <li class="compare"><a href="/mua-ngay" title="Mua ngay"><i class="bx bx-money"></i></a></li>
@@ -739,7 +752,7 @@
                                     </div>
                                     <figcaption class="product_content">
                                         <div class="product_content-header">
-                                            <h4 class="product_name" th:text="${nike[1]}"><a th:href="@{/xem-chi-tiet/{id}(id=${nike[0]})}">Letraset Sheets</a></h4>
+                                            <h4 class="product_name" ><a th:href="@{/xem-chi-tiet/{id}(id=${nike[0]})}" th:text="${nike[1]}"> Letraset Sheets</a> (<span th:text="${nike[3]}"></span>)</h4>
                                             <div class="wishlist-btn">
                                                 <a href="#"><i class="bx bx-heart"></i></a>
                                             </div>
@@ -773,8 +786,21 @@
                             <article class="single_product">
                                 <figure>
                                     <div class="product_thumb">
-                                        <a class="primary_img" href="#"><img src="images/product/product53.jpg" alt=""></a>
-                                        <a class="secondary_img" href="#"><img src="images/product/product54.jpg" alt=""></a>
+                                        <div th:if="${#strings.contains(adidas[5], ',')}">
+                                            <!-- Chuyển chuỗi ảnh thành danh sách và hiển thị từng ảnh -->
+                                            <div th:each="image,iterStat : ${#strings.arraySplit(adidas[5], ',')}">
+                                                <div th:if="${iterStat.index == 0}">
+                                                    <a class="primary_img" href="#"><img th:src="@{'../images/product/'+ ${image}}" alt=""></a>
+                                                </div>
+                                                <div th:if="${iterStat.index == 1}">
+                                                    <a class="secondary_img" href="#"><img th:src="@{'/images/product/'+ ${image}}" alt=""></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:if="${#strings.contains(adidas[5], ',') == false}">
+                                            <!-- Nếu chỉ có một ảnh, hiển thị ảnh đó -->
+                                            <img th:src="@{'/repository/'+${adidas[5]}}" alt="Ảnh sản phẩm"/>
+                                        </div>
                                         <div class="action_links">
                                             <ul>
                                                 <li class="compare"><a href="/mua-ngay" title="Mua ngay"><i class="bx bx-money"></i></a></li>
@@ -819,8 +845,21 @@
                             <article class="single_product">
                                 <figure>
                                     <div class="product_thumb">
-                                        <a class="primary_img" href="product-details.html"><img src="images/product/product55.jpg" alt=""></a>
-                                        <a class="secondary_img" href="product-details.html"><img src="images/product/product56.jpg" alt=""></a>
+                                        <div th:if="${#strings.contains(asics[5], ',')}">
+                                            <!-- Chuyển chuỗi ảnh thành danh sách và hiển thị từng ảnh -->
+                                            <div th:each="image,iterStat : ${#strings.arraySplit(asics[5], ',')}">
+                                                <div th:if="${iterStat.index == 0}">
+                                                    <a class="primary_img" href="#"><img th:src="@{'../images/product/'+ ${image}}" alt=""></a>
+                                                </div>
+                                                <div th:if="${iterStat.index == 1}">
+                                                    <a class="secondary_img" href="#"><img th:src="@{'/images/product/'+ ${image}}" alt=""></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:if="${#strings.contains(asics[5], ',') == false}">
+                                            <!-- Nếu chỉ có một ảnh, hiển thị ảnh đó -->
+                                            <img th:src="@{'/repository/'+${asics[5]}}" alt="Ảnh sản phẩm"/>
+                                        </div>
                                         <div class="action_links">
                                             <ul>
                                                 <li class="compare"><a href="/mua-ngay" title="Mua ngay"><i class="bx bx-money"></i></a></li>
@@ -865,8 +904,21 @@
                             <article class="single_product">
                                 <figure>
                                     <div class="product_thumb">
-                                        <a class="primary_img" href="#"><img src="images/product/product57.jpg" alt=""></a>
-                                        <a class="secondary_img" href="#"><img src="images/product/product58.jpg" alt=""></a>
+                                        <div th:if="${#strings.contains(puma[5], ',')}">
+                                            <!-- Chuyển chuỗi ảnh thành danh sách và hiển thị từng ảnh -->
+                                            <div th:each="image,iterStat : ${#strings.arraySplit(puma[5], ',')}">
+                                                <div th:if="${iterStat.index == 0}">
+                                                    <a class="primary_img" href="#"><img th:src="@{'../images/product/'+ ${image}}" alt=""></a>
+                                                </div>
+                                                <div th:if="${iterStat.index == 1}">
+                                                    <a class="secondary_img" href="#"><img th:src="@{'/images/product/'+ ${image}}" alt=""></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:if="${#strings.contains(puma[5], ',') == false}">
+                                            <!-- Nếu chỉ có một ảnh, hiển thị ảnh đó -->
+                                            <img th:src="@{'/repository/'+${puma[5]}}" alt="Ảnh sản phẩm"/>
+                                        </div>
                                         <div class="action_links">
                                             <ul>
                                                 <li class="compare"><a href="/mua-ngay" title="Mua ngay"><i class="bx bx-money"></i></a></li>
@@ -911,8 +963,21 @@
                             <article class="single_product">
                                 <figure>
                                     <div class="product_thumb">
-                                        <a class="primary_img" href="#"><img src="images/product/product59.jpg" alt=""></a>
-                                        <a class="secondary_img" href="#"><img src="images/product/product60.jpg" alt=""></a>
+                                        <div th:if="${#strings.contains(newbalance[5], ',')}">
+                                            <!-- Chuyển chuỗi ảnh thành danh sách và hiển thị từng ảnh -->
+                                            <div th:each="image,iterStat : ${#strings.arraySplit(newbalance[5], ',')}">
+                                                <div th:if="${iterStat.index == 0}">
+                                                    <a class="primary_img" href="#"><img th:src="@{'../images/product/'+ ${image}}" alt=""></a>
+                                                </div>
+                                                <div th:if="${iterStat.index == 1}">
+                                                    <a class="secondary_img" href="#"><img th:src="@{'/images/product/'+ ${image}}" alt=""></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:if="${#strings.contains(newbalance[5], ',') == false}">
+                                            <!-- Nếu chỉ có một ảnh, hiển thị ảnh đó -->
+                                            <img th:src="@{'/repository/'+${newbalance[5]}}" alt="Ảnh sản phẩm"/>
+                                        </div>
                                         <div class="action_links">
                                             <ul>
                                                 <li class="compare"><a href="/mua-ngay" title="Mua ngay"><i class="bx bx-money"></i></a></li>

@@ -79,7 +79,7 @@
                             <img class="rounded-circle header-profile-user" src="images/users/avatar-1.jpg" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" th:text="${#authentication.principal.displayName}"></span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text" th:text="${#authentication.principal.role == 'ROLE_ADMIN' ? 'Admin' : 'Nhân viên'}">Trưởng nhóm</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text" th:text="${#authentication.principal.role == 'ROLE_ADMIN' ? 'Admin' : (#authentication.principal.role == 'ROLE_MANAGER' ? 'Quản lý' : 'Nhân viên')}">Trưởng nhóm</span>
                             </span>
                         </span>
                         </button>
@@ -133,7 +133,7 @@
                 </div>
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
                         <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                             <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
                         </a>
@@ -147,7 +147,7 @@
                             </ul>
                         </div>
                     </li> <!-- end Dashboard Menu -->
-                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
                         <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
                             <i class="ri-apps-2-line"></i> <span data-key="t-apps">Quản lý</span>
                         </a>
@@ -188,13 +188,13 @@
                         </div>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                         <a class="nav-link menu-link" href="/don-hang/hien-thi">
                             <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Bán hàng</span>
                         </a>
 
                     </li> <!-- end Dashboard Menu -->
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','STAFF')">
                         <a class="nav-link menu-link" href="/donhangadmin">
                             <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Đơn hàng</span>
                         </a>
@@ -205,10 +205,10 @@
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarAuth">
                             <ul class="nav nav-sm flex-column">
-                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                <li class="nav-item" sec:authorize="hasAnyRole('MANAGER','ADMIN')">
                                     <a href="/qlnhanvien" class="nav-link" data-key="t-nhanvien"> Nhân viên </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item"  sec:authorize="hasAnyRole('MANAGER','STAFF')">
                                     <a href="/qlkhachhang" class="nav-link" data-key="t-khachang"> Khách hàng </a>
                                 </li>
                             </ul>
@@ -330,6 +330,23 @@
                             </tr>
                             </tbody>
                         </table>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <!-- Nút Previous -->
+                                <li th:if="${thieu.number > 0}" class="page-item">
+                                    <a th:href="@{/qlthuonghieu(page=${thieu.number - 1})}" class="page-link">Previous</a>
+                                </li>
+                                <!-- Hiển thị các số trang -->
+                                <li th:each="i : ${#numbers.sequence(0, thieu.totalPages - 1)}" class="page-item"
+                                    th:classappend="${i == thieu.number ? 'active' : ''}">
+                                    <a th:href="@{/qlthuonghieu(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
+                                </li>
+                                <!-- Nút Next -->
+                                <li th:if="${thieu.number < thieu.totalPages - 1}" class="page-item">
+                                    <a th:href="@{/qlthuonghieu(page=${thieu.number + 1})}" class="page-link">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

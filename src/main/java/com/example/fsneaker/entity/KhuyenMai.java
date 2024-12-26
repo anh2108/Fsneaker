@@ -22,7 +22,6 @@ public class KhuyenMai {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer id;
 
     @NotBlank(message = "Mã khuyến mãi không được để trống")

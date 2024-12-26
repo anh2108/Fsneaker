@@ -30,7 +30,7 @@ public class CustomUserDetailService implements UserDetailsService {
                     nhanVien.getDiaChi(),
                     nhanVien.getSoDienThoai(),
                     nhanVien.getEmail(),
-                    nhanVien.getVaiTro()  ? "ROLE_ADMIN" : "ROLE_STAFF"
+                    nhanVien.getVaiTro() == 0  ? "ROLE_ADMIN" : nhanVien.getVaiTro() == 1 ? "ROLE_MANAGER" : "ROLE_STAFF"
             );
         }
         KhachHang khachHang= khachHangRepo.findBySoDienThoaiOrEmail(username,username);
