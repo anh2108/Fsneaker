@@ -16,29 +16,6 @@ import java.util.List;
 @Repository
 public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer> {
 
-
-    //Lệnh thực hiện update phía sản phẩm
-    @Modifying
-    @Transactional
-    @Query("""
-        UPDATE SanPhamChiTiet chiTiet 
-        SET chiTiet.giaBanGiamGia = 
-            CASE 
-                WHEN :tyLeGiamGia <= 100 THEN chiTiet.giaBan - (chiTiet.giaBan * :tyLeGiamGia / 100)
-                ELSE chiTiet.giaBan - :tyLeGiamGia 
-            END
-        WHERE chiTiet.sanPham = :sanPham
-    """)
-    int updateGiaBanGiamGiaBySanPham(
-            @Param("sanPham") SanPham sanPham,
-            @Param("tyLeGiamGia") BigDecimal tyLeGiamGia
-    );
-
-    //Lấy sản phẩm chi tiết qua SanPham
-    @Query("SELECT spct FROM SanPhamChiTiet spct WHERE spct.sanPham = :sanPham")
-    List<SanPhamChiTiet> findChiTietBySanPham(@Param("sanPham") SanPham sanPham);
-
-
     @Query("select e from SanPhamChiTiet e where e.id = :id")
     public SanPhamChiTiet findById(int id);
 
@@ -200,6 +177,7 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
             "OR LOWER(spct.kichThuoc.tenKichThuoc) LIKE LOWER(CONCAT('%', :keyword, '%')) GROUP BY spct.sanPham.tenSanPham, spct.mauSac.tenMauSac")
     List<Object[]> searchProducts(@Param("keyword")String keyword);
     //Lệnh thực hiện update phía sản phẩm
+
     @Modifying
     @Transactional
     @Query("""
@@ -219,5 +197,10 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet,Integer
     //Lấy sản phẩm chi tiết qua SanPham
     @Query("SELECT spct FROM SanPhamChiTiet spct WHERE spct.sanPham = :sanPham")
     List<SanPhamChiTiet> findChiTietBySanPham(@Param("sanPham") SanPham sanPham);
+
+    @Query("select o from SanPhamChiTiet o where o.sanPham.tenSanPham like ?1" +
+            " and (?2 is null or o.mauSac.tenMauSac = ?2)" +
+            " and (?3 is null or o.kichThuoc.tenKichThuoc = ?3)")
+    Page<SanPhamChiTiet> findAddOrder(String tenSanPham, String tenMauSac, String tenKichThuoc, Pageable page);
 
 }
