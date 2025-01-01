@@ -16,16 +16,24 @@ import com.example.fsneaker.repositories.LichSuDonHangRepo;
 import com.example.fsneaker.repositories.MauSacRepo;
 import com.example.fsneaker.repositories.SanPhamChiTietRepo;
 import com.example.fsneaker.repositories.VoucherRepo;
+import com.example.fsneaker.service.PhieuGiaoHangService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -56,6 +64,9 @@ public class HoaDonController {
 
     @Autowired
     KichThuocRepo kichThuocRepo;
+
+    @Autowired
+    PhieuGiaoHangService phieuGiaoHangService;
 
     @GetMapping("/donhangadmin")
     public String donHang(
@@ -144,7 +155,7 @@ public class HoaDonController {
 
     // Xác nhận đơn hàng
     @PostMapping("/donhangadmin-detail/{orderId}/confirm")
-    public String confirmOrder(@PathVariable Integer orderId) {
+    public String confirmOrder(@PathVariable Integer orderId,  RedirectAttributes redirectAttributes) {
         // Lấy thông tin đơn hàng
         DonHang order = donHangRepo.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
 
@@ -170,6 +181,7 @@ public class HoaDonController {
                 sanPhamChiTietRepo.save(product);
             }
             donHangRepo.save(order);
+            redirectAttributes.addFlashAttribute("message", "Xác nhận đơn hàng thành công.");
         }
         return "redirect:/donhangadmin-detail/" + orderId;
     }
@@ -177,33 +189,35 @@ public class HoaDonController {
 
     // Vận chuyển đơn hàng
     @PostMapping("/donhangadmin-detail/{orderId}/ship")
-    public String shipOrder(@PathVariable Integer orderId) {
+    public String shipOrder(@PathVariable Integer orderId,  RedirectAttributes redirectAttributes) {
         DonHang order = donHangRepo.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
 
         if ("Chờ giao".equals(order.getTrangThai())) {
             saveOrderStatusHistory(order, order.getTrangThai(), "Đang giao");
             order.setTrangThai("Đang giao");
             donHangRepo.save(order);
+            redirectAttributes.addFlashAttribute("message", "Chuyển trạng thái đơn hàng thành công.");
         }
         return "redirect:/donhangadmin-detail/" + orderId;
     }
 
     // Thanh toán đơn hàng
     @PostMapping("/donhangadmin-detail/{orderId}/pay")
-    public String payOrder(@PathVariable Integer orderId) {
+    public String payOrder(@PathVariable Integer orderId,  RedirectAttributes redirectAttributes) {
         DonHang order = donHangRepo.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
 
         if ("Đang giao".equals(order.getTrangThai())) {
             saveOrderStatusHistory(order, order.getTrangThai(), "Đã thanh toán");
             order.setTrangThai("Đã thanh toán");
             donHangRepo.save(order);
+            redirectAttributes.addFlashAttribute("message", "Thanh toán đơn hàng thành công.");
         }
         return "redirect:/donhangadmin-detail/" + orderId;
     }
 
     // huỷ don hang
     @PostMapping("/donhangadmin-detail/{orderId}/huy")
-    public String huyOrder(@PathVariable Integer orderId) {
+    public String huyOrder(@PathVariable Integer orderId,  RedirectAttributes redirectAttributes) {
         // Lấy thông tin đơn hàng
         DonHang order = donHangRepo.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
 
@@ -240,6 +254,7 @@ public class HoaDonController {
             // Cập nhật trạng thái đơn hàng
             order.setTrangThai("Đã hủy");
             donHangRepo.save(order);
+            redirectAttributes.addFlashAttribute("message", "Huỷ đơn hàng thành công.");
         }
 
         return "redirect:/donhangadmin-detail/" + orderId;
@@ -262,7 +277,8 @@ public class HoaDonController {
             @RequestParam("tenKhachHang") String tenKhachHang,
             @RequestParam("soDienThoai") String soDienThoai,
             @RequestParam("email") String email,
-            @RequestParam("diaChi") String diaChi) {
+            @RequestParam("diaChi") String diaChi,
+            RedirectAttributes redirectAttributes) {
         // Tìm khách hàng hiện tại trong cơ sở dữ liệu
         KhachHang existingCustomer = khachHangRepo.findById(idKhachHang)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy khách hàng với ID: " + idKhachHang));
@@ -277,6 +293,7 @@ public class HoaDonController {
         khachHangRepo.save(existingCustomer);
 
         // Điều hướng về trang chi tiết đơn hàng
+        redirectAttributes.addFlashAttribute("message", "Thay đổi thông tin khách hàng thành công.");
         return "redirect:/donhangadmin-detail/" + idDonHang;
     }
 
@@ -307,7 +324,8 @@ public class HoaDonController {
     @PostMapping("/donhangadmin-detail/{orderId}/add-product")
     public String addProductToOrder(@PathVariable Integer orderId,
                                     @RequestParam Integer productId,
-                                    @RequestParam Integer soLuong) {
+                                    @RequestParam Integer soLuong,
+                                    RedirectAttributes redirectAttributes) {
         // Lấy thông tin đơn hàng
         DonHang order = donHangRepo.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
@@ -346,7 +364,7 @@ public class HoaDonController {
             BigDecimal tongTienGiamGia;
             if ("Giảm giá %".equals(voucher.getLoaiVoucher())) {
                 // Voucher giảm giá theo phần trăm
-                tongTienGiamGia = tongGiaTri.multiply(voucher.getGiaTri()).divide(BigDecimal.valueOf(100));
+                tongTienGiamGia = tongGiaTri.subtract(tongGiaTri.multiply(voucher.getGiaTri()).divide(BigDecimal.valueOf(100)));
             } else if ("Giảm giá số tiền".equals(voucher.getLoaiVoucher())) {
                 // Voucher giảm giá theo số tiền
                 tongTienGiamGia = tongGiaTri.subtract(voucher.getGiaTri());
@@ -368,14 +386,14 @@ public class HoaDonController {
 //        }
 
         donHangRepo.save(order);
-
+        redirectAttributes.addFlashAttribute("message", "Thêm sản phẩm vào đơn hàng thành công.");
         return "redirect:/donhangadmin-detail/" + orderId;
     }
 
 
     // xoá don hang chi tiet
     @PostMapping("/donhangadmin-detail/{orderId}/remove-product/{chiTietId}")
-    public String removeProductFromOrder(@PathVariable Integer orderId, @PathVariable Integer chiTietId) {
+    public String removeProductFromOrder(@PathVariable Integer orderId, @PathVariable Integer chiTietId, RedirectAttributes redirectAttributes) {
         // Tìm đơn hàng
         DonHang order = donHangRepo.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với ID: " + orderId));
@@ -396,7 +414,7 @@ public class HoaDonController {
             BigDecimal tongTienGiamGia;
             if ("Giảm giá %".equals(voucher.getLoaiVoucher())) {
                 // Voucher giảm giá theo phần trăm
-                tongTienGiamGia = newTongGiaTri.multiply(voucher.getGiaTri()).divide(BigDecimal.valueOf(100));
+                tongTienGiamGia = newTongGiaTri.subtract(newTongGiaTri.multiply(voucher.getGiaTri()).divide(BigDecimal.valueOf(100)));
             } else if ("Giảm giá số tiền".equals(voucher.getLoaiVoucher())) {
                 // Voucher giảm giá theo số tiền
                 tongTienGiamGia = newTongGiaTri.subtract(voucher.getGiaTri());
@@ -412,7 +430,7 @@ public class HoaDonController {
             // Lưu tổng tiền giảm giá vào đơn hàng
             order.setTongTienGiamGia(tongTienGiamGia);
         }
-
+        redirectAttributes.addFlashAttribute("message", "Xoá sản phẩm đơn hàng thành công.");
         donHangRepo.save(order);
 
         return "redirect:/donhangadmin-detail/" + orderId;
@@ -422,7 +440,8 @@ public class HoaDonController {
     @PostMapping("/donhangadmin-detail/{orderId}/update-product-quantity/{chiTietId}")
     public String updateProductQuantity(@PathVariable Integer orderId,
                                         @PathVariable Integer chiTietId,
-                                        @RequestParam Integer newQuantity) {
+                                        @RequestParam Integer newQuantity,
+                                        RedirectAttributes redirectAttributes) {
         // Tìm đơn hàng
         DonHang order = donHangRepo.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với ID: " + orderId));
@@ -461,7 +480,7 @@ public class HoaDonController {
             BigDecimal tongTienGiamGia;
             if ("Giảm giá %".equals(voucher.getLoaiVoucher())) {
                 // Voucher giảm giá theo phần trăm
-                tongTienGiamGia = newTongGiaTri.multiply(voucher.getGiaTri()).divide(BigDecimal.valueOf(100));
+                tongTienGiamGia = newTongGiaTri.subtract(newTongGiaTri.multiply(voucher.getGiaTri()).divide(BigDecimal.valueOf(100)));
             } else if ("Giảm giá số tiền".equals(voucher.getLoaiVoucher())) {
                 // Voucher giảm giá theo số tiền
                 tongTienGiamGia = newTongGiaTri.subtract(voucher.getGiaTri());
@@ -480,9 +499,41 @@ public class HoaDonController {
 
         // Lưu thay đổi
         donHangRepo.save(order);
-
+        redirectAttributes.addFlashAttribute("message", "Cập nhật số lượng đơn hàng thành công.");
         return "redirect:/donhangadmin-detail/" + orderId;
     }
 
+    @GetMapping("/donhang/view-inphieugiao/{orderId}")
+    public ResponseEntity<Resource> inPhieuGiao(@PathVariable Integer orderId) {
+        phieuGiaoHangService.inPhieuGiao(orderId);
+        String fileName = "in_phieu_giao_" + orderId + ".pdf";
+        File file = new File(fileName);
 
+        if (!file.exists()) {
+            throw new RuntimeException("Phiếu giao hàng không tồn tại.");
+        }
+
+        Resource resource = new FileSystemResource(file);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                .body(resource);
+    }
+
+    @GetMapping("/donhang/view-inhoadon/{orderId}")
+    public ResponseEntity<Resource> inHoaDon(@PathVariable Integer orderId) {
+        phieuGiaoHangService.inHoaDon(orderId);
+        String fileName = "in_hoa_don_" + orderId + ".pdf";
+        File file = new File(fileName);
+
+        if (!file.exists()) {
+            throw new RuntimeException("Hoá đơn không tồn tại.");
+        }
+
+        Resource resource = new FileSystemResource(file);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                .body(resource);
+    }
 }

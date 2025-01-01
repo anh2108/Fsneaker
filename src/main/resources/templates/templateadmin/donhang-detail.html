@@ -41,7 +41,11 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
     <style>
-
+        .custom-btn {
+            padding: 4px 8px; /* Giảm kích thước padding */
+            font-size: 12px; /* Thu nhỏ cỡ chữ */
+            line-height: 1;  /* Tăng độ gọn gàng */
+        }
 
         .circle {
             width: 80px; /* Tăng kích thước hình tròn */
@@ -430,6 +434,27 @@
 
         <div class="page-content">
             <div class="container-fluid">
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+                    <!-- Toast for Success -->
+                    <div th:if="${message}" id="toastSuccess" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                <p th:text="${message}">Thông báo thành công!</p>
+                            </div>
+                            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <a style="margin-bottom: 5px" th:href="@{/donhang/view-inphieugiao/{id}(id=${dataDHCT[0].donHang.id})}"
+                       th:if="${dataDHCT != null and dataDHCT.size() > 0 and dataDHCT[0].donHang != null and dataDHCT[0].donHang.trangThai != 'Đã hủy' and dataDHCT[0].donHang.trangThai != 'Đã thanh toán' and dataDHCT[0].donHang.loaiDonHang != 'Bán hàng tại quầy'}"target="_blank" class="btn btn-primary me-2">
+                        <i class="bi bi-printer"></i> In phiếu giao
+                    </a>
+                    <a style="margin-bottom: 5px" th:href="@{/donhang/view-inhoadon/{id}(id=${dataDHCT[0].donHang.id})}"
+                       th:if="${dataDHCT != null and dataDHCT.size() > 0 and dataDHCT[0].donHang != null }" target="_blank" class="btn btn-primary">
+                        <i class="bi bi-printer-fill"></i> In hoá đơn
+                    </a>
+                </div>
                 <div class="card">
                     <h4 style="padding: 10px" class="text-muted mb-3">Danh sách hóa đơn / Hóa đơn <span
                             class="text-primary"
@@ -639,8 +664,8 @@
                                                         <tr>
                                                             <th>#</th>
                                                             <th>Mã đơn hàng</th>
-                                                            <th>Trạng thái cũ</th>
-                                                            <th>Trạng thái mới</th>
+                                                            <th>Trạng thái</th>
+<!--                                                            <th>Trạng thái mới</th>-->
                                                             <th>Ngày sửa</th>
                                                         </tr>
                                                         </thead>
@@ -649,14 +674,14 @@
                                                             <td>1</td>
                                                             <td th:text="${dataDHCT[0].donHang.maDonHang}"></td>
                                                             <td th:text="${dataDHCT[0].donHang.trangThai}"></td>
-                                                            <td>#</td>
+<!--                                                            <td>#</td>-->
                                                             <td th:text="${#temporals.format(dataDHCT[0].donHang.ngayTao, 'dd-MM-yyyy HH:mm:ss')}"></td>
                                                         </tr>
                                                         <tr th:each="lsdh, stat : ${dataLSDH}">
                                                             <td th:text="${stat.index + 1}"></td>
                                                             <td th:text="${lsdh.donHang.maDonHang}"></td>
-                                                            <td th:text="${lsdh.trangThaiCu}"></td>
                                                             <td th:text="${lsdh.trangThaiMoi}"></td>
+<!--                                                            <td th:text="${lsdh.trangThaiMoi}"></td>-->
                                                             <td th:text="${#temporals.format(lsdh.ngaySua, 'dd-MM-yyyy HH:mm:ss')}"></td>
                                                         </tr>
 
@@ -852,7 +877,7 @@
                                           th:if="${dataDHCT != null and dataDHCT.size() > 0 and dataDHCT[0].donHang != null and dataDHCT[0].donHang.trangThai == 'Chờ xác nhận'}">
                                         <input type="number" name="newQuantity" th:value="${i.soLuong}" min="1"
                                                th:max="${i.sanPhamChiTiet.soLuong}" required>
-                                        <button type="submit"><i class="bi bi-arrow-repeat"></i></button>
+                                        <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-arrow-repeat"></i></button>
                                     </form>
                                     <span th:if="${dataDHCT != null and dataDHCT.size() > 0 and dataDHCT[0].donHang != null and dataDHCT[0].donHang.trangThai != 'Chờ xác nhận'}"
                                           th:text="${i.soLuong}"></span>
@@ -864,7 +889,7 @@
                                           method="post"
                                           onsubmit="return confirmAction('Bạn có chắc chắn muốn xoá sản phẩm này?')"
                                           th:if="${dataDHCT != null and dataDHCT.size() > 0 and dataDHCT[0].donHang != null and dataDHCT[0].donHang.trangThai == 'Chờ xác nhận'}">
-                                        <button type="submit"><i class="bi bi-trash3"></i></button>
+                                        <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash3"></i></button>
                                     </form>
                                 </td>
                             </tr>
@@ -969,6 +994,18 @@
             })
             .catch(error => console.error('Error:', error));
     }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastSuccessElement = document.getElementById('toastSuccess');
+        if (toastSuccessElement) {
+            const toastSuccess = new bootstrap.Toast(toastSuccessElement, {
+                autohide: true,
+                delay: 3000
+            });
+            toastSuccess.show();
+        }
+    });
 </script>
 <script>
     /**
